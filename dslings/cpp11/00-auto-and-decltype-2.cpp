@@ -18,7 +18,7 @@
 //   d2x checker auto-and-decltype-2
 //
 
-#include <d2x/common.hpp>
+#include <d2x/cpp/common.hpp>
 
 #include <iostream>
 #include <vector>

@@ -18,7 +18,7 @@
 //   d2x checker auto-and-decltype-4
 //
 
-#include <d2x/common.hpp>
+#include <d2x/cpp/common.hpp>
 
 #include <type_traits>
 

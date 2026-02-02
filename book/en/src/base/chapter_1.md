@@ -102,7 +102,7 @@ After entering the automated code practice environment using `xlings checker`, t
 //   d2x checker hello-mcpp
 //
 
-#include <d2x/common.hpp>
+#include <d2x/cpp/common.hpp>
 
 // You can observe "real-time" changes in the console when modifying code
 

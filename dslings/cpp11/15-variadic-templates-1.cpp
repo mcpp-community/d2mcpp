@@ -13,7 +13,7 @@
 //   - https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/15-variadic-templates.md
 //
 
-#include <d2x/common.hpp>
+#include <d2x/cpp/common.hpp>
 
 D2X_YOUR_ANSWER
 

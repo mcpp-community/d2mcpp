@@ -17,7 +17,7 @@
 //   d2x checker nullptr
 //
 
-#include <d2x/common.hpp>
+#include <d2x/cpp/common.hpp>
 #include <type_traits>
 
 // 模板函数示例

@@ -100,7 +100,7 @@ d2x update
 //   d2x checker hello-mcpp
 //
 
-#include <d2x/common.hpp>
+#include <d2x/cpp/common.hpp>
 
 // 修改代码时可以观察到控制台"实时"的变化
 

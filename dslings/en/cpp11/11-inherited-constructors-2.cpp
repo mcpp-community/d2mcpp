@@ -16,7 +16,7 @@
 //   d2x checker inherited-constructors
 //
 
-#include <d2x/common.hpp>
+#include <d2x/cpp/common.hpp>
 
 #include <iostream>
 #include <string>

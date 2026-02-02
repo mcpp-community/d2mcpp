@@ -10,7 +10,6 @@ if d2x and d2x.private and d2x.private.mcpp then
 end
 
 if lang == "zh" then
-    add_includedirs(".")
 
     target("00-0-hello-mcpp")
         set_languages("cxx11")

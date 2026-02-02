@@ -17,7 +17,7 @@
 //   d2x checker long-long
 //
 
-#include <d2x/common.hpp>
+#include <d2x/cpp/common.hpp>
 
 #include <type_traits>
 

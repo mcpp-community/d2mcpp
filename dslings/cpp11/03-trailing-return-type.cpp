@@ -14,7 +14,7 @@
 //   d2x checker trailing-return-type
 //
 
-#include <d2x/common.hpp>
+#include <d2x/cpp/common.hpp>
 
 #include <iostream>
 

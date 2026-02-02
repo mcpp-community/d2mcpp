@@ -15,7 +15,7 @@
 //   d2x checker final-and-override
 //
 
-#include <d2x/common.hpp>
+#include <d2x/cpp/common.hpp>
 
 #include <iostream>
 #include <string>
