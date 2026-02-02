@@ -151,7 +151,7 @@ Homepage: https://github.com/d2learn/xlings
 
 ### 配置语言
 
-编辑项目配置文件`config.xlings`中的`lang`属性, `zh`对应中文, `en`对应英文
+编辑项目配置文件`.d2x.json`中的`lang`属性, `zh`对应中文, `en`对应英文
 
 ```lua
     },

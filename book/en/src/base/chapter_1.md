@@ -153,7 +153,7 @@ Homepage: https://github.com/d2learn/xlings
 
 ### Configure Language
 
-Edit the `lang` attribute in the project configuration file `config.xlings`. `zh` corresponds to Chinese, and `en` corresponds to English.
+Edit the `lang` attribute in the project configuration file `.d2x.json`. `zh` corresponds to Chinese, and `en` corresponds to English.
 
 ```lua
     },

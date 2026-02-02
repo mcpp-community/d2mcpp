@@ -1,4 +1,5 @@
 {
+    "version": "0.1.1",
     "buildtools": "xmake d2x-buildtools",
     "lang": "en",
     "llm": {
