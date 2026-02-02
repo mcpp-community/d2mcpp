@@ -63,7 +63,7 @@ irm https://d2learn.org/xlings-install.ps1.txt | iex
 </details>
 
 ```bash
-xlings install d2x:d2mcpp
+d2x install d2mcpp
 cd d2mcpp
 d2x checker
 ```

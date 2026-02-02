@@ -37,7 +37,7 @@ Invoke-Expression (Invoke-Webrequest 'https://d2learn.org/xlings-install.ps1.txt
 > Download the project to current directory and automatically configure local environment
 
 ```bash
-xlings install d2x:d2mcpp
+d2x install d2mcpp
 ```
 
 ### Local E-book

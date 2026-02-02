@@ -37,7 +37,7 @@ Invoke-Expression (Invoke-Webrequest 'https://d2learn.org/xlings-install.ps1.txt
 > 下载项目到当前目录并自动配置本地环境
 
 ```bash
-xlings install d2x:d2mcpp
+d2x install d2mcpp
 ```
 
 ### 本地电子书
