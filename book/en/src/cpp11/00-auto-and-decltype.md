@@ -12,7 +12,7 @@ auto and decltype are powerful **type deduction** tools introduced in C++11. The
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference-auto](https://en.cppreference.com/w/cpp/language/auto) / [cppreference-decltype](https://en.cppreference.com/w/cpp/language/decltype) / [markdown](https://github.com/Sunrisepeak/mcpp-standard/blob/main/book/en/src/cpp11/00-auto-and-decltype.md) | [Video Explanation](https://www.bilibili.com/video/BV1xkdYYUEyH) | [Practice Code](https://github.com/Sunrisepeak/mcpp-standard/blob/main/dslings/cpp11/00-auto-and-decltype-0.cpp) |  |
+| [cppreference-auto](https://en.cppreference.com/w/cpp/language/auto) / [cppreference-decltype](https://en.cppreference.com/w/cpp/language/decltype) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/00-auto-and-decltype.md) | [Video Explanation](https://www.bilibili.com/video/BV1xkdYYUEyH) | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-0.cpp) |  |
 
 
 **Why were they introduced?**
@@ -184,6 +184,6 @@ decltype( (b) ) // Deduction result is int &
 ## III. Additional Resources
 
 - [Discussion Forum](https://forum.d2learn.org/category/20)
-- [mcpp-standard Tutorial Repository](https://github.com/Sunrisepeak/mcpp-standard)
+- [d2mcpp Tutorial Repository](https://github.com/mcpp-community/d2mcpp)
 - [Tutorial Video List](https://space.bilibili.com/65858958/lists/5208246)
 - [Tutorial Support Tool - xlings](https://github.com/d2learn/xlings)

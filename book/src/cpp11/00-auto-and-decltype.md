@@ -12,7 +12,7 @@ auto 和 decltype 是C++11引入的强有力的**类型自动推导**工具. 不
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference-auto](https://en.cppreference.com/w/cpp/language/auto) / [cppreference-decltype](https://en.cppreference.com/w/cpp/language/decltype) / [markdown](https://github.com/Sunrisepeak/mcpp-standard/blob/main/book/src/cpp11/00-auto-and-decltype.md) | [视频解读](https://www.bilibili.com/video/BV1xkdYYUEyH) | [练习代码](https://github.com/Sunrisepeak/mcpp-standard/blob/main/dslings/cpp11/00-auto-and-decltype-0.cpp) |  |
+| [cppreference-auto](https://en.cppreference.com/w/cpp/language/auto) / [cppreference-decltype](https://en.cppreference.com/w/cpp/language/decltype) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/00-auto-and-decltype.md) | [视频解读](https://www.bilibili.com/video/BV1xkdYYUEyH) | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-0.cpp) |  |
 
 
 **为什么引入?**
@@ -184,6 +184,6 @@ decltype( (b) ) // 推导结果是 int &
 ## 三、其他
 
 - [交流讨论](https://forum.d2learn.org/category/20)
-- [mcpp-standard教程仓库](https://github.com/Sunrisepeak/mcpp-standard)
+- [d2mcpp教程仓库](https://github.com/mcpp-community/d2mcpp)
 - [教程视频列表](https://space.bilibili.com/65858958/lists/5208246)
 - [教程支持工具-xlings](https://github.com/d2learn/xlings)

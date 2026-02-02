@@ -1,4 +1,4 @@
-// mcpp-standard: https://github.com/Sunrisepeak/mcpp-standard
+// d2mcpp: https://github.com/mcpp-community/d2mcpp
 // license: Apache-2.0
 // file: dslings/cpp11/10-delegating-constructors-1.cpp
 //
@@ -8,7 +8,7 @@
 //
 // Docs/文档:
 //   - https://en.cppreference.com/w/cpp/language/initializer_list.html#Delegating_constructor
-//   - https://github.com/Sunrisepeak/mcpp-standard/blob/main/book/src/cpp11/10-delegating-constructors.md
+//   - https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/10-delegating-constructors.md
 //
 // Auto-Checker/自动检测命令:
 //

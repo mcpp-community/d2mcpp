@@ -1,4 +1,4 @@
-// mcpp-standard: https://github.com/Sunrisepeak/mcpp-standard
+// d2mcpp: https://github.com/mcpp-community/d2mcpp
 // license: Apache-2.0
 // file: dslings/hello-mcpp.cpp
 //
@@ -20,7 +20,7 @@
 //        used for code completion (replace this macro with correct code)
 //
 // Docs:
-//   - https://github.com/Sunrisepeak/mcpp-standard/blob/main/book/src/chapter_1.md
+//   - https://github.com/mcpp-community/d2mcpp/blob/main/book/src/chapter_1.md
 //   - book/src/chapter_1.md
 //
 // Auto-Checker command:
@@ -34,13 +34,13 @@
 
 int main() {
 
-    std::cout << "hello, mcpp!" << std:endl; // 0. Fix this compilation error
+    std::cout << "hello, mcpp!" << std::endl; // 0. Fix this compilation error
 
     int a = 1.1; // 1. Fix this runtime error, change int to double to pass the check
 
     d2x_assert_eq(a, 1.1); // 2. Runtime checkpoint, need to fix code to pass all checkpoints (cannot directly delete checkpoint code)
 
-    D2X_YOUR_ANSWER b = a; // 3. Fix this compilation error, give b an appropriate type
+    int b = a; // 3. Fix this compilation error, give b an appropriate type
 
     d2x_assert_eq(b, 1); // 4. Runtime checkpoint 2
 

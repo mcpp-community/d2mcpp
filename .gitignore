@@ -44,3 +44,4 @@ media
 build
 .cache/
 dslings/compile_commands.json
+.d2x*

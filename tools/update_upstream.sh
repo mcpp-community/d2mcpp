@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-UPSTREAM_URL="https://github.com/Sunrisepeak/mcpp-standard.git"
+UPSTREAM_URL="https://github.com/mcpp-community/d2mcpp.git"
 BRANCH_NAME="main"
 
 echo "[1] - 检查是否已添加 upstream 远程..."

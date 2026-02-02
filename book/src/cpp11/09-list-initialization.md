@@ -12,7 +12,7 @@
 
 | Book | Video | Code | X | 
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/list_initialization.html) / [markdown](https://github.com/Sunrisepeak/mcpp-standard/blob/main/book/src/cpp11/09-list-initialization.md) | [视频解读](https://www.bilibili.com/video/BV1vKuQzkEo2) | [练习代码](https://github.com/Sunrisepeak/mcpp-standard/blob/main/dslings/cpp11/09-list-initialization-0.cpp) |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/list_initialization.html) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/09-list-initialization.md) | [视频解读](https://www.bilibili.com/video/BV1vKuQzkEo2) | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/09-list-initialization-0.cpp) |  |
 
 **为什么引入?**
 
@@ -180,6 +180,6 @@ MyVector v1(1, 2); // 匹配MyVector(int x, int y)
 ## 三、其他
 
 - [交流讨论](https://forum.d2learn.org/category/20)
-- [mcpp-standard教程仓库](https://github.com/Sunrisepeak/mcpp-standard)
+- [d2mcpp教程仓库](https://github.com/mcpp-community/d2mcpp)
 - [教程视频列表](https://space.bilibili.com/65858958/lists/5208246)
 - [教程支持工具-xlings](https://github.com/d2learn/xlings)

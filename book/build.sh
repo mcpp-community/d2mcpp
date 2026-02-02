@@ -17,4 +17,4 @@ cp -r imgs book/
 
 echo "Build completed."
 
-# python -m http.server --directory book/book
+python -m http.server --directory book/book

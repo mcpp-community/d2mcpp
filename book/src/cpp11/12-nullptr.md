@@ -12,7 +12,7 @@
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/nullptr) / [markdown](https://github.com/Sunrisepeak/mcpp-standard/blob/main/book/src/cpp11/12-nullptr.md) | [视频解读]() | [练习代码](https://github.com/Sunrisepeak/mcpp-standard/blob/main/dslings/cpp11/12-nullptr-0.cpp) |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/nullptr) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/12-nullptr.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/12-nullptr-0.cpp) |  |
 
 **为什么引入?**
 
@@ -178,9 +178,9 @@ bool isEmpty = (ptr == nullptr);  // true
 
 ### 练习代码主题
 
-- 0 - [nullptr基础用法](https://github.com/Sunrisepeak/mcpp-standard/blob/main/dslings/cpp11/12-nullptr-0.cpp)
-- 1 - [nullptr的函数重载](https://github.com/Sunrisepeak/mcpp-standard/blob/main/dslings/cpp11/12-nullptr-1.cpp)
-- 2 - [nullptr在模板编程中的优势](https://github.com/Sunrisepeak/mcpp-standard/blob/main/dslings/cpp11/12-nullptr-2.cpp)
+- 0 - [nullptr基础用法](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/12-nullptr-0.cpp)
+- 1 - [nullptr的函数重载](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/12-nullptr-1.cpp)
+- 2 - [nullptr在模板编程中的优势](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/12-nullptr-2.cpp)
 
 ### 练习代码自动检测命令
 
@@ -191,6 +191,6 @@ d2x checker nullptr
 ## 四、其他
 
 - [交流讨论](https://forum.d2learn.org/category/20)
-- [mcpp-standard教程仓库](https://github.com/Sunrisepeak/mcpp-standard)
+- [d2mcpp教程仓库](https://github.com/mcpp-community/d2mcpp)
 - [教程视频列表](https://space.bilibili.com/65858958/lists/5208246)
 - [教程支持工具-xlings](https://xlings.d2learn.org)

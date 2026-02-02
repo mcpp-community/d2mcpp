@@ -12,7 +12,7 @@ Inherited constructors are a syntactic feature introduced in C++11 that solves t
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/using_declaration.html#Inheriting_constructors) / [markdown](https://github.com/Sunrisepeak/mcpp-standard/blob/main/book/en/src/cpp11/11-inherited-constructors.md) | [Bili](https://www.bilibili.com/video/BV1bspBzFEEC) / [Youtube](https://youtu.be/p7vbY8XUKnY?si=GZUn9GSW68aU94A6) | [Practice Code](https://github.com/Sunrisepeak/mcpp-standard/blob/main/dslings/cpp11/11-inherited-constructors-0.cpp) |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/using_declaration.html#Inheriting_constructors) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/11-inherited-constructors.md) | [Bili](https://www.bilibili.com/video/BV1bspBzFEEC) / [Youtube](https://youtu.be/p7vbY8XUKnY?si=GZUn9GSW68aU94A6) | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/11-inherited-constructors-0.cpp) |  |
 
 **Why was it introduced?**
 
@@ -222,9 +222,9 @@ For example, for testing environments or scenarios involving **only functional e
 
 ### Practice Code Topics
 
-- 0 - [Familiarize with Inherited Constructors Feature](https://github.com/Sunrisepeak/mcpp-standard/blob/main/dslings/cpp11/11-inherited-constructors-0.cpp)
-- 1 - [Application in Functional Extension - StudentTest](https://github.com/Sunrisepeak/mcpp-standard/blob/main/dslings/cpp11/11-inherited-constructors-1.cpp)
-- 2 - [Application in Generic Templates - NoCopy / NoMove Behavior Constraints](https://github.com/Sunrisepeak/mcpp-standard/blob/main/dslings/cpp11/11-inherited-constructors-2.cpp)
+- 0 - [Familiarize with Inherited Constructors Feature](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/11-inherited-constructors-0.cpp)
+- 1 - [Application in Functional Extension - StudentTest](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/11-inherited-constructors-1.cpp)
+- 2 - [Application in Generic Templates - NoCopy / NoMove Behavior Constraints](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/11-inherited-constructors-2.cpp)
 
 ### Practice Code Auto-detection Command
 
@@ -235,6 +235,6 @@ d2x checker inherited-constructors
 ## IV. Additional Resources
 
 - [Discussion Forum](https://forum.d2learn.org/category/20)
-- [mcpp-standard Tutorial Repository](https://github.com/Sunrisepeak/mcpp-standard)
+- [d2mcpp Tutorial Repository](https://github.com/mcpp-community/d2mcpp)
 - [Tutorial Video List](https://space.bilibili.com/65858958/lists/5208246)
 - [Tutorial Support Tool - xlings](https://github.com/d2learn/xlings)

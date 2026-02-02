@@ -1,4 +1,4 @@
-// mcpp-standard: https://github.com/Sunrisepeak/mcpp-standard
+// d2mcpp: https://github.com/mcpp-community/d2mcpp
 // license: Apache-2.0
 // file: dslings/cpp11/00-auto-and-decltype-3.cpp
 //
@@ -9,7 +9,7 @@
 // Docs:
 //   - https://en.cppreference.com/w/cpp/language/auto
 //   - https://en.cppreference.com/w/cpp/language/decltype
-//   - https://github.com/Sunrisepeak/mcpp-standard/blob/main/book/src/cpp11/00-auto-and-decltype.md
+//   - https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/00-auto-and-decltype.md
 //
 // Forum: https://forum.d2learn.org/category/20
 //

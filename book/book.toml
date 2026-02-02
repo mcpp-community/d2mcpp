@@ -1,6 +1,6 @@
 # docs: https://rust-lang.github.io/mdBook
 [book]
-title = "mcpp-standard | 动手学现代C++核心语言特性"
+title = "d2mcpp | 动手学现代C++核心语言特性"
 author = "sunrispeak"
 language = "zh"
 
@@ -8,7 +8,7 @@ language = "zh"
 build-dir = "book"
 
 [output.html]
-git-repository-url = "https://github.com/Sunrisepeak/mcpp-standard"
+git-repository-url = "https://github.com/mcpp-community/d2mcpp"
 
 [preprocessor.foo]
 # Add any additional configurations

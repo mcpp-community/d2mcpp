@@ -1,4 +1,4 @@
-// mcpp-standard: https://github.com/Sunrisepeak/mcpp-standard
+// d2mcpp: https://github.com/mcpp-community/d2mcpp
 // license: Apache-2.0
 // file: dslings/cpp11/11-inherited-constructors-1.cpp
 //
@@ -8,7 +8,7 @@
 //
 // Docs:
 //   - https://en.cppreference.com/w/cpp/language/using_declaration.html#Inheriting_constructors
-//   - https://sunrisepeak.github.io/mcpp-standard/cpp11/11-inherited-constructors.html
+//   - https://mcpp-community.github.com/d2mcpp/cpp11/11-inherited-constructors.html
 //
 // Auto-Checker command:
 //

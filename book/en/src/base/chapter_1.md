@@ -8,7 +8,7 @@
 
 # Usage Guide
 
-**mcpp-standard** is a hands-on tutorial project focused on Modern C++ core language features. Based on the [xlings(d2x) tool](https://xlings.d2learn.org), it implements a **compiler-driven development model** for code practice that can automatically detect exercise code status and navigate to the next exercise.
+**d2mcpp** is a hands-on tutorial project focused on Modern C++ core language features. Based on the [xlings(d2x) tool](https://xlings.d2learn.org), it implements a **compiler-driven development model** for code practice that can automatically detect exercise code status and navigate to the next exercise.
 
 ## 0. xlings Tool Installation
 
@@ -37,7 +37,7 @@ Invoke-Expression (Invoke-Webrequest 'https://d2learn.org/xlings-install.ps1.txt
 > Download the project to current directory and automatically configure local environment
 
 ```bash
-xlings install d2x:mcpp-standard
+xlings install d2x:d2mcpp
 ```
 
 ### Local E-book
@@ -50,7 +50,7 @@ d2x book
 
 ### Practice Code Auto-detection
 
-> Enter the project directory `mcpp-standard` and run the checker command to enter the practice code auto-detection program
+> Enter the project directory `d2mcpp` and run the checker command to enter the practice code auto-detection program
 
 ```bash
 d2x checker
@@ -79,7 +79,7 @@ After entering the automated code practice environment using `xlings checker`, t
 **Practice Code File Example**
 
 ```cpp
-// mcpp-standard: https://github.com/Sunrisepeak/mcpp-standard
+// d2mcpp: https://github.com/mcpp-community/d2mcpp
 // license: Apache-2.0
 // file: dslings/hello-mcpp.cpp
 //
@@ -200,6 +200,6 @@ xlings install
 
 **xlings:** [https://github.com/d2learn/xlings](https://github.com/d2learn/xlings)
 
-**Tutorial Repository:** [https://github.com/Sunrisepeak/mcpp-standard](https://github.com/Sunrisepeak/mcpp-standard)
+**Tutorial Repository:** [https://github.com/mcpp-community/d2mcpp](https://github.com/mcpp-community/d2mcpp)
 
 **Tutorial Video Collection:** [https://space.bilibili.com/65858958/lists/5208246](https://space.bilibili.com/65858958/lists/5208246)

@@ -12,7 +12,7 @@
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/types) / [markdown](https://github.com/Sunrisepeak/mcpp-standard/blob/main/book/en/src/cpp11/13-long-long.md) | [Video Explanation]() | [Practice Code](https://github.com/Sunrisepeak/mcpp-standard/blob/main/dslings/en/cpp11/13-long-long-0.cpp) |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/types) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/13-long-long.md) | [Video Explanation]() | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/en/cpp11/13-long-long-0.cpp) |  |
 
 **Why was it introduced?**
 
@@ -109,8 +109,8 @@ if (bigValue > std::numeric_limits<int>::max() || bigValue < std::numeric_limits
 
 ### Practice Code Topics
 
-- 0 - [long long Basic Usage](https://github.com/Sunrisepeak/mcpp-standard/blob/main/dslings/en/cpp11/13-long-long-0.cpp)
-- 1 - [long long Large Number Applications and Boundary Values](https://github.com/Sunrisepeak/mcpp-standard/blob/main/dslings/en/cpp11/13-long-long-1.cpp)
+- 0 - [long long Basic Usage](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/en/cpp11/13-long-long-0.cpp)
+- 1 - [long long Large Number Applications and Boundary Values](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/en/cpp11/13-long-long-1.cpp)
 
 ### Auto-Checker Command
 
@@ -121,6 +121,6 @@ d2x checker long-long
 ## IV. Additional Resources
 
 - [Discussion Forum](https://forum.d2learn.org/category/20)
-- [mcpp-standard Tutorial Repository](https://github.com/Sunrisepeak/mcpp-standard)
+- [d2mcpp Tutorial Repository](https://github.com/mcpp-community/d2mcpp)
 - [Tutorial Video List](https://space.bilibili.com/65858958/lists/5208246)
 - [Tutorial Support Tool - xlings](https://xlings.d2learn.org)

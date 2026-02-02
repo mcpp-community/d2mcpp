@@ -8,7 +8,7 @@
 
 # 使用说明
 
-**mcpp-standard**是一个强调动手实践的现代C++核心语言特性教程项目。基于[xlings(d2x)工具](https://github.com/d2learn/xlings)搭建了一套**编译器驱动开发模式**的代码练习, 可以自动化的检测练习代码的状态和跳转到下一个练习...
+**d2mcpp**是一个强调动手实践的现代C++核心语言特性教程项目。基于[xlings(d2x)工具](https://github.com/d2learn/xlings)搭建了一套**编译器驱动开发模式**的代码练习, 可以自动化的检测练习代码的状态和跳转到下一个练习...
 
 ## 0.xlings工具安装
 
@@ -37,7 +37,7 @@ Invoke-Expression (Invoke-Webrequest 'https://d2learn.org/xlings-install.ps1.txt
 > 下载项目到当前目录并自动配置本地环境
 
 ```bash
-xlings install d2x:mcpp-standard
+xlings install d2x:d2mcpp
 ```
 
 ### 本地电子书
@@ -50,7 +50,7 @@ d2x book
 
 ### 练习代码自动检测
 
-> 进入项目目录`mcpp-standard`运行checker命令, 进入练习代码自动检测程序
+> 进入项目目录`d2mcpp`运行checker命令, 进入练习代码自动检测程序
 
 ```bash
 d2x checker
@@ -79,7 +79,7 @@ d2x update
 **代码练习文件示例**
 
 ```cpp
-// mcpp-standard: https://github.com/Sunrisepeak/mcpp-standard
+// d2mcpp: https://github.com/mcpp-community/d2mcpp
 // license: Apache-2.0
 // file: dslings/hello-mcpp.cpp
 //
@@ -197,6 +197,6 @@ xlings install
 
 **xlings:** [https://github.com/d2learn/xlings](https://github.com/d2learn/xlings)
 
-**教程仓库:** [https://github.com/Sunrisepeak/mcpp-standard](https://github.com/Sunrisepeak/mcpp-standard)
+**教程仓库:** [https://github.com/mcpp-community/d2mcpp](https://github.com/mcpp-community/d2mcpp)
 
 **教程视频合集:** [https://space.bilibili.com/65858958/lists/5208246](https://space.bilibili.com/65858958/lists/5208246)

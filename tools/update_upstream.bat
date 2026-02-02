@@ -1,6 +1,6 @@
 @echo off
 REM ===== 配置参数 =====
-set "UPSTREAM_URL=https://github.com/Sunrisepeak/mcpp-standard.git"
+set "UPSTREAM_URL=https://github.com/mcpp-community/d2mcpp.git"
 set "BRANCH_NAME=main"
 set "HAS_CHANGES="
 set "HAS_COMMITS="

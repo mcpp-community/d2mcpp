@@ -1,4 +1,4 @@
-// mcpp-standard: https://github.com/Sunrisepeak/mcpp-standard
+// d2mcpp: https://github.com/mcpp-community/d2mcpp
 // license: Apache-2.0
 // file: dslings/cpp11/15-variadic-templates-0.cpp
 //
@@ -11,7 +11,7 @@
 //
 // Docs/文档:
 //   - https://en.cppreference.com/w/cpp/language/parameter_pack
-//   - https://github.com/Sunrisepeak/mcpp-standard/blob/main/book/src/cpp11/15-variadic-templates.md
+//   - https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/15-variadic-templates.md
 //
 // 练习交流讨论: http://forum.d2learn.org/category/20
 //

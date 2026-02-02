@@ -1,6 +1,6 @@
 # docs: https://rust-lang.github.io/mdBook
 [book]
-title = "mcpp-standard | D2X - Modern C++ Core Language Features"
+title = "d2mcpp | D2X - Modern C++ Core Language Features"
 author = "sunrispeak"
 language = "en"
 
@@ -8,7 +8,7 @@ language = "en"
 build-dir = "../book/en"
 
 [output.html]
-git-repository-url = "https://github.com/Sunrisepeak/mcpp-standard"
+git-repository-url = "https://github.com/mcpp-community/d2mcpp"
 
 [preprocessor.foo]
 # Add any additional configurations

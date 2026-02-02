@@ -1,4 +1,4 @@
-// mcpp-standard: https://github.com/Sunrisepeak/mcpp-standard
+// d2mcpp: https://github.com/mcpp-community/d2mcpp
 // license: Apache-2.0
 // file: dslings/cpp11/13-long-long-0.cpp
 //
@@ -8,7 +8,7 @@
 //
 // Docs/文档:
 //   - https://en.cppreference.com/w/cpp/language/types
-//   - https://github.com/Sunrisepeak/mcpp-standard/blob/main/book/src/cpp11/13-long-long.md
+//   - https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/13-long-long.md
 //
 // 练习交流讨论: http://forum.d2learn.org
 //

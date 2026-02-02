@@ -1,4 +1,4 @@
-// mcpp-standard: https://github.com/Sunrisepeak/mcpp-standard
+// d2mcpp: https://github.com/mcpp-community/d2mcpp
 // license: Apache-2.0
 // file: dslings/cpp11/12-nullptr-0.cpp
 //
@@ -8,7 +8,7 @@
 //
 // Docs/文档:
 //   - https://en.cppreference.com/w/cpp/language/nullptr
-//   - https://github.com/Sunrisepeak/mcpp-standard/blob/main/book/src/cpp11/12-nullptr.md
+//   - https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/12-nullptr.md
 //
 // 练习交流讨论: http://forum.d2learn.org
 //

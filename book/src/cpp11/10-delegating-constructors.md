@@ -12,7 +12,7 @@
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/initializer_list.html#Delegating_constructor) / [markdown](https://github.com/Sunrisepeak/mcpp-standard/blob/main/book/src/cpp11/10-delegating-constructors.md) | [视频解读](https://www.bilibili.com/video/BV1zft3zSEER) | [练习代码](https://github.com/Sunrisepeak/mcpp-standard/blob/main/dslings/cpp11/10-delegating-constructors-0.cpp)  |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/initializer_list.html#Delegating_constructor) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/10-delegating-constructors.md) | [视频解读](https://www.bilibili.com/video/BV1zft3zSEER) | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/10-delegating-constructors-0.cpp)  |  |
 
 **为什么引入?**
 
@@ -206,6 +206,6 @@ public:
 ## 三、其他
 
 - [交流讨论](https://forum.d2learn.org/category/20)
-- [mcpp-standard教程仓库](https://github.com/Sunrisepeak/mcpp-standard)
+- [d2mcpp教程仓库](https://github.com/mcpp-community/d2mcpp)
 - [教程视频列表](https://space.bilibili.com/65858958/lists/5208246)
 - [教程支持工具-xlings](https://github.com/d2learn/xlings)

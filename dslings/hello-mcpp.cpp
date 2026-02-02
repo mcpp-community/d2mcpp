@@ -1,4 +1,4 @@
-// mcpp-standard: https://github.com/Sunrisepeak/mcpp-standard
+// d2mcpp: https://github.com/mcpp-community/d2mcpp
 // license: Apache-2.0
 // file: dslings/hello-mcpp.cpp
 //
@@ -15,7 +15,7 @@
 //      - D2X_YOUR_ANSWER: 该宏用于提示你需要修改的代码, 一般用于代码填空(即用正确的代码替换这个宏)
 //
 // Docs/文档:
-//   - https://github.com/Sunrisepeak/mcpp-standard/blob/main/book/src/chapter_1.md
+//   - https://github.com/mcpp-community/d2mcpp/blob/main/book/src/chapter_1.md
 //   - book/src/chapter_1.md
 //
 // Auto-Checker/自动检测命令:

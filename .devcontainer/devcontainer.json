@@ -1,5 +1,5 @@
 {
-  "name": "mcpp-standard (Codespaces)",
+  "name": "d2mcpp (Codespaces)",
   "image": "mcr.microsoft.com/devcontainers/cpp:ubuntu-24.04",
   "customizations": {
     "vscode": {

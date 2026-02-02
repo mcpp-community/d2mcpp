@@ -1,6 +1,6 @@
 -- https://xlings.d2learn.org
 
-xname = "mcpp-standard" -- project name
+xname = "d2mcpp" -- project name
 
 -- xim-deps
 xim = {

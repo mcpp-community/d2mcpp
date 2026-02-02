@@ -4,7 +4,7 @@ def mcpp_video_start(scene, target_title):
 
     title = Text(target_title)
     logo = VGroup(
-        Tex(r"\textit{\underline{mcpp-standard}}"),
+        Tex(r"\textit{\underline{d2mcpp}}"),
         Tex(r"\textit{+}", color=RED)
     ).arrange(RIGHT, buff=0.1).scale(0.8)
 
@@ -30,7 +30,7 @@ def mcpp_video_end(scene, logo, obj_group=VGroup()):
 
     ending = VGroup(
         Text("开源交互式教程", color=RED).scale(0.9),
-        Tex(r"\textit{\underline{https://github.com/Sunrisepeak/mcpp-standard}}"),
+        Tex(r"\textit{\underline{https://github.com/mcpp-community/d2mcpp}}"),
     ).arrange(DOWN, buff=0.15).scale(0.8)
 
     scene.play(

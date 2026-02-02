@@ -12,7 +12,7 @@
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/nullptr) / [markdown](https://github.com/Sunrisepeak/mcpp-standard/blob/main/book/en/src/cpp11/12-nullptr.md) | [Video Explanation]() | [Practice Code](https://github.com/Sunrisepeak/mcpp-standard/blob/main/dslings/en/cpp11/12-nullptr-0.cpp) |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/nullptr) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/12-nullptr.md) | [Video Explanation]() | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/en/cpp11/12-nullptr-0.cpp) |  |
 
 **Why was it introduced?**
 
@@ -178,9 +178,9 @@ bool isEmpty = (ptr == nullptr);  // true
 
 ### Practice Code Topics
 
-- 0 - [nullptr Basic Usage](https://github.com/Sunrisepeak/mcpp-standard/blob/main/dslings/en/cpp11/12-nullptr-0.cpp)
-- 1 - [nullptr Function Overloading](https://github.com/Sunrisepeak/mcpp-standard/blob/main/dslings/en/cpp11/12-nullptr-1.cpp)
-- 2 - [nullptr Advantages in Template Programming](https://github.com/Sunrisepeak/mcpp-standard/blob/main/dslings/en/cpp11/12-nullptr-2.cpp)
+- 0 - [nullptr Basic Usage](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/en/cpp11/12-nullptr-0.cpp)
+- 1 - [nullptr Function Overloading](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/en/cpp11/12-nullptr-1.cpp)
+- 2 - [nullptr Advantages in Template Programming](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/en/cpp11/12-nullptr-2.cpp)
 
 ### Auto-Checker Command
 
@@ -191,6 +191,6 @@ d2x checker nullptr
 ## IV. Additional Resources
 
 - [Discussion Forum](https://forum.d2learn.org/category/20)
-- [mcpp-standard Tutorial Repository](https://github.com/Sunrisepeak/mcpp-standard)
+- [d2mcpp Tutorial Repository](https://github.com/mcpp-community/d2mcpp)
 - [Tutorial Video List](https://space.bilibili.com/65858958/lists/5208246)
 - [Tutorial Support Tool - xlings](https://xlings.d2learn.org)
