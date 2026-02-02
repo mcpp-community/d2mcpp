@@ -10,7 +10,7 @@
 
 d2mcpp是一个开源、强调代码实践的`现代C++核心语言特性`教程项目。项目的总体结构为[Book + Video + Code + X]。为使用者提供了 在线电子书、对应的讲解视频、配套练习代码, 同时也提供了用于讨论交流的论坛和定期的学习活动...
 
-- [Book: 在线电子书](https://mcpp-community.github.com/d2mcpp)
+- [Book: 在线电子书](https://mcpp-community.github.io/d2mcpp)
 - [Video: 讲解视频](https://space.bilibili.com/65858958/lists/5208246?type=season)
 - [Code: 练习代码](https://github.com/mcpp-community/d2mcpp/tree/main/dslings)
 - [X: mcpp论坛](https://forum.d2learn.org/category/20)
@@ -26,7 +26,7 @@ d2mcpp是一个开源、强调代码实践的`现代C++核心语言特性`教程
 > MSCP是一款基于d2mcpp开源项目开发的"地球Online"风格的角色扮演游戏。在游戏中你将扮演一个"编程初学者", 为了入门"现代C++"并揭露其背后的真相, 踏上了一条充满挑战和惊奇的现代C++学习之路...
 
 - `价格:` 免费
-- `开发者:` [Sunrisepeak](https://github.com/mcpp-community)
+- `开发者:` [Sunrisepeak](https://github.com/sunrisepeak)
 - `发行商:` [MOGA](https://moga.d2learn.org)
 - `发行时间:` 2025年10月
 - `游戏体量:` 100H - 200H之间

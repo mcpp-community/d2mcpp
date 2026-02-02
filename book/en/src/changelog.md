@@ -14,12 +14,12 @@
 
 **C++11 - 13 - long long - 64-bit Integer Type**
 
-- `Book`: [zh](https://mcpp-community.github.com/d2mcpp/cpp11/13-long-long.html) / [en](https://mcpp-community.github.com/d2mcpp/en/cpp11/13-long-long.html) - 2025/11/03
+- `Book`: [zh](https://mcpp-community.github.io/d2mcpp/cpp11/13-long-long.html) / [en](https://mcpp-community.github.io/d2mcpp/en/cpp11/13-long-long.html) - 2025/11/03
 - `Code`: [zh](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/13-long-long-0.cpp) / [en](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/en/cpp11/13-long-long-0.cpp) - 2025/11/03
 
 **C++11 - 12 - nullptr - Pointer Literal**
 
-- `Book`: [zh](https://mcpp-community.github.com/d2mcpp/cpp11/12-nullptr.html) / [en](https://mcpp-community.github.com/d2mcpp/en/cpp11/12-nullptr.html) - 2025/11/02
+- `Book`: [zh](https://mcpp-community.github.io/d2mcpp/cpp11/12-nullptr.html) / [en](https://mcpp-community.github.io/d2mcpp/en/cpp11/12-nullptr.html) - 2025/11/02
 - `Code`: [zh](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/12-nullptr-0.cpp) / [en](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/en/cpp11/12-nullptr-0.cpp) - 2025/11/02
 
 ## 2025/09
@@ -35,7 +35,7 @@
 **C++11 - 11 - Inherited Constructors**
 
 - **[code-0](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/11-inherited-constructors-0.cpp) / [code-1](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/11-inherited-constructors-1.cpp) / [code-2](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/11-inherited-constructors-2.cpp)** - 2025/08/29
-- **[book](https://mcpp-community.github.com/d2mcpp/cpp11/11-inherited-constructors.html)** - 2025/08/28
+- **[book](https://mcpp-community.github.io/d2mcpp/cpp11/11-inherited-constructors.html)** - 2025/08/28
 - **video** - todo
 
 ---

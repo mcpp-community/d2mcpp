@@ -9,7 +9,7 @@
 //
 // Docs/文档:
 //   - https://en.cppreference.com/w/cpp/language/using_declaration.html#Inheriting_constructors
-//   - https://mcpp-community.github.com/d2mcpp/cpp11/11-inherited-constructors.html
+//   - https://mcpp-community.github.io/d2mcpp/cpp11/11-inherited-constructors.html
 //
 // Auto-Checker/自动检测命令:
 //

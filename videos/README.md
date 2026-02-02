@@ -13,7 +13,7 @@ manim -pql videos/cpp11/09-list-initialization.py
 
 | c++标准 | 特性 | 标题 | 练习代码/视频 | 备注 |
 | --- | --- | --- | --- | --- |
-| **引导** | `项目使用教程/引导` | hello mcpp | [docs](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/chapter_1.md) / [code](/dslings/hello-mcpp.cpp) / [video](https://www.bilibili.com/video/BV182MtzPEiX?p=2) | |
+| **引导** | `项目使用教程/引导` | hello mcpp | [docs](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/base/chapter_1.md) / [code](/dslings/hello-mcpp.cpp) / [video](https://www.bilibili.com/video/BV182MtzPEiX?p=2) | |
 | **cpp11** | `00 - auto和decltype` | 类型自动推导 | [docs](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/00-auto-and-decltype.md) / [code](/dslings/cpp11/00-auto-and-decltype-0.cpp) / [video](https://www.bilibili.com/video/BV1xkdYYUEyH) | |
 | | | decltype注意事项 | [code](/dslings/cpp11/00-auto-and-decltype-4.cpp) / [video](https://www.bilibili.com/video/BV1KWoMYUEzW) | [补充](https://forum.d2learn.org/topic/82) |
 | | `01 - default和delete` | 控制默认构造函数生成 | [code](/dslings/cpp11/01-default-and-delete-0.cpp) / [video](https://www.bilibili.com/video/BV1B35pz5EN2) | |
