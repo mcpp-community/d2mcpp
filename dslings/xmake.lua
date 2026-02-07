@@ -4,10 +4,11 @@ if is_host("windows") then
     add_ldflags("-static")
 end
 
-local lang = "en"
-if d2x and d2x.private and d2x.private.mcpp then
-    lang = d2x.private.mcpp.lang or "en"
-end
+option("lang")
+    set_default("en")
+    set_description("Language: en or zh")
+
+local lang = get_config("lang")
 
 if lang == "zh" then
 
