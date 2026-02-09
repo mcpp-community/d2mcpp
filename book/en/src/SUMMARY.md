@@ -17,6 +17,7 @@
 - [nullptr - Pointer Literal](./cpp11/12-nullptr.md)
 - [long long - 64-bit Integer Type](./cpp11/13-long-long.md)
 - [using - Type Alias and Alias Template](./cpp11/14-type-alias.md)
+- [Generalized Unions](./cpp11/16-generalized-unions.md)
 
 # C++14 Core Language Features
 
