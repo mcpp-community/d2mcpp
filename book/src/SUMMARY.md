@@ -18,7 +18,7 @@
 - [long long - 64位整数类型](./cpp11/13-long-long.md)
 - [using - 类型别名和别名模板](./cpp11/14-type-alias.md)
 - [可变参数模板](./cpp11/15-variadic-templates.md)
-- [广泛联合体](./cpp11/16-generalized-unions.md)
+- [广义联合体](./cpp11/16-generalized-unions.md)
 
 # C++14核心语言特性
 
