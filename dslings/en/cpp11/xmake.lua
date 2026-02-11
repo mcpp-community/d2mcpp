@@ -159,3 +159,14 @@ target("cpp11-14-type-alias-2")
 
 target("cpp11-14-type-alias-3")
     add_files("14-type-alias-3.cpp")
+
+-- target: cpp11-17-pod-type
+
+target("cpp11-17-pod-type-0")
+    add_files("17-pod-type-0.cpp")
+
+target("cpp11-17-pod-type-1")
+    add_files("17-pod-type-1.cpp")
+
+target("cpp11-17-pod-type-2")
+    add_files("17-pod-type-2.cpp")

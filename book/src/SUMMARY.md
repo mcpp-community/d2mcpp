@@ -19,6 +19,7 @@
 - [using - 类型别名和别名模板](./cpp11/14-type-alias.md)
 - [可变参数模板](./cpp11/15-variadic-templates.md)
 - [广义联合体](./cpp11/16-generalized-unions.md)
+- [POD 类型](./cpp11/17-pod-type.md)
 
 # C++14核心语言特性
 

@@ -168,3 +168,14 @@ target("cpp11-15-variadic-templates-0")
 
 target("cpp11-15-variadic-templates-1")
     add_files("15-variadic-templates-1.cpp")
+
+-- target: cpp11-17-pod-type
+
+target("cpp11-17-pod-type-0")
+    add_files("17-pod-type-0.cpp")
+
+target("cpp11-17-pod-type-1")
+    add_files("17-pod-type-1.cpp")
+
+target("cpp11-17-pod-type-2")
+    add_files("17-pod-type-2.cpp")
