@@ -169,6 +169,14 @@ target("cpp11-15-variadic-templates-0")
 target("cpp11-15-variadic-templates-1")
     add_files("15-variadic-templates-1.cpp")
 
+-- target: cpp11-16-generalized-unions
+
+target("cpp11-16-generalized-unions-0")
+    add_files("16-generalized-unions-0.cpp")
+
+target("cpp11-16-generalized-unions-1")
+    add_files("16-generalized-unions-1.cpp")
+
 -- target: cpp11-17-pod-type
 
 target("cpp11-17-pod-type-0")
