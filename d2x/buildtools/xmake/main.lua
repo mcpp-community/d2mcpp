@@ -1,8 +1,25 @@
 import("core.base.json")
 import("core.base.option")
 import("core.project.project")
+import("core.project.config")
+
+local function get_d2x_lang()
+    local d2x_json_file = path.join(os.projectdir(), ".d2x.json")
+    if os.isfile(d2x_json_file) then
+        local d2x_config = json.loadfile(d2x_json_file) or {}
+        return d2x_config["lang"]
+    end
+    return nil
+end
 
 function list()
+
+    config.load()
+    local lang = get_d2x_lang()
+    if lang and #lang > 0 then
+        config.set("lang", lang, {force = true})
+    end
+
     local targets = project.targets()
     for name, _ in pairs(targets) do
         local files = targets[name]:sourcefiles()
@@ -33,12 +50,9 @@ function main()
     --print("project file: " .. project.rootfile())
 
     if command == "init" then
-        local d2x_json_file = path.join(os.projectdir(), ".d2x.json")
-        if os.isfile(d2x_json_file) then
-            local d2x_config = json.loadfile(d2x_json_file) or {}
-            if d2x_config["lang"] then
-                os.exec("xmake f --lang=" .. d2x_config["lang"])
-            end
+        local lang = get_d2x_lang()
+        if lang and #lang > 0 then
+            os.exec("xmake f --lang=" .. lang)
         end
     elseif command == "list" then
         list()
