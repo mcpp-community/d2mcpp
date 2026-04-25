@@ -10,7 +10,7 @@
 # C++11核心语言特性
 
 - [auto和decltype - 类型自动推导](./cpp11/00-auto-and-decltype.md)
-- [default和delete - 默认/删除函数](./cpp11/01-default-and-delete.md)
+- [default 和 delete - 显式控制特殊成员函数](./cpp11/01-default-and-delete.md)
 - [final 和 override - 虚函数重写控制](./cpp11/02-final-and-override.md)
 - [尾置返回类型 - trailing return type](./cpp11/03-trailing-return-type.md)
 - [右值引用 - rvalue reference](./cpp11/04-rvalue-references.md)
@@ -24,7 +24,7 @@
 - [nullptr - 指针字面量](./cpp11/12-nullptr.md)
 - [long long - 64位整数类型](./cpp11/13-long-long.md)
 - [using - 类型别名和别名模板](./cpp11/14-type-alias.md)
-- [可变参数模板](./cpp11/15-variadic-templates.md)
+- [可变参数模板 - variadic templates](./cpp11/15-variadic-templates.md)
 - [广义联合体](./cpp11/16-generalized-unions.md)
 - [POD 类型](./cpp11/17-pod-type.md)
 

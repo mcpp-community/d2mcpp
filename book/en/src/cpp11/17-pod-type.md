@@ -3,8 +3,8 @@
   🌎 [中文] | [English]
 </div>
 
-[中文]: ./17-pod.md
-[English]: ../en/cpp11/17-pod.md
+[中文]: ../../cpp11/17-pod-type.html
+[English]: ./17-pod-type.html
 
 # POD (Plain Old Data)
 
