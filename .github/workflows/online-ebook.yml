@@ -36,17 +36,19 @@ jobs:
         working-directory: book
 
     env:
+      XLINGS_VERSION: "0.4.3"
       MDBOOK_VERSION: 0.4.43
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Xlings
-        env:
-          XLINGS_NON_INTERACTIVE: 1
+      - name: Install Xlings ${{ env.XLINGS_VERSION }}
         run: |
-          curl -fsSL https://d2learn.org/xlings-install.sh | bash
-          echo "PATH=$HOME/.xlings/subos/current/bin:$PATH" >> "$GITHUB_ENV"
+          set -eu
+          curl -fsSL "https://github.com/d2learn/xlings/releases/download/v${XLINGS_VERSION}/xlings-${XLINGS_VERSION}-linux-x86_64.tar.gz" \
+            | tar -xzf - -C /tmp
+          /tmp/xlings-${XLINGS_VERSION}-linux-x86_64/bin/xlings self install
+          echo "$HOME/.xlings/subos/current/bin" >> "$GITHUB_PATH"
 
       - name: Install mdBook
         run: xlings install mdbook@${MDBOOK_VERSION} -y
