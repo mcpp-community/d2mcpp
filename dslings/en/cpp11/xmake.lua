@@ -55,8 +55,8 @@ target("cpp11-03-trailing-return-type")
 -- target: cpp11-04-rvalue-references
 
 target("cpp11-04-rvalue-references")
-set_optimize("none")
-add_cxxflags("-fno-elide-constructors")
+    set_optimize("none")
+    add_cxxflags("-fno-elide-constructors")
     add_files("04-rvalue-references.cpp")
 
 -- target: cpp11-05-move-semantics
@@ -81,7 +81,7 @@ target("cpp11-06-scoped-enums-1")
 -- target: cpp11-07-constexpr
 
 target("cpp11-07-constexpr-0")
-add_cxxflags("-Wpedantic -Werror")
+    add_cxxflags("-Wpedantic -Werror")
     add_files("07-constexpr-0.cpp")
 
 target("cpp11-07-constexpr-1")
@@ -90,6 +90,7 @@ target("cpp11-07-constexpr-1")
 -- target: cpp11-08-literal-type
 
 target("cpp11-08-literal-type-0")
+    set_languages("c++17") -- TODO: optimize it
     add_files("08-literal-type-0.cpp")
 
 target("cpp11-08-literal-type-1")
@@ -159,6 +160,14 @@ target("cpp11-14-type-alias-2")
 
 target("cpp11-14-type-alias-3")
     add_files("14-type-alias-3.cpp")
+
+-- target: cpp11-15-variadic-templates
+
+target("cpp11-15-variadic-templates-0")
+    add_files("15-variadic-templates-0.cpp")
+
+target("cpp11-15-variadic-templates-1")
+    add_files("15-variadic-templates-1.cpp")
 
 -- target: cpp11-16-generalized-unions
 
