@@ -1,0 +1,115 @@
+name: Validate dslings reference solutions
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "dslings/**"
+      - "solutions/**"
+      - "d2x/**"
+      - "xmake.lua"
+      - ".github/workflows/dslings-ref-ci.yml"
+  pull_request:
+    paths:
+      - "dslings/**"
+      - "solutions/**"
+      - "d2x/**"
+      - "xmake.lua"
+      - ".github/workflows/dslings-ref-ci.yml"
+  workflow_dispatch:
+
+jobs:
+  build-and-run-reference:
+    runs-on: ubuntu-latest
+
+    env:
+      XLINGS_VERSION: "0.4.3"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Xlings ${{ env.XLINGS_VERSION }}
+        run: |
+          set -eu
+          curl -fsSL "https://github.com/d2learn/xlings/releases/download/v${XLINGS_VERSION}/xlings-${XLINGS_VERSION}-linux-x86_64.tar.gz" \
+            | tar -xzf - -C /tmp
+          /tmp/xlings-${XLINGS_VERSION}-linux-x86_64/bin/xlings self install
+          echo "$HOME/.xlings/subos/current/bin" >> "$GITHUB_PATH"
+
+      - name: Install xmake (via xlings)
+        run: xlings install xmake -y
+
+      - name: xmake config
+        run: xmake f -y
+
+      # Following steps go through the SAME `xmake d2x-buildtools` plugin
+      # path that `d2x checker` uses internally (see d2x/buildtools/xmake/main.lua).
+      # This way the CI exercises the real d2x integration code path, not a
+      # parallel xmake-only path. A passing CI here is what a learner would
+      # see if they ran `d2x checker cpp11-XX-feat-K-ref` locally.
+
+      - name: List all *-ref targets via d2x-buildtools
+        id: list_ref
+        run: |
+          set -eu
+          REF_TARGETS=$(xmake d2x-buildtools --command=list 2>/dev/null \
+            | tr ' ' '\n' \
+            | sed 's/@.*$//' \
+            | grep -E '\-ref$' \
+            | sort -u)
+          echo "Found $(echo "$REF_TARGETS" | wc -l) reference targets:"
+          echo "$REF_TARGETS"
+          echo "targets<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$REF_TARGETS" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Build all *-ref targets via d2x-buildtools
+        run: |
+          set -eu
+          while IFS= read -r tgt; do
+            [ -z "$tgt" ] && continue
+            echo "::group::build $tgt"
+            xmake d2x-buildtools --command=build --target="$tgt"
+            echo "::endgroup::"
+          done <<< "${{ steps.list_ref.outputs.targets }}"
+
+      - name: Run all *-ref targets via d2x-buildtools and assert no ❌
+        run: |
+          set -eu
+          fail=0
+          while IFS= read -r tgt; do
+            [ -z "$tgt" ] && continue
+            echo "::group::run $tgt"
+            output=$(xmake d2x-buildtools --command=run --target="$tgt" 2>&1)
+            echo "$output"
+            if echo "$output" | grep -qE '❌|Compilation/Running failed'; then
+              echo "::error::reference target $tgt produced a ❌ — exercise solution does not pass its own asserts"
+              fail=1
+            fi
+            if echo "$output" | grep -q 'Delete the D2X_WAIT to continue'; then
+              echo "::error::reference target $tgt still contains D2X_WAIT — remove it from the solution"
+              fail=1
+            fi
+            echo "::endgroup::"
+          done <<< "${{ steps.list_ref.outputs.targets }}"
+          exit $fail
+
+      - name: Verify dslings ↔ solutions filename parity
+        run: |
+          set -eu
+          # Every dslings/{cpp,hpp} file should have a matching solutions/ counterpart
+          missing=0
+          while IFS= read -r f; do
+            rel="${f#dslings/}"
+            # Skip the en/ mirror — solutions are language-neutral
+            case "$rel" in
+              en/*) continue ;;
+            esac
+            if [ ! -f "solutions/$rel" ]; then
+              echo "::warning::missing solutions/$rel (paired with dslings/$rel)"
+              missing=$((missing+1))
+            fi
+          done < <(find dslings -name '*.cpp' -not -path 'dslings/en/*')
+          if [ "$missing" -gt 0 ]; then
+            echo "::warning::$missing dslings exercises do not yet have a reference solution. This is informational during the bring-up phase; tighten to error once cpp11 is fully covered."
+          fi
