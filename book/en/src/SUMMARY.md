@@ -11,6 +11,7 @@
 
 - [Type Deduction - auto and decltype](./cpp11/00-auto-and-decltype.md)
 - [Defaulted and Deleted Functions](./cpp11/01-default-and-delete.md)
+- [final and override - Explicit Control of Virtual Function Behavior](./cpp11/02-final-and-override.md)
 - [List Initialization](./cpp11/09-list-initialization.md)
 - [Delegating Constructors](./cpp11/10-delegating-constructors.md)
 - [Inherited Constructors](./cpp11/11-inherited-constructors.md)

@@ -11,6 +11,7 @@
 
 - [auto和decltype - 类型自动推导](./cpp11/00-auto-and-decltype.md)
 - [...](./cpp11/01-default-and-delete.md)
+- [final 和 override - 虚函数重写控制](./cpp11/02-final-and-override.md)
 - [列表初始化](./cpp11/09-list-initialization.md)
 - [委托构造函数](./cpp11/10-delegating-constructors.md)
 - [继承构造函数](./cpp11/11-inherited-constructors.md)
