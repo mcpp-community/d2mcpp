@@ -6,7 +6,7 @@
 //
 // Tips/提示:
 //    该项目是使用xlings工具搭建的自动化代码练习项目, 通过在项目根目录下
-//    执行 xlings checker 进入"编译器驱动开发模式"的练习代码自动检测.
+//    执行 d2x checker 进入"编译器驱动开发模式"的练习代码自动检测.
 //    你需要根据控制台的报错和提示信息, 修改代码中的错误. 当修复所有编译错误和
 //    运行时检查点后, 你可以删除或注释掉代码中的 D2X_WAIT 宏, 会自动进入下一个练习.
 //
@@ -63,12 +63,12 @@ int main() {
 [HONLY LOGW]: main: dslings/hello-mcpp.cpp:26 - 🥳 Delete the D2X_WAIT to continue...
 
 
-AI-Tips-Config: https://d2learn.org/docs/xlings -->> AI提示(需要配置大模型的key, 可不使用)
+AI-Tips-Config: https://xlings.d2learn.org/documents/d2x/intro.html -->> AI提示(需要配置大模型的key, 可不使用)
 
 ---------E-Files---------
 dslings/hello-mcpp.cpp -->> 当前检测的文件
 -------------------------
 
-Homepage: https://github.com/d2learn/xlings
+Homepage: https://github.com/openxlings/xlings
 
 */

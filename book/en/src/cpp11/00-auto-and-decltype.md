@@ -186,4 +186,4 @@ decltype( (b) ) // Deduction result is int &
 - [Discussion Forum](https://forum.d2learn.org/category/20)
 - [d2mcpp Tutorial Repository](https://github.com/mcpp-community/d2mcpp)
 - [Tutorial Video List](https://space.bilibili.com/65858958/lists/5208246)
-- [Tutorial Support Tool - xlings](https://github.com/d2learn/xlings)
+- [Tutorial Support Tool - xlings](https://github.com/openxlings/xlings)

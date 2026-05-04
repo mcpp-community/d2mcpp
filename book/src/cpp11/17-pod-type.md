@@ -155,5 +155,5 @@ d2x checker pod-type
 - [交流讨论](https://forum.d2learn.org/category/20)
 - [d2mcpp 教程仓库](https://github.com/mcpp-community/d2mcpp)
 - [教程视频列表](https://space.bilibili.com/65858958/lists/5208246)
-- [教程支持工具 - xlings](https://github.com/d2learn/xlings)
+- [教程支持工具 - xlings](https://github.com/openxlings/xlings)
 

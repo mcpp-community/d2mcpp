@@ -17,19 +17,19 @@
 **Linux**
 
 ```bash
-curl -fsSL https://d2learn.org/xlings-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.sh | bash
 ```
 
 or
 
 ```bash
-wget https://d2learn.org/xlings-install.sh -O - | bash
+wget https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.sh -O - | bash
 ```
 
 **Windows - PowerShell**
 
 ```bash
-Invoke-Expression (Invoke-Webrequest 'https://d2learn.org/xlings-install.ps1.txt' -UseBasicParsing).Content
+Invoke-Expression (Invoke-Webrequest 'https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.ps1' -UseBasicParsing).Content
 ```
 
 ## 1. Get Project and Auto-configure Environment
@@ -74,7 +74,7 @@ d2x update
 
 ## 2. Automated Detection Program Introduction
 
-After entering the automated code practice environment using `xlings checker`, the tool will automatically locate and open the corresponding practice code file, and output compiler errors and hints in the console. The detection program generally has two detection phases: the first is compile-time detection, where you need to fix compilation errors based on hints in the practice code and compiler error messages in the console; the second is runtime detection, which checks if the current code passes all checkpoints when running. When compilation errors are fixed and all checkpoints are passed, the console will display that the current exercise is completed and prompt you to proceed to the next exercise.
+After entering the automated code practice environment using `d2x checker`, the tool will automatically locate and open the corresponding practice code file, and output compiler errors and hints in the console. The detection program generally has two detection phases: the first is compile-time detection, where you need to fix compilation errors based on hints in the practice code and compiler error messages in the console; the second is runtime detection, which checks if the current code passes all checkpoints when running. When compilation errors are fixed and all checkpoints are passed, the console will display that the current exercise is completed and prompt you to proceed to the next exercise.
 
 **Practice Code File Example**
 
@@ -87,7 +87,7 @@ After entering the automated code practice environment using `xlings checker`, t
 //
 // Tips:
 //    This project uses the xlings tool to build automated code practice projects. Execute
-//    xlings checker in the project root directory to enter "compiler-driven development mode"
+//    d2x checker in the project root directory to enter "compiler-driven development mode"
 //    for automatic exercise code detection.
 //    You need to modify errors in the code based on console error messages and hints.
 //    When all compilation errors and runtime checkpoints are fixed, you can delete or comment
@@ -140,13 +140,13 @@ int main() {
 [HONLY LOGW]: main: dslings/hello-mcpp.cpp:26 - 🥳 Delete the D2X_WAIT to continue...
 
 
-AI-Tips-Config: https://d2learn.org/docs/xlings -->> AI hints (requires configuring large model key, optional)
+AI-Tips-Config: https://xlings.d2learn.org/en/documents/d2x/intro.html -->> AI hints (requires configuring large model key, optional)
 
 ---------E-Files---------
 dslings/hello-mcpp.cpp -->> Current detected file
 -------------------------
 
-Homepage: https://github.com/d2learn/xlings
+Homepage: https://github.com/openxlings/xlings
 ```
 
 ## 3. Configure Project (Optional)
@@ -195,7 +195,7 @@ xlings install
 
 **Tutorial Discussion Section:** [https://forum.d2learn.org/category/20](https://forum.d2learn.org/category/20)
 
-**xlings:** [https://github.com/d2learn/xlings](https://github.com/d2learn/xlings)
+**xlings:** [https://github.com/openxlings/xlings](https://github.com/openxlings/xlings)
 
 **Tutorial Repository:** [https://github.com/mcpp-community/d2mcpp](https://github.com/mcpp-community/d2mcpp)
 

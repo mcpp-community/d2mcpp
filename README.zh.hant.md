@@ -51,13 +51,13 @@
 #### Linux/MacOS
 
 ```bash
-curl -fsSL https://d2learn.org/xlings-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.sh | bash
 ```
 
 #### Windows - PowerShell
 
 ```bash
-irm https://d2learn.org/xlings-install.ps1.txt | iex
+irm https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.ps1 | iex
 ```
 
 > 註: xlings工具 -> [詳情](https://xlings.d2learn.org)

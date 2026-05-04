@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      XLINGS_VERSION: "0.4.3"
+      XLINGS_VERSION: "0.4.14"
 
     steps:
       - uses: actions/checkout@v4
@@ -31,7 +31,7 @@ jobs:
       - name: Install Xlings ${{ env.XLINGS_VERSION }}
         run: |
           set -eu
-          curl -fsSL "https://github.com/d2learn/xlings/releases/download/v${XLINGS_VERSION}/xlings-${XLINGS_VERSION}-linux-x86_64.tar.gz" \
+          curl -fsSL "https://github.com/openxlings/xlings/releases/download/v${XLINGS_VERSION}/xlings-${XLINGS_VERSION}-linux-x86_64.tar.gz" \
             | tar -xzf - -C /tmp
           /tmp/xlings-${XLINGS_VERSION}-linux-x86_64/bin/xlings self install
           echo "$HOME/.xlings/subos/current/bin" >> "$GITHUB_PATH"

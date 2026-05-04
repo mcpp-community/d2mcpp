@@ -6,7 +6,7 @@
 //
 // Tips:
 //    This project is an automated code practice project built using the xlings tool. 
-//    By executing `xlings checker` in the project root directory, you enter the 
+//    By executing `d2x checker` in the project root directory, you enter the
 //    "compiler-driven development mode" for automatic code practice detection.
 //    You need to modify errors in the code based on console error messages and prompts.
 //    After fixing all compilation errors and runtime checkpoints, you can delete or 
@@ -68,12 +68,12 @@ int main() {
 [HONLY LOGW]: main: dslings/hello-mcpp.cpp:26 - 🥳 Delete the D2X_WAIT to continue...
 
 
-AI-Tips-Config: https://d2learn.org/docs/xlings -->> AI tips (requires configuring large model key, optional)
+AI-Tips-Config: https://xlings.d2learn.org/en/documents/d2x/intro.html -->> AI tips (requires configuring large model key, optional)
 
 ---------E-Files---------
 dslings/hello-mcpp.cpp -->> Current file being checked
 -------------------------
 
-Homepage: https://github.com/d2learn/xlings
+Homepage: https://github.com/openxlings/xlings
 
 */
