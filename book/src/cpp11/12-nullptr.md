@@ -8,7 +8,7 @@
 
 # nullptr - 指针字面量
 
-`nullptr` 是C++11引入的**指针字面量**，用于表示空指针。它解决了传统空指针表示方式（如`NULL`和`0`）在类型安全性和重载解析方面的不足。
+`nullptr` 是C++11引入的**指针字面量**，用于表示空指针。它解决了传统空指针表示方式（如`NULL`和`0`）在类型安全性和重载决议方面的不足。
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
@@ -16,7 +16,7 @@
 
 **为什么引入?**
 
-- 解决`NULL`宏和整数`0`在重载解析中的歧义问题
+- 解决`NULL`宏和整数`0`在[**重载决议**](https://en.cppreference.com/cpp/language/overload_resolution)中的歧义问题
 - 提供类型安全的空指针表示方式
 - 明确区分指针和整数类型
 - 支持模板编程中的类型推导
@@ -24,8 +24,21 @@
 **nullptr和NULL有什么区别?**
 
 - `nullptr`是C++11引入的关键字，类型为`std::nullptr_t`
-- `NULL`是预处理宏，通常定义为整数`0`或`(void*)0`
-- `nullptr`在重载解析中更精确，不会与整数类型混淆
+- `NULL`宏是由实现定义的[**空指针常量**](https://en.cppreference.com/cpp/language/pointer#%E7%A9%BA%E6%8C%87%E9%92%88)。
+
+    **可能的实现**
+
+    ```cpp
+    #define NULL 0
+    // C++11 起
+    #define NULL nullptr
+    ```
+
+    > C 中，宏 `NULL` 可以拥有类型 `void*`，但这在 C++ 中不允许，因为空指针常量不能具有该类型
+
+- `nullptr`在重载决议中更精确，不会与空指针常量 `0` 混淆。
+
+    > `0` 的类型是`int`，C++禁止`int`到指针类型的转换，但 `0` 是一个例外，它属于空指针常量，可以隐式转换为任何指针类型，这就导致了重载决议中的歧义问题。C++11引入了`nullptr` 来解决这个问题。
 
 ## 一、基础用法和场景
 
@@ -46,7 +59,7 @@ if (ptr1 == nullptr) {
 
 ### 解决重载歧义问题
 
-> 在函数调用中明确传递空指针，`nulltpr`能避免重载歧义问题, 并且避免与整数类型的混淆
+> 在函数调用中明确传递空指针，`nullptr`能避免重载歧义问题, 并且避免与整数类型的混淆
 
 ```cpp
 void func(int* ptr) {
@@ -61,17 +74,19 @@ void func(int value) {
 
 int main() {
     func(nullptr);  // 明确调用指针版本
-    func(0);        // 可能调用整数版本，产生歧义
-    func(NULL);     // 可能调用整数版本，产生歧义
+    func(0);        // 重载决议不明确，编译错误
+    func(NULL);     // 重载决议不明确，编译错误
 }
 ```
+
+> 此示例不同编译器存在差异，msvc 与 gcc/clang的行为不同, 但无论如何, `nullptr` 都能避免重载歧义问题。
 
 例如上面的代码中,调用`func(NULL)`就会报重载歧义错误
 
 ```bash
 main.cpp: In function 'int main()':
 main.cpp:16:9: error: call of overloaded 'func(NULL)' is ambiguous
-   16 |     func(NULL);     // 可能调用整数版本，产生歧义
+   16 |     func(NULL);     // 重载决议不明确，编译错误
       |     ~~~~^~~~~~
 ```
 
