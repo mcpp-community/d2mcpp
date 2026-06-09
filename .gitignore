@@ -34,6 +34,9 @@
 # Python
 __pycache__
 
+# temporary upstream STL clone (vendored subset lives in /msvc-stl)
+/STL/
+
 # d2x project files
 .xlings
 .vscode
