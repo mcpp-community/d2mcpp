@@ -1,0 +1,31 @@
+// Copyright (c) Microsoft Corporation.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+// initialize standard wide log stream
+
+#include <fstream>
+#include <iostream>
+
+#include "init_locks.hpp"
+
+#pragma warning(disable : 4074)
+#pragma init_seg(compiler)
+static std::_Init_locks initlocks;
+
+_STD_BEGIN
+
+__PURE_APPDOMAIN_GLOBAL static wfilebuf wflog(stderr);
+#if defined(_M_CEE_PURE)
+__PURE_APPDOMAIN_GLOBAL extern wostream wclog(&wflog);
+#else
+__PURE_APPDOMAIN_GLOBAL extern _CRTDATA2_IMPORT wostream wclog(&wflog);
+#endif
+
+struct _Init_wclog { // ensures that wclog is initialized
+    __CLR_OR_THIS_CALL _Init_wclog() { // initialize wclog
+        _Ptr_wclog = &wclog;
+    }
+};
+__PURE_APPDOMAIN_GLOBAL static _Init_wclog init_wclog;
+
+_STD_END

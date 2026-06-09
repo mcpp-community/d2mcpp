@@ -1,0 +1,2357 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) Microsoft Corporation.
+SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+-->
+
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <!-- VC 2015 -->
+  <Type Name="std::_Compressed_pair&lt;*,*,1&gt;">
+      <DisplayString>{*($T1 *)this}</DisplayString>
+      <Expand>
+          <ExpandedItem>*($T1 *)this</ExpandedItem>
+      </Expand>
+  </Type>
+
+  <!-- VC 2015 -->
+  <Type Name="std::_Compressed_pair&lt;*,*,0&gt;">
+      <DisplayString>{_Myval1}</DisplayString>
+      <Expand>
+          <ExpandedItem>_Myval1</ExpandedItem>
+      </Expand>
+  </Type>
+
+
+  <Type Name="std::error_category">
+      <DisplayString>[{name(),sb}]</DisplayString>
+      <Expand>
+      <Synthetic Name="hint">
+          <DisplayString>Enable "Allow Function Calls In Value Formatting" if you see "???" here</DisplayString>
+      </Synthetic>
+      </Expand>
+  </Type>
+
+  <Type Name="std::error_code">
+    <DisplayString>{{ value={_Myval}, category={*_Mycat} }}</DisplayString>
+    <Expand>
+      <Synthetic Name="hint">
+        <DisplayString>Enable "Allow Function Calls In Value Formatting" if you see "???" here</DisplayString>
+      </Synthetic>
+      <Item Name="[value]">_Myval</Item>
+      <Item Name="[category]">_Mycat</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="std::exception_ptr">
+      <CustomVisualizer Condition="_Data1 != 0" VisualizerId="CEB58A03-E78D-4D19-9AE7-4738E200649E" />
+      <DisplayString Condition="_Data1 == 0">null</DisplayString>
+      <Expand/>
+  </Type>
+
+
+  <Type Name="std::initializer_list&lt;*&gt;">
+      <DisplayString>{{ size={_Last - _First} }}</DisplayString>
+      <Expand>
+          <ArrayItems>
+              <Size>_Last - _First</Size>
+              <ValuePointer>_First</ValuePointer>
+          </ArrayItems>
+      </Expand>
+  </Type>
+
+
+  <Type Name="std::pair&lt;*&gt;">
+      <DisplayString IncludeView="noparens">{first}, {second}</DisplayString>
+      <DisplayString ExcludeView="noparens">({first}, {second})</DisplayString>
+      <Expand>
+          <Item Name="first">first</Item>
+          <Item Name="second">second</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::tuple&lt;&gt;">
+    <DisplayString IncludeView="noparens;noparensasptr"></DisplayString>
+    <DisplayString>({*this,view(noparens)})</DisplayString>
+    <Expand/>
+  </Type>
+
+  <!--
+    Tuple uses a bit of a SFINAE-style technique in order to allow us to write less code.
+    It uses Condition="(void)<expr>, true", along with Optional="true".
+    This allows us to check if <expr> compiles, and if so, use that "branch".
+  -->
+
+  <Type Name="std::tuple&lt;*&gt;">
+    <DisplayString IncludeView="noparens" Optional="true" Condition="(void)((_Mybase *)this)->_Myfirst._Val, true">
+      {_Myfirst._Val}, {*((_Mybase *) this),view(noparens)}
+    </DisplayString>
+    <DisplayString IncludeView="noparens">{_Myfirst._Val}</DisplayString>
+    <DisplayString>({*this,view(noparens)})</DisplayString>
+    <Expand>
+      <Item Name="[0]">_Myfirst._Val</Item>
+      <Item Name="[1]" Optional="true">((_Mybase *) this)->_Myfirst._Val</Item>
+      <Item Name="[2]" Optional="true">((_Mybase::_Mybase *) this)->_Myfirst._Val</Item>
+      <Item Name="[3]" Optional="true">((_Mybase::_Mybase::_Mybase *) this)->_Myfirst._Val</Item>
+      <Item Name="[4]" Optional="true">((_Mybase::_Mybase::_Mybase::_Mybase *) this)->_Myfirst._Val</Item>
+      <Synthetic Name="[...]" Optional="true" Condition="(void)((_Mybase::_Mybase::_Mybase::_Mybase::_Mybase *) this)->_Myfirst._Val, true">
+        <DisplayString>Next five elements:</DisplayString>
+      </Synthetic>
+      <ExpandedItem Optional="true">*((_Mybase::_Mybase::_Mybase::_Mybase::_Mybase *) this)</ExpandedItem>
+    </Expand>
+  </Type>
+
+  <Type Name="std::tuple&lt;*&gt;" IncludeView="asptr;noparensasptr">
+    <DisplayString IncludeView="noparensasptr" Optional="true" Condition="(void)((_Mybase *)this)->_Myfirst._Val, true">
+      {_Myfirst._Val}, {*((_Mybase *) this),view(noparensasptr)}
+    </DisplayString>
+    <DisplayString IncludeView="noparensasptr">{&amp;_Myfirst._Val}</DisplayString>
+    <DisplayString>({*this,view(noparensasptr)})</DisplayString>
+    <Expand>
+      <Item Name="[0]">&amp;_Myfirst._Val</Item>
+      <Item Name="[1]">&amp;((_Mybase *) this)->_Myfirst._Val</Item>
+      <Item Name="[2]" Optional="true">&amp;((_Mybase::_Mybase *) this)->_Myfirst._Val</Item>
+      <Item Name="[3]" Optional="true">&amp;((_Mybase::_Mybase::_Mybase *) this)->_Myfirst._Val</Item>
+      <Item Name="[4]" Optional="true">&amp;((_Mybase::_Mybase::_Mybase::_Mybase *) this)->_Myfirst._Val</Item>
+      <Synthetic Name="[...]" Optional="true" Condition="(void)((_Mybase::_Mybase::_Mybase::_Mybase::_Mybase *) this)->_Myfirst._Val, true">
+        <DisplayString>Next five elements:</DisplayString>
+      </Synthetic>
+      <ExpandedItem Optional="true">*((_Mybase::_Mybase::_Mybase::_Mybase::_Mybase *) this),view(asptr)</ExpandedItem>
+    </Expand>
+  </Type>
+
+  <Type Name="std::nullopt_t">
+      <DisplayString>nullopt</DisplayString>
+  </Type>
+
+  <Type Name="std::optional&lt;*&gt;">
+      <DisplayString Condition="!_Has_value">nullopt</DisplayString>
+      <DisplayString Condition="_Has_value">{_Value}</DisplayString>
+      <Expand>
+          <Item Condition="_Has_value" Name="value">_Value</Item>
+      </Expand>
+  </Type>
+
+
+  <Type Name="std::_Variant_item&lt;*&gt;">
+      <DisplayString>{_Elem}</DisplayString>
+  </Type>
+
+  <Type Name="std::variant&lt;*&gt;">
+      <Intrinsic Name="index" Expression="(int)_Which"/>
+      <DisplayString Condition="index() &lt; 0">[valueless_by_exception]</DisplayString>
+      <DisplayString Condition="index() ==  0" Optional="true">{{ index=0, value={_Head} }}</DisplayString>
+      <DisplayString Condition="index() ==  1" Optional="true">{{ index=1, value={_Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() ==  2" Optional="true">{{ index=2, value={_Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() ==  3" Optional="true">{{ index=3, value={_Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() ==  4" Optional="true">{{ index=4, value={_Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() ==  5" Optional="true">{{ index=5, value={_Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() ==  6" Optional="true">{{ index=6, value={_Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() ==  7" Optional="true">{{ index=7, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() ==  8" Optional="true">{{ index=8, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() ==  9" Optional="true">{{ index=9, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() == 10" Optional="true">{{ index=10, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() == 11" Optional="true">{{ index=11, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() == 12" Optional="true">{{ index=12, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() == 13" Optional="true">{{ index=13, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() == 14" Optional="true">{{ index=14, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() == 15" Optional="true">{{ index=15, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() == 16" Optional="true">{{ index=16, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() == 17" Optional="true">{{ index=17, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() == 18" Optional="true">{{ index=18, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() == 19" Optional="true">{{ index=19, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() == 20" Optional="true">{{ index=20, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() == 21" Optional="true">{{ index=21, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() == 22" Optional="true">{{ index=22, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() == 23" Optional="true">{{ index=23, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() == 24" Optional="true">{{ index=24, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() == 25" Optional="true">{{ index=25, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() == 26" Optional="true">{{ index=26, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() == 27" Optional="true">{{ index=27, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() == 28" Optional="true">{{ index=28, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() == 29" Optional="true">{{ index=29, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() == 30" Optional="true">{{ index=30, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <DisplayString Condition="index() == 31" Optional="true">{{ index=31, value={_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head} }}</DisplayString>
+      <Expand>
+          <Item Name="index">index()</Item>
+          <Item Name="[value]" Condition="index() ==  0" Optional="true">_Head</Item>
+          <Item Name="[value]" Condition="index() ==  1" Optional="true">_Tail._Head</Item>
+          <Item Name="[value]" Condition="index() ==  2" Optional="true">_Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() ==  3" Optional="true">_Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() ==  4" Optional="true">_Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() ==  5" Optional="true">_Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() ==  6" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() ==  7" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() ==  8" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() ==  9" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() == 10" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() == 11" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() == 12" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() == 13" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() == 14" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() == 15" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() == 16" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() == 17" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() == 18" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() == 19" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() == 20" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() == 21" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() == 22" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() == 23" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() == 24" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() == 25" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() == 26" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() == 27" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() == 28" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() == 29" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() == 30" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+          <Item Name="[value]" Condition="index() == 31" Optional="true">_Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Tail._Head</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::monostate">
+      <DisplayString>monostate</DisplayString>
+  </Type>
+
+  <Type Name="std::unexpected&lt;*&gt;">
+      <Intrinsic Name="unex" Expression="_Unexpected"/>
+      <DisplayString>{unex()}</DisplayString>
+      <Expand>
+          <Item Name="unex">unex()</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::bad_expected_access&lt;*&gt;">
+      <Intrinsic Name="unex" Expression="_Unexpected"/>
+      <DisplayString>{unex()}</DisplayString>
+      <Expand>
+          <Item Name="unex">unex()</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::expected&lt;*,*&gt;">
+      <Intrinsic Name="has_value" Expression="_Has_value"/>
+      <Intrinsic Name="value" Expression="_Value"/>
+      <Intrinsic Name="unex" Expression="_Unexpected"/>
+      <DisplayString Condition="has_value()">{value()}</DisplayString>
+      <DisplayString Condition="!has_value()">{unex()}</DisplayString>
+      <Expand>
+          <Item Condition="has_value()" Name="value">value()</Item>
+          <Item Condition="!has_value()" Name="unex">unex()</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::expected&lt;void,*&gt;">
+      <Intrinsic Name="has_value" Expression="_Has_value"/>
+      <Intrinsic Name="unex" Expression="_Unexpected"/>
+      <DisplayString Condition="has_value()">void</DisplayString>
+      <DisplayString Condition="!has_value()">{unex()}</DisplayString>
+      <Expand>
+          <Item Condition="!has_value()" Name="unex">unex()</Item>
+      </Expand>
+  </Type>
+
+
+  <Type Name="std::bitset&lt;*&gt;">
+      <DisplayString>{{ size={$T1} }}</DisplayString>
+      <Expand>
+          <IndexListItems>
+              <Size>$T1</Size>
+              <ValueNode>(_Array[$i / _Bitsperword] &gt;&gt; ($i % _Bitsperword)) &amp; 1,d</ValueNode>
+          </IndexListItems>
+      </Expand>
+  </Type>
+
+  <Type Name="std::bitset&lt;*&gt;::reference">
+      <DisplayString>{(_Pbitset-&gt;_Array[_Mypos / _Pbitset-&gt;_Bitsperword] &gt;&gt; (_Mypos % _Pbitset-&gt;_Bitsperword)) &amp; 1,d}</DisplayString>
+      <Expand>
+          <Item Name="[bitset]">_Pbitset</Item>
+          <Item Name="[pos]">_Mypos</Item>
+      </Expand>
+  </Type>
+
+
+  <Type Name="std::allocator&lt;*&gt;">
+      <DisplayString>allocator</DisplayString>
+      <Expand/>
+  </Type>
+
+
+  <Type Name="std::default_delete&lt;*&gt;">
+      <DisplayString>default_delete</DisplayString>
+      <Expand/>
+  </Type>
+
+  <!-- VC 2015 -->
+   <Type Name="std::unique_ptr&lt;void, *&gt;">
+      <SmartPointer Usage="Minimal">_Mypair._Myval2</SmartPointer>
+      <DisplayString Condition="_Mypair._Myval2 == 0">empty</DisplayString>
+      <DisplayString Condition="_Mypair._Myval2 != 0">unique_ptr void</DisplayString>
+      <Expand>
+          <Item Condition="_Mypair._Myval2 != 0" Name="[ptr]">_Mypair._Myval2</Item>
+          <Item Condition="_Mypair._Myval2 != 0" Name="[deleter]">_Mypair</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::unique_ptr&lt;*&gt;">
+      <SmartPointer Usage="Minimal">_Mypair._Myval2</SmartPointer>
+      <DisplayString Condition="_Mypair._Myval2 == 0">empty</DisplayString>
+      <DisplayString Condition="_Mypair._Myval2 != 0">unique_ptr {*_Mypair._Myval2}</DisplayString>
+      <Expand>
+          <Item Condition="_Mypair._Myval2 != 0" Name="[ptr]">_Mypair._Myval2</Item>
+          <Item Condition="_Mypair._Myval2 != 0" Name="[deleter]">_Mypair</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::unique_ptr&lt;wchar_t [0],*&gt;">
+    <AlternativeType Name="std::unique_ptr&lt;char [0],*&gt;"/>
+    <AlternativeType Name="std::unique_ptr&lt;char8_t [0],*&gt;"/>
+    <AlternativeType Name="std::unique_ptr&lt;char16_t [0],*&gt;"/>
+    <AlternativeType Name="std::unique_ptr&lt;char32_t [0],*&gt;"/>
+    <AlternativeType Name="std::unique_ptr&lt;wchar_t const [0],*&gt;"/>
+    <AlternativeType Name="std::unique_ptr&lt;char const [0],*&gt;"/>
+    <AlternativeType Name="std::unique_ptr&lt;char8_t const [0],*&gt;"/>
+    <AlternativeType Name="std::unique_ptr&lt;char16_t const [0],*&gt;"/>
+    <AlternativeType Name="std::unique_ptr&lt;char32_t const [0],*&gt;"/>
+    <DisplayString Condition="_Mypair._Myval2 == nullptr">{{empty}}</DisplayString>
+    <DisplayString Condition="_Mypair._Myval2 != nullptr">{_Mypair._Myval2}</DisplayString>
+    <StringView>_Mypair._Myval2</StringView>
+    <Expand>
+      <Item Condition="_Mypair._Myval2 != nullptr" Name="[deleter]">_Mypair</Item>
+      <ExpandedItem Condition="_Mypair._Myval2 != nullptr">_Mypair._Myval2,hv</ExpandedItem>
+    </Expand>
+  </Type>
+
+  <Type Name="std::_Ref_count&lt;*&gt;">
+      <DisplayString>default</DisplayString>
+      <Expand>
+          <Item Condition="_Uses != 0" Name="[original ptr]">_Ptr</Item>
+      </Expand>
+  </Type>
+
+  <!-- VC 2015 -->
+  <Type Name="std::_Ref_count_del&lt;*&gt;">
+      <DisplayString>custom deleter</DisplayString>
+      <Expand>
+          <Item Condition="_Uses != 0" Name="[original ptr]">_Mypair._Myval2</Item>
+          <Item Name="[deleter]">_Mypair</Item>
+      </Expand>
+  </Type>
+
+  <!-- VC 2015 -->
+  <Type Name="std::_Ref_count_del_alloc&lt;*&gt;">
+      <DisplayString>custom deleter, custom allocator</DisplayString>
+      <Expand>
+          <Item Condition="_Uses != 0" Name="[original ptr]">_Mypair._Myval2._Myval2</Item>
+          <Item Name="[deleter]">_Mypair</Item>
+          <Item Name="[allocator]">_Mypair._Myval2</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::_Ref_count_obj&lt;*&gt;">
+      <DisplayString>make_shared</DisplayString>
+      <Expand>
+          <Item Condition="_Uses != 0" Name="[original ptr]">($T1 *) &amp;_Storage</Item>
+      </Expand>
+  </Type>
+
+  <!-- VS 2019 16.3 -->
+  <Type Name="std::_Ref_count_obj2&lt;*&gt;">
+      <DisplayString>make_shared</DisplayString>
+      <Expand>
+          <Item Condition="_Uses != 0" Name="[original ptr]">($T1 *) &amp;_Storage</Item>
+      </Expand>
+  </Type>
+
+  <!-- VS 2022 17.10 -->
+  <Type Name="std::_Ref_count_bounded_array&lt;*&gt;">
+    <DisplayString>make_shared&lt;T[N]&gt;</DisplayString>
+    <Expand>
+      <Item Condition="_Uses != 0" Name="[allocated array]">_Storage._Value</Item>
+    </Expand>
+  </Type>
+
+  <!-- VS 2022 17.10 -->
+  <Type Name="std::_Ref_count_unbounded_array&lt;*,0&gt;">
+    <Intrinsic Name="data" Expression="&amp;(_Storage._Value)" />
+    <Intrinsic Name="size" Expression="_Size" />
+    <DisplayString>make_shared&lt;T[]&gt;</DisplayString>
+    <Expand>
+      <ArrayItems>
+        <Size>size()</Size>
+        <ValuePointer>data()</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <!-- VS 2022 17.10 -->
+  <Type Name="std::_Ref_count_unbounded_array&lt;*,1&gt;">
+    <DisplayString>make_shared&lt;T[]&gt;</DisplayString>
+    <Expand>
+      <Item Condition="_Uses != 0" Name="[original ptr]">_Storage._Value</Item>
+    </Expand>
+  </Type>
+
+  <!-- VC 2015 -->
+  <Type Name="std::_Ref_count_obj_alloc&lt;*&gt;">
+      <DisplayString>allocate_shared</DisplayString>
+      <Expand>
+          <Item Condition="_Uses != 0" Name="[original ptr]">($T1 *) &amp;_Mypair._Myval2</Item>
+          <Item Name="[allocator]">_Mypair</Item>
+      </Expand>
+  </Type>
+
+  <!-- VS 2019 16.7: _Ref_count_obj_alloc3 -->
+  <!-- VS 2019 16.3: _Ref_count_obj_alloc2 -->
+  <Type Name="std::_Ref_count_obj_alloc3&lt;*&gt;">
+      <AlternativeType Name="std::_Ref_count_obj_alloc2&lt;*&gt;" />
+      <!-- stateless allocator -->
+      <Intrinsic Optional="true" Name="allocator" Expression="*((_Mybase *) this)"/>
+      <!-- stateful allocator -->
+      <Intrinsic Optional="true" Name="allocator" Expression="_Myval"/>
+      <DisplayString>allocate_shared</DisplayString>
+      <Expand>
+          <Item Condition="_Uses != 0" Name="[original ptr]">($T1 *) &amp;_Storage</Item>
+          <Item Name="[allocator]">allocator()</Item>
+      </Expand>
+  </Type>
+
+  <!-- VS 2022 17.10 -->
+  <Type Name="std::_Ref_count_bounded_array_alloc&lt;*&gt;">
+    <!-- stateless allocator -->
+    <Intrinsic Optional="true" Name="allocator" Expression="*((_Mybase *) this)"/>
+    <!-- stateful allocator -->
+    <Intrinsic Optional="true" Name="allocator" Expression="_Myval"/>
+    <DisplayString>allocate_shared&lt;T[N]&gt;</DisplayString>
+    <Expand>
+      <Item Condition="_Uses != 0" Name="[allocated array]">_Storage._Value</Item>
+      <Item Name="[allocator]">allocator()</Item>
+    </Expand>
+  </Type>
+
+  <!-- VS 2022 17.10 -->
+  <Type Name="std::_Ref_count_unbounded_array_alloc&lt;*&gt;">
+    <!-- stateless allocator -->
+    <Intrinsic Optional="true" Name="allocator" Expression="*((_Mybase *) this)"/>
+    <!-- stateful allocator -->
+    <Intrinsic Optional="true" Name="allocator" Expression="_Myval"/>
+    <Intrinsic Name="data" Expression="&amp;(_Storage._Value)" />
+    <Intrinsic Name="size" Expression="_Size" />
+    <DisplayString>allocate_shared&lt;T[]&gt;</DisplayString>
+    <Expand>
+      <Item Name="[allocator]">allocator()</Item>
+      <ArrayItems>
+        <Size>size()</Size>
+        <ValuePointer>data()</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <!-- VS 2022 17.10 -->
+  <Type Name="std::_Ref_count_obj_alloc_for_overwrite&lt;*&gt;">
+      <!-- stateless allocator -->
+      <Intrinsic Optional="true" Name="allocator" Expression="*((_Mybase *) this)"/>
+      <!-- stateful allocator -->
+      <Intrinsic Optional="true" Name="allocator" Expression="_Myval"/>
+      <DisplayString>allocate_shared_for_overwrite</DisplayString>
+      <Expand>
+          <Item Condition="_Uses != 0" Name="[original ptr]">($T1 *) &amp;_Storage</Item>
+          <Item Name="[allocator]">allocator()</Item>
+      </Expand>
+  </Type>
+
+  <!-- VS 2022 17.10 -->
+  <Type Name="std::_Ref_count_bounded_array_alloc_for_overwrite&lt;*&gt;">
+    <!-- stateless allocator -->
+    <Intrinsic Optional="true" Name="allocator" Expression="*((_Mybase *) this)"/>
+    <!-- stateful allocator -->
+    <Intrinsic Optional="true" Name="allocator" Expression="_Myval"/>
+    <DisplayString>allocate_shared_for_overwrite&lt;T[N]&gt;</DisplayString>
+    <Expand>
+      <Item Condition="_Uses != 0" Name="[allocated array]">_Storage._Value</Item>
+      <Item Name="[allocator]">allocator()</Item>
+    </Expand>
+  </Type>
+
+  <!-- VS 2022 17.10 -->
+  <Type Name="std::_Ref_count_unbounded_array_alloc_for_overwrite&lt;*&gt;">
+    <!-- stateless allocator -->
+    <Intrinsic Optional="true" Name="allocator" Expression="*((_Mybase *) this)"/>
+    <!-- stateful allocator -->
+    <Intrinsic Optional="true" Name="allocator" Expression="_Myval"/>
+    <Intrinsic Name="data" Expression="&amp;(_Storage._Value)" />
+    <Intrinsic Name="size" Expression="_Size" />
+    <DisplayString>allocate_shared_for_overwrite&lt;T[]&gt;</DisplayString>
+    <Expand>
+      <Item Name="[allocator]">allocator()</Item>
+      <ArrayItems>
+        <Size>size()</Size>
+        <ValuePointer>data()</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <!-- VC 2017, second toolset update -->
+  <Type Name="std::_Ref_count_resource&lt;*&gt;">
+      <DisplayString>custom deleter</DisplayString>
+      <Expand>
+          <Item Condition="_Uses != 0" Name="[original ptr]">_Mypair._Myval2</Item>
+          <Item Name="[deleter]">_Mypair</Item>
+      </Expand>
+  </Type>
+
+  <!-- VC 2017, second toolset update -->
+  <Type Name="std::_Ref_count_resource_alloc&lt;*&gt;">
+      <DisplayString>custom deleter, custom allocator</DisplayString>
+      <Expand>
+          <Item Condition="_Uses != 0" Name="[original ptr]">_Mypair._Myval2._Myval2</Item>
+          <Item Name="[deleter]">_Mypair</Item>
+          <Item Name="[allocator]">_Mypair._Myval2</Item>
+      </Expand>
+  </Type>
+
+  <!-- Do not dereference _Ptr when type is void -->
+  <Type Name="std::shared_ptr&lt;void&gt;">
+    <SmartPointer Usage="Minimal">_Ptr</SmartPointer>
+      <DisplayString Condition="_Rep == 0">empty</DisplayString>
+      <DisplayString IncludeView="ptr" Condition="_Ptr == 0">nullptr</DisplayString>
+      <DisplayString IncludeView="ptr" Condition="_Ptr != 0">void</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses == 1)   &amp;&amp; (_Rep-&gt;_Weaks == 1)"  >shared_ptr {*this,view(ptr)} [{_Rep-&gt;_Uses} strong ref] [{*_Rep}]</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses == 1)   &amp;&amp; (_Rep-&gt;_Weaks == 2)"  >shared_ptr {*this,view(ptr)} [{_Rep-&gt;_Uses} strong ref, {_Rep-&gt;_Weaks - 1} weak ref] [{*_Rep}]</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses == 1)   &amp;&amp; (_Rep-&gt;_Weaks &gt; 2)">shared_ptr {*this,view(ptr)} [{_Rep-&gt;_Uses} strong ref, {_Rep-&gt;_Weaks - 1} weak refs] [{*_Rep}]</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses &gt; 1) &amp;&amp; (_Rep-&gt;_Weaks == 1)"  >shared_ptr {*this,view(ptr)} [{_Rep-&gt;_Uses} strong refs] [{*_Rep}]</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses &gt; 1) &amp;&amp; (_Rep-&gt;_Weaks == 2)"  >shared_ptr {*this,view(ptr)} [{_Rep-&gt;_Uses} strong refs, {_Rep-&gt;_Weaks - 1} weak ref] [{*_Rep}]</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses &gt; 1) &amp;&amp; (_Rep-&gt;_Weaks &gt; 2)">shared_ptr {*this,view(ptr)} [{_Rep-&gt;_Uses} strong refs, {_Rep-&gt;_Weaks - 1} weak refs] [{*_Rep}]</DisplayString>
+      <Expand>
+          <Item Condition="_Rep != 0" Name="[ptr]">_Ptr</Item>
+          <Item Condition="_Rep != 0" Name="[control block]">*_Rep</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::shared_ptr&lt;*&gt;">
+      <SmartPointer Usage="Minimal">_Ptr</SmartPointer>
+      <DisplayString Condition="_Rep == 0">empty</DisplayString>
+      <DisplayString IncludeView="ptr" Condition="_Ptr == 0">nullptr</DisplayString>
+      <DisplayString IncludeView="ptr" Condition="_Ptr != 0">{*_Ptr}</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses == 1)   &amp;&amp; (_Rep-&gt;_Weaks == 1)"  >shared_ptr {*this,view(ptr)} [{_Rep-&gt;_Uses} strong ref] [{*_Rep}]</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses == 1)   &amp;&amp; (_Rep-&gt;_Weaks == 2)"  >shared_ptr {*this,view(ptr)} [{_Rep-&gt;_Uses} strong ref, {_Rep-&gt;_Weaks - 1} weak ref] [{*_Rep}]</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses == 1)   &amp;&amp; (_Rep-&gt;_Weaks &gt; 2)">shared_ptr {*this,view(ptr)} [{_Rep-&gt;_Uses} strong ref, {_Rep-&gt;_Weaks - 1} weak refs] [{*_Rep}]</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses &gt; 1) &amp;&amp; (_Rep-&gt;_Weaks == 1)"  >shared_ptr {*this,view(ptr)} [{_Rep-&gt;_Uses} strong refs] [{*_Rep}]</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses &gt; 1) &amp;&amp; (_Rep-&gt;_Weaks == 2)"  >shared_ptr {*this,view(ptr)} [{_Rep-&gt;_Uses} strong refs, {_Rep-&gt;_Weaks - 1} weak ref] [{*_Rep}]</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses &gt; 1) &amp;&amp; (_Rep-&gt;_Weaks &gt; 2)">shared_ptr {*this,view(ptr)} [{_Rep-&gt;_Uses} strong refs, {_Rep-&gt;_Weaks - 1} weak refs] [{*_Rep}]</DisplayString>
+      <Expand>
+          <Item Condition="_Rep != 0" Name="[ptr]">_Ptr</Item>
+          <Item Condition="_Rep != 0" Name="[control block]">*_Rep</Item>
+      </Expand>
+  </Type>
+
+  <!-- Do not dereference _Ptr when type is void -->
+  <Type Name="std::weak_ptr&lt;void&gt;">
+      <DisplayString Condition="_Rep == 0">empty</DisplayString>
+      <DisplayString IncludeView="ptr" Condition="_Ptr == 0">nullptr</DisplayString>
+      <DisplayString IncludeView="ptr" Condition="_Ptr != 0">void</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses == 0)   &amp;&amp; (_Rep-&gt;_Weaks == 1)"  >expired [{_Rep-&gt;_Weaks} weak ref] [{*_Rep}]</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses == 0)   &amp;&amp; (_Rep-&gt;_Weaks &gt; 1)">expired [{_Rep-&gt;_Weaks} weak refs] [{*_Rep}]</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses == 1)   &amp;&amp; (_Rep-&gt;_Weaks == 2)"  >weak_ptr {*this,view(ptr)} [{_Rep-&gt;_Uses} strong ref, {_Rep-&gt;_Weaks - 1} weak ref] [{*_Rep}]</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses == 1)   &amp;&amp; (_Rep-&gt;_Weaks &gt; 2)">weak_ptr {*this,view(ptr)} [{_Rep-&gt;_Uses} strong ref, {_Rep-&gt;_Weaks - 1} weak refs] [{*_Rep}]</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses &gt; 1) &amp;&amp; (_Rep-&gt;_Weaks == 2)"  >weak_ptr {*this,view(ptr)} [{_Rep-&gt;_Uses} strong refs, {_Rep-&gt;_Weaks - 1} weak ref] [{*_Rep}]</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses &gt; 1) &amp;&amp; (_Rep-&gt;_Weaks &gt; 2)">weak_ptr {*this,view(ptr)} [{_Rep-&gt;_Uses} strong refs, {_Rep-&gt;_Weaks - 1} weak refs] [{*_Rep}]</DisplayString>
+      <Expand>
+          <Item Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses &gt; 0)" Name="[ptr]">_Ptr</Item>
+          <Item Condition="_Rep != 0" Name="[control block]">*_Rep</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::weak_ptr&lt;*&gt;">
+      <DisplayString Condition="_Rep == 0">empty</DisplayString>
+      <DisplayString IncludeView="ptr" Condition="_Ptr == 0">nullptr</DisplayString>
+      <DisplayString IncludeView="ptr" Condition="_Ptr != 0">{*_Ptr}</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses == 0)   &amp;&amp; (_Rep-&gt;_Weaks == 1)"  >expired [{_Rep-&gt;_Weaks} weak ref] [{*_Rep}]</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses == 0)   &amp;&amp; (_Rep-&gt;_Weaks &gt; 1)">expired [{_Rep-&gt;_Weaks} weak refs] [{*_Rep}]</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses == 1)   &amp;&amp; (_Rep-&gt;_Weaks == 2)"  >weak_ptr {*this,view(ptr)} [{_Rep-&gt;_Uses} strong ref, {_Rep-&gt;_Weaks - 1} weak ref] [{*_Rep}]</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses == 1)   &amp;&amp; (_Rep-&gt;_Weaks &gt; 2)">weak_ptr {*this,view(ptr)} [{_Rep-&gt;_Uses} strong ref, {_Rep-&gt;_Weaks - 1} weak refs] [{*_Rep}]</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses &gt; 1) &amp;&amp; (_Rep-&gt;_Weaks == 2)"  >weak_ptr {*this,view(ptr)} [{_Rep-&gt;_Uses} strong refs, {_Rep-&gt;_Weaks - 1} weak ref] [{*_Rep}]</DisplayString>
+      <DisplayString Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses &gt; 1) &amp;&amp; (_Rep-&gt;_Weaks &gt; 2)">weak_ptr {*this,view(ptr)} [{_Rep-&gt;_Uses} strong refs, {_Rep-&gt;_Weaks - 1} weak refs] [{*_Rep}]</DisplayString>
+      <Expand>
+          <Item Condition="(_Rep != 0) &amp;&amp; (_Rep-&gt;_Uses &gt; 0)" Name="[ptr]">_Ptr</Item>
+          <Item Condition="_Rep != 0" Name="[control block]">*_Rep</Item>
+      </Expand>
+  </Type>
+
+
+  <!-- VC 2015 -->
+  <Type Name="std::reference_wrapper&lt;*&gt;">
+      <DisplayString>{*_Ptr}</DisplayString>
+      <Expand>
+          <Item Name="[ptr]">_Ptr</Item>
+      </Expand>
+  </Type>
+
+  <!-- std::compare_three_way, std::ranges::less and similar -->
+  <Type Name="std::ranges::equal_to"><DisplayString>ranges::equal_to</DisplayString><Expand/></Type>
+  <Type Name="std::ranges::not_equal_to"><DisplayString>ranges::not_equal_to</DisplayString><Expand/></Type>
+  <Type Name="std::ranges::greater"><DisplayString>ranges::greater</DisplayString><Expand/></Type>
+  <Type Name="std::ranges::less"><DisplayString>ranges::less</DisplayString><Expand/></Type>
+  <Type Name="std::ranges::greater_equal"><DisplayString>ranges::greater_equal</DisplayString><Expand/></Type>
+  <Type Name="std::ranges::less_equal"><DisplayString>ranges::less_equal</DisplayString><Expand/></Type>
+  <Type Name="std::compare_three_way"><DisplayString>compare_three_way</DisplayString><Expand/></Type>
+
+  <!-- std::less<> and similar -->
+  <Type Name="std::plus&lt;void&gt;"><DisplayString>plus&lt;&gt;</DisplayString><Expand/></Type>
+  <Type Name="std::minus&lt;void&gt;"><DisplayString>minus&lt;&gt;</DisplayString><Expand/></Type>
+  <Type Name="std::multiplies&lt;void&gt;"><DisplayString>multiplies&lt;&gt;</DisplayString><Expand/></Type>
+  <Type Name="std::divides&lt;void&gt;"><DisplayString>divides&lt;&gt;</DisplayString><Expand/></Type>
+  <Type Name="std::modulus&lt;void&gt;"><DisplayString>modulus&lt;&gt;</DisplayString><Expand/></Type>
+  <Type Name="std::negate&lt;void&gt;"><DisplayString>negate&lt;&gt;</DisplayString><Expand/></Type>
+  <Type Name="std::equal_to&lt;void&gt;"><DisplayString>equal_to&lt;&gt;</DisplayString><Expand/></Type>
+  <Type Name="std::not_equal_to&lt;void&gt;"><DisplayString>not_equal_to&lt;&gt;</DisplayString><Expand/></Type>
+  <Type Name="std::greater&lt;void&gt;"><DisplayString>greater&lt;&gt;</DisplayString><Expand/></Type>
+  <Type Name="std::less&lt;void&gt;"><DisplayString>less&lt;&gt;</DisplayString><Expand/></Type>
+  <Type Name="std::greater_equal&lt;void&gt;"><DisplayString>greater_equal&lt;&gt;</DisplayString><Expand/></Type>
+  <Type Name="std::less_equal&lt;void&gt;"><DisplayString>less_equal&lt;&gt;</DisplayString><Expand/></Type>
+  <Type Name="std::logical_and&lt;void&gt;"><DisplayString>logical_and&lt;&gt;</DisplayString><Expand/></Type>
+  <Type Name="std::logical_or&lt;void&gt;"><DisplayString>logical_or&lt;&gt;</DisplayString><Expand/></Type>
+  <Type Name="std::logical_not&lt;void&gt;"><DisplayString>logical_not&lt;&gt;</DisplayString><Expand/></Type>
+  <Type Name="std::bit_and&lt;void&gt;"><DisplayString>bit_and&lt;&gt;</DisplayString><Expand/></Type>
+  <Type Name="std::bit_or&lt;void&gt;"><DisplayString>bit_or&lt;&gt;</DisplayString><Expand/></Type>
+  <Type Name="std::bit_xor&lt;void&gt;"><DisplayString>bit_xor&lt;&gt;</DisplayString><Expand/></Type>
+  <Type Name="std::bit_not&lt;void&gt;"><DisplayString>bit_not&lt;&gt;</DisplayString><Expand/></Type>
+
+  <!-- std::less<T> and similar -->
+  <Type Name="std::plus&lt;*&gt;"><DisplayString>plus</DisplayString><Expand/></Type>
+  <Type Name="std::minus&lt;*&gt;"><DisplayString>minus</DisplayString><Expand/></Type>
+  <Type Name="std::multiplies&lt;*&gt;"><DisplayString>multiplies</DisplayString><Expand/></Type>
+  <Type Name="std::divides&lt;*&gt;"><DisplayString>divides</DisplayString><Expand/></Type>
+  <Type Name="std::modulus&lt;*&gt;"><DisplayString>modulus</DisplayString><Expand/></Type>
+  <Type Name="std::negate&lt;*&gt;"><DisplayString>negate</DisplayString><Expand/></Type>
+  <Type Name="std::equal_to&lt;*&gt;"><DisplayString>equal_to</DisplayString><Expand/></Type>
+  <Type Name="std::not_equal_to&lt;*&gt;"><DisplayString>not_equal_to</DisplayString><Expand/></Type>
+  <Type Name="std::greater&lt;*&gt;"><DisplayString>greater</DisplayString><Expand/></Type>
+  <Type Name="std::less&lt;*&gt;"><DisplayString>less</DisplayString><Expand/></Type>
+  <Type Name="std::greater_equal&lt;*&gt;"><DisplayString>greater_equal</DisplayString><Expand/></Type>
+  <Type Name="std::less_equal&lt;*&gt;"><DisplayString>less_equal</DisplayString><Expand/></Type>
+  <Type Name="std::logical_and&lt;*&gt;"><DisplayString>logical_and</DisplayString><Expand/></Type>
+  <Type Name="std::logical_or&lt;*&gt;"><DisplayString>logical_or</DisplayString><Expand/></Type>
+  <Type Name="std::logical_not&lt;*&gt;"><DisplayString>logical_not</DisplayString><Expand/></Type>
+  <Type Name="std::bit_and&lt;*&gt;"><DisplayString>bit_and</DisplayString><Expand/></Type>
+  <Type Name="std::bit_or&lt;*&gt;"><DisplayString>bit_or</DisplayString><Expand/></Type>
+  <Type Name="std::bit_xor&lt;*&gt;"><DisplayString>bit_xor</DisplayString><Expand/></Type>
+  <Type Name="std::bit_not&lt;*&gt;"><DisplayString>bit_not</DisplayString><Expand/></Type>
+
+
+  <Type Name="std::unary_negate&lt;*&gt;">
+      <DisplayString>not1({_Functor})</DisplayString>
+      <Expand>
+          <Item Name="[pred]">_Functor</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::binary_negate&lt;*&gt;">
+      <DisplayString>not2({_Functor})</DisplayString>
+      <Expand>
+          <Item Name="[pred]">_Functor</Item>
+      </Expand>
+  </Type>
+
+
+  <Type Name="std::_Ph&lt;*&gt;">
+      <DisplayString>_{$T1,d}</DisplayString>
+      <Expand/>
+  </Type>
+
+  <!-- VC 2015 -->
+  <Type Name="std::_Binder&lt;*&gt;">
+      <DisplayString>bind({_Mypair}, {_Mypair._Myval2,view(noparens)})</DisplayString>
+      <Expand>
+          <Item Name="[f]">_Mypair</Item>
+          <Item Name="[bound_args]">_Mypair._Myval2</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::_Front_binder&lt;*&gt;">
+      <DisplayString>bind_front({_Mypair}, {_Mypair._Myval2,view(noparens)})</DisplayString>
+      <Expand>
+          <Item Name="[f]">_Mypair</Item>
+          <Item Name="[bound_args]">_Mypair._Myval2</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::_Back_binder&lt;*&gt;">
+    <DisplayString>bind_back({_Mypair}, {_Mypair._Myval2,view(noparens)})</DisplayString>
+    <Expand>
+      <Item Name="[f]">_Mypair</Item>
+      <Item Name="[bound_args]">_Mypair._Myval2</Item>
+    </Expand>
+  </Type>
+
+
+  <!-- VC 2015 -->
+  <Type Name="std::_Mem_fn&lt;*&gt;">
+      <DisplayString>mem_fn({_Pm})</DisplayString>
+      <Expand/>
+  </Type>
+
+
+  <!-- VC 2015 -->
+  <Type Name="std::_Func_impl&lt;*&gt;">
+      <DisplayString>{_Mypair._Myval2}</DisplayString>
+      <Expand>
+          <Item Name="[functor]">_Mypair._Myval2</Item>
+          <Item Name="[allocator]">_Mypair</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::_Func_impl_no_alloc&lt;*&gt;">
+      <DisplayString>{_Callee}</DisplayString>
+      <Expand>
+          <Item Name="[functor]">_Callee</Item>
+      </Expand>
+  </Type>
+
+  <!-- VC 2015 -->
+  <Type Name="std::function&lt;*&gt;">
+      <DisplayString Condition="_Mystorage._Ptrs[_EEN_IMPL] == 0">empty</DisplayString>
+      <DisplayString Condition="_Mystorage._Ptrs[_EEN_IMPL] != 0">{*_Mystorage._Ptrs[_EEN_IMPL]}</DisplayString>
+      <Expand>
+          <ExpandedItem Condition="_Mystorage._Ptrs[_EEN_IMPL] != 0">*_Mystorage._Ptrs[_EEN_IMPL]</ExpandedItem>
+      </Expand>
+  </Type>
+
+
+  <Type Name="std::hash&lt;*&gt;">
+      <DisplayString>hash</DisplayString>
+      <Expand/>
+  </Type>
+
+
+  <Type Name="std::chrono::duration&lt;*,std::ratio&lt;1,1000000000&gt; &gt;">
+      <DisplayString Condition="_MyRep == 1">{_MyRep} nanosecond</DisplayString>
+      <DisplayString>{_MyRep} nanoseconds</DisplayString>
+      <Expand/>
+  </Type>
+
+  <Type Name="std::chrono::duration&lt;*,std::ratio&lt;1,1000000&gt; &gt;">
+      <DisplayString Condition="_MyRep == 1">{_MyRep} microsecond</DisplayString>
+      <DisplayString>{_MyRep} microseconds</DisplayString>
+      <Expand/>
+  </Type>
+
+  <Type Name="std::chrono::duration&lt;*,std::ratio&lt;1,1000&gt; &gt;">
+      <DisplayString Condition="_MyRep == 1">{_MyRep} millisecond</DisplayString>
+      <DisplayString>{_MyRep} milliseconds</DisplayString>
+      <Expand/>
+  </Type>
+
+  <Type Name="std::chrono::duration&lt;*,std::ratio&lt;1,1&gt; &gt;">
+      <DisplayString Condition="_MyRep == 1">{_MyRep} second</DisplayString>
+      <DisplayString>{_MyRep} seconds</DisplayString>
+      <Expand/>
+  </Type>
+
+  <Type Name="std::chrono::duration&lt;*,std::ratio&lt;60,1&gt; &gt;">
+      <DisplayString Condition="_MyRep == 1">{_MyRep} minute</DisplayString>
+      <DisplayString>{_MyRep} minutes</DisplayString>
+      <Expand/>
+  </Type>
+
+  <Type Name="std::chrono::duration&lt;*,std::ratio&lt;3600,1&gt; &gt;">
+      <DisplayString Condition="_MyRep == 1">{_MyRep} hour</DisplayString>
+      <DisplayString>{_MyRep} hours</DisplayString>
+      <Expand/>
+  </Type>
+
+  <Type Name="std::chrono::duration&lt;*,std::ratio&lt;86400,1&gt; &gt;">
+      <DisplayString Condition="_MyRep == 1">{_MyRep} day</DisplayString>
+      <DisplayString>{_MyRep} days</DisplayString>
+      <Expand/>
+  </Type>
+
+  <Type Name="std::chrono::duration&lt;*,std::ratio&lt;604800,1&gt; &gt;">
+      <DisplayString Condition="_MyRep == 1">{_MyRep} week</DisplayString>
+      <DisplayString>{_MyRep} weeks</DisplayString>
+      <Expand/>
+  </Type>
+
+  <Type Name="std::chrono::duration&lt;*,std::ratio&lt;2629746,1&gt; &gt;">
+      <DisplayString Condition="_MyRep == 1">{_MyRep} month</DisplayString>
+      <DisplayString>{_MyRep} months</DisplayString>
+      <Expand/>
+  </Type>
+
+  <Type Name="std::chrono::duration&lt;*,std::ratio&lt;31556952,1&gt; &gt;">
+      <DisplayString Condition="_MyRep == 1">{_MyRep} year</DisplayString>
+      <DisplayString>{_MyRep} years</DisplayString>
+      <Expand/>
+  </Type>
+
+  <Type Name="std::chrono::day">
+      <DisplayString Condition="_Day % 10 == 1 &amp;&amp; _Day % 100 != 11">{(int)_Day}st</DisplayString>
+      <DisplayString Condition="_Day % 10 == 2 &amp;&amp; _Day % 100 != 12">{(int)_Day}nd</DisplayString>
+      <DisplayString Condition="_Day % 10 == 3 &amp;&amp; _Day % 100 != 13">{(int)_Day}rd</DisplayString>
+      <DisplayString>{(int)_Day}th</DisplayString>
+      <Expand/>
+  </Type>
+
+  <Type Name="std::chrono::month">
+      <DisplayString Condition="_Month == 1">January</DisplayString>
+      <DisplayString Condition="_Month == 2">February</DisplayString>
+      <DisplayString Condition="_Month == 3">March</DisplayString>
+      <DisplayString Condition="_Month == 4">April</DisplayString>
+      <DisplayString Condition="_Month == 5">May</DisplayString>
+      <DisplayString Condition="_Month == 6">June</DisplayString>
+      <DisplayString Condition="_Month == 7">July</DisplayString>
+      <DisplayString Condition="_Month == 8">August</DisplayString>
+      <DisplayString Condition="_Month == 9">September</DisplayString>
+      <DisplayString Condition="_Month == 10">October</DisplayString>
+      <DisplayString Condition="_Month == 11">November</DisplayString>
+      <DisplayString Condition="_Month == 12">December</DisplayString>
+      <DisplayString>{_Month}</DisplayString>
+      <Expand/>
+  </Type>
+
+  <Type Name="std::chrono::year">
+      <DisplayString>{_Year}</DisplayString>
+      <Expand/>
+  </Type>
+
+  <Type Name="std::chrono::weekday">
+      <DisplayString Condition="_Weekday == 0">Sunday</DisplayString>
+      <DisplayString Condition="_Weekday == 1">Monday</DisplayString>
+      <DisplayString Condition="_Weekday == 2">Tuesday</DisplayString>
+      <DisplayString Condition="_Weekday == 3">Wednesday</DisplayString>
+      <DisplayString Condition="_Weekday == 4">Thursday</DisplayString>
+      <DisplayString Condition="_Weekday == 5">Friday</DisplayString>
+      <DisplayString Condition="_Weekday == 6">Saturday</DisplayString>
+      <DisplayString>{_Weekday}</DisplayString>
+      <Expand/>
+  </Type>
+
+  <Type Name="std::chrono::weekday_indexed">
+      <DisplayString Condition="_Index == 1">{(int)_Index}st {_Weekday}</DisplayString>
+      <DisplayString Condition="_Index == 2">{(int)_Index}nd {_Weekday}</DisplayString>
+      <DisplayString Condition="_Index == 3">{(int)_Index}rd {_Weekday}</DisplayString>
+      <DisplayString Condition="_Index == 4 || _Index == 5">{(int)_Index}th {_Weekday}</DisplayString>
+      <DisplayString>{(int)_Index}, {_Weekday}</DisplayString>
+      <Expand>
+        <Item Name="[weekday]">_Weekday</Item>
+        <Item Name="[index]">(int)_Index</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::chrono::weekday_last">
+      <DisplayString>Last {_Weekday}</DisplayString>
+      <Expand>
+        <Item Name="[weekday]">_Weekday</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::chrono::month_day">
+      <DisplayString>{_Month} {_Day}</DisplayString>
+        <Expand>
+          <Item Name="[month]">_Month</Item>
+          <Item Name="[day]">_Day</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::chrono::month_day_last">
+      <DisplayString>Last day of {_Month}</DisplayString>
+      <Expand>
+        <Item Name="[month]">_Month</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::chrono::month_weekday">
+      <DisplayString>{_Weekday_index} of {_Month}</DisplayString>
+        <Expand>
+          <Item Name="[month]">_Month</Item>
+          <Item Name="[weekday_indexed]">_Weekday_index</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::chrono::month_weekday_last">
+      <DisplayString>Last {_Weekday_last._Weekday} of {_Month}</DisplayString>
+      <Expand>
+        <Item Name="[month]">_Month</Item>
+        <Item Name="[weekday]">_Weekday_last._Weekday</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::chrono::year_month">
+      <DisplayString>{_Year} {_Month}</DisplayString>
+        <Expand>
+          <Item Name="[year]">_Year</Item>
+          <Item Name="[month]">_Month</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::chrono::year_month_day">
+      <DisplayString>{_Year} {_Month} {_Day}</DisplayString>
+        <Expand>
+          <Item Name="[year]">_Year</Item>
+          <Item Name="[month]">_Month</Item>
+          <Item Name="[day]">_Day</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::chrono::year_month_day_last">
+      <DisplayString>{_Month_day_last}, {_Year}</DisplayString>
+      <Expand>
+        <Item Name="[year]">_Year</Item>
+        <Item Name="[month]">_Month_day_last._Month</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::chrono::year_month_weekday">
+      <DisplayString>{_Weekday_index} of {_Month}, {_Year}</DisplayString>
+        <Expand>
+          <Item Name="[year]">_Year</Item>
+          <Item Name="[month]">_Month</Item>
+          <Item Name="[weekday_indexed]">_Weekday_index</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::chrono::year_month_weekday_last">
+      <DisplayString>{_Weekday_last} of {_Month}, {_Year}</DisplayString>
+      <Expand>
+        <Item Name="[year]">_Year</Item>
+        <Item Name="[month]">_Month</Item>
+        <Item Name="[weekday]">_Weekday_last._Weekday</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::chrono::hh_mm_ss&lt;*&gt;">
+      <DisplayString Condition="_Is_neg">-{_Hours._MyRep}h {_Mins._MyRep}m {_Secs._MyRep}s {_Sub_secs._MyRep}ss</DisplayString>
+      <DisplayString>{_Hours._MyRep}h {_Mins._MyRep}m {_Secs._MyRep}s {_Sub_secs._MyRep}ss</DisplayString>
+      <Expand>
+        <Item Name="[is_negative]">_Is_neg</Item>
+        <Item Name="[hours]">_Hours</Item>
+        <Item Name="[minutes]">_Mins</Item>
+        <Item Name="[seconds]">_Secs</Item>
+        <Item Name="[subseconds]">_Sub_secs</Item>
+      </Expand>
+  </Type>
+
+  <!--
+   * VC 2015+ ABI basic_string
+   * Notes:
+   * Hard coding _BUF_SIZE for clang-cl compatibility; clang-cl as of 7.0.1 does not emit S_CONSTANT to get _BUF_SIZE
+   *
+   * The `na` format specifier means "no address". For more info, see:
+   * https://learn.microsoft.com/visualstudio/debugger/format-specifiers-in-cpp
+   -->
+  <Type Name="std::basic_string&lt;*&gt;">
+    <Intrinsic Name="size" Expression="_Mypair._Myval2._Mysize" />
+    <Intrinsic Name="capacity" Expression="_Mypair._Myval2._Myres" />
+    <!-- _BUF_SIZE = 16 / sizeof($T1) &lt; 1 ? 1 : 16 / sizeof($T1) -->
+    <Intrinsic Name="bufSize" Expression="16 / sizeof($T1) &lt; 1 ? 1 : 16 / sizeof($T1)" />
+    <Intrinsic Name="isShortString" Expression="capacity() &lt; bufSize()" />
+    <Intrinsic Name="isLongString" Expression="capacity() &gt;= bufSize()" />
+    <Intrinsic Name="c_str" Expression="const_cast&lt;const $T1*&gt;(isShortString() ? _Mypair._Myval2._Bx._Buf : _Mypair._Myval2._Bx._Ptr)" />
+    <DisplayString Condition="isShortString()">{_Mypair._Myval2._Bx._Buf,na}</DisplayString>
+    <DisplayString Condition="isLongString()">{_Mypair._Myval2._Bx._Ptr,na}</DisplayString>
+    <StringView Condition="isShortString()">_Mypair._Myval2._Bx._Buf,na</StringView>
+    <StringView Condition="isLongString()">_Mypair._Myval2._Bx._Ptr,na</StringView>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">capacity()</Item>
+      <Item Name="[allocator]" ExcludeView="simple">_Mypair</Item>
+      <ArrayItems>
+        <Size>_Mypair._Myval2._Mysize</Size>
+        <ValuePointer Condition="isShortString()">_Mypair._Myval2._Bx._Buf</ValuePointer>
+        <ValuePointer Condition="isLongString()">_Mypair._Myval2._Bx._Ptr</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <Type Name="std::_String_iterator&lt;*&gt;">
+      <AlternativeType Name="std::_String_const_iterator&lt;*&gt;" />
+      <SmartPointer Usage="Indexable">_Ptr,na</SmartPointer>
+      <Expand>
+          <Item Name="[ptr]">_Ptr</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::basic_string_view&lt;*,*&gt;">
+    <Intrinsic Name="size" Expression="_Mysize" />
+    <Intrinsic Name="data" Expression="_Mydata" />
+    <DisplayString>{_Mydata,[_Mysize]na}</DisplayString>
+    <StringView>_Mydata,[_Mysize]na</StringView>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">size()</Item>
+      <ArrayItems>
+        <Size>size()</Size>
+        <ValuePointer>data()</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <!-- This is for _ITERATOR_DEBUG_LEVEL == 0 and must have lower priority. -->
+  <Type Name="std::_String_view_iterator&lt;*&gt;" Priority="MediumLow">
+    <SmartPointer Usage="Indexable">_Myptr,na</SmartPointer>
+    <Expand>
+      <Item Name="[ptr]">_Myptr</Item>
+    </Expand>
+  </Type>
+
+  <!-- This is for _ITERATOR_DEBUG_LEVEL != 0 and must have higher priority. -->
+  <Type Name="std::_String_view_iterator&lt;*&gt;" Priority="Medium">
+    <DisplayString>{_Mydata + _Myoff,[_Mysize - _Myoff]na}</DisplayString>
+    <StringView>_Mydata + _Myoff,[_Mysize - _Myoff]na</StringView>
+    <Expand>
+      <Item Name="[ptr]">_Mydata + _Myoff</Item>
+      <Item Name="[offset]">_Myoff</Item>
+      <Item Name="[string_view]">_Mydata,[_Mysize]na</Item>
+    </Expand>
+  </Type>
+
+
+  <Type Name="std::array&lt;*,*&gt;">
+      <DisplayString>{{ size={$T2} }}</DisplayString>
+      <Expand>
+          <ArrayItems>
+              <Size>$T2</Size>
+              <ValuePointer>_Elems</ValuePointer>
+          </ArrayItems>
+      </Expand>
+  </Type>
+
+  <!-- This is for _ITERATOR_DEBUG_LEVEL == 0 and must have lower priority. -->
+  <Type Name="std::_Array_iterator&lt;*&gt;" Priority="MediumLow">
+      <AlternativeType Name="std::_Array_const_iterator&lt;*&gt;" />
+      <SmartPointer Usage="Indexable">_Ptr,na</SmartPointer>
+      <DisplayString>{*_Ptr}</DisplayString>
+      <Expand>
+          <Item Name="[ptr]">_Ptr</Item>
+      </Expand>
+  </Type>
+
+  <!-- This is for _ITERATOR_DEBUG_LEVEL != 0 and must have higher priority. -->
+  <Type Name="std::_Array_iterator&lt;*&gt;" Priority="Medium">
+      <AlternativeType Name="std::_Array_const_iterator&lt;*&gt;" />
+      <SmartPointer Usage="Indexable">_Ptr + _Idx</SmartPointer>
+      <DisplayString Condition="_Idx != _EEN_SIZE">{_Ptr[_Idx]}</DisplayString>
+      <DisplayString Condition="_Idx == _EEN_SIZE">end</DisplayString>
+      <Expand>
+          <Item Condition="_Idx != _EEN_SIZE" Name="[ptr]">_Ptr + _Idx</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::deque&lt;*&gt;">
+      <Intrinsic Name="size" Expression="_Mypair._Myval2._Mysize" />
+      <DisplayString>{{ size={size()} }}</DisplayString>
+      <Expand>
+          <Item Name="[allocator]" ExcludeView="simple">_Mypair</Item>
+          <IndexListItems>
+              <Size>size()</Size>
+              <ValueNode>_Mypair._Myval2._Map[(($i + _Mypair._Myval2._Myoff) / _EEN_DS) % _Mypair._Myval2._Mapsize][($i + _Mypair._Myval2._Myoff) % _EEN_DS]</ValueNode>
+          </IndexListItems>
+      </Expand>
+  </Type>
+
+  <Type Name="std::_Deque_iterator&lt;*&gt;">
+      <AlternativeType Name="std::_Deque_const_iterator&lt;*&gt;" />
+      <DisplayString Condition="_Myoff &lt; ((_Mydeque_t *)_Myproxy-&gt;_Mycont)-&gt;_Myoff + ((_Mydeque_t *)_Myproxy-&gt;_Mycont)-&gt;_Mysize">{((_Mydeque_t *)_Myproxy-&gt;_Mycont)-&gt;_Map[(_Myoff / _EEN_DS) % ((_Mydeque_t *)_Myproxy-&gt;_Mycont)-&gt;_Mapsize][_Myoff % _EEN_DS]}</DisplayString>
+      <DisplayString Condition="_Myoff &gt;= ((_Mydeque_t *)_Myproxy-&gt;_Mycont)-&gt;_Myoff + ((_Mydeque_t *)_Myproxy-&gt;_Mycont)-&gt;_Mysize">end</DisplayString>
+      <Expand>
+          <Item Condition="_Myoff &lt; ((_Mydeque_t *)_Myproxy-&gt;_Mycont)-&gt;_Myoff + ((_Mydeque_t *)_Myproxy-&gt;_Mycont)-&gt;_Mysize" Name="[index]">_Myoff - ((_Mydeque_t *)_Myproxy-&gt;_Mycont)-&gt;_Myoff</Item>
+          <Item Condition="_Myoff &lt; ((_Mydeque_t *)_Myproxy-&gt;_Mycont)-&gt;_Myoff + ((_Mydeque_t *)_Myproxy-&gt;_Mycont)-&gt;_Mysize" Name="[ptr]">&amp;((_Mydeque_t *)_Myproxy-&gt;_Mycont)-&gt;_Map[(_Myoff / _EEN_DS) % ((_Mydeque_t *)_Myproxy-&gt;_Mycont)-&gt;_Mapsize][_Myoff % _EEN_DS]</Item>
+      </Expand>
+  </Type>
+
+
+  <!-- VC 2015 -->
+  <Type Name="std::forward_list&lt;*&gt;">
+      <DisplayString Condition="_Mypair._Myval2._Myhead == 0">empty</DisplayString>
+      <DisplayString Condition="_Mypair._Myval2._Myhead != 0">non-empty</DisplayString>
+      <Expand>
+          <Item Name="[allocator]" ExcludeView="simple">_Mypair</Item>
+          <LinkedListItems>
+              <HeadPointer>_Mypair._Myval2._Myhead</HeadPointer>
+              <NextPointer>_Next</NextPointer>
+              <ValueNode>_Myval</ValueNode>
+          </LinkedListItems>
+      </Expand>
+  </Type>
+
+  <Type Name="std::_Flist_iterator&lt;*&gt;">
+      <AlternativeType Name="std::_Flist_const_iterator&lt;*&gt;" />
+      <SmartPointer Usage="Minimal">&amp;_Ptr-&gt;_Myval,na</SmartPointer>
+      <DisplayString Condition="_Ptr == 0">end</DisplayString>
+      <DisplayString Condition="_Ptr != 0">{**this}</DisplayString>
+  </Type>
+
+  <!-- VC 2015 -->
+  <Type Name="std::list&lt;*&gt;">
+      <DisplayString>{{ size={_Mypair._Myval2._Mysize} }}</DisplayString>
+      <Expand>
+          <Item Name="[allocator]" ExcludeView="simple">_Mypair</Item>
+          <LinkedListItems>
+              <Size>_Mypair._Myval2._Mysize</Size>
+              <HeadPointer>_Mypair._Myval2._Myhead-&gt;_Next</HeadPointer>
+              <NextPointer>_Next</NextPointer>
+              <ValueNode>_Myval</ValueNode>
+          </LinkedListItems>
+      </Expand>
+  </Type>
+
+  <Type Name="std::_List_iterator&lt;*&gt;">
+      <AlternativeType Name="std::_List_const_iterator&lt;*&gt;" />
+      <SmartPointer Usage="Minimal">&amp;_Ptr-&gt;_Myval,na</SmartPointer>
+  </Type>
+
+
+  <!-- VC 2015 -->
+  <Type Name="std::vector&lt;bool,*&gt;">
+    <Intrinsic Name="size" Expression="_Mysize" />
+    <Intrinsic Name="capacity" Expression="_Myvec.capacity() * _EEN_VBITS" />
+      <DisplayString>{{ size={size()} }}</DisplayString>
+      <Expand>
+          <Item Name="[capacity]" ExcludeView="simple">capacity()</Item>
+          <Item Name="[allocator]" ExcludeView="simple">_Myvec._Mypair</Item>
+          <IndexListItems>
+              <Size>_Mysize</Size>
+              <ValueNode>(bool)((_Myvec._Mypair._Myval2._Myfirst[$i / _EEN_VBITS] &gt;&gt; ($i % _EEN_VBITS)) &amp; 1)</ValueNode>
+          </IndexListItems>
+      </Expand>
+  </Type>
+
+  <Type Name="std::_Vb_reference&lt;*&gt;">
+      <AlternativeType Name="std::_Vb_iterator&lt;*&gt;" />
+      <AlternativeType Name="std::_Vb_const_iterator&lt;*&gt;" />
+      <DisplayString>{(bool)((*_Myptr &gt;&gt; _Myoff) &amp; 1)}</DisplayString>
+      <Expand>
+          <Item Name="[ptr]">_Myptr</Item>
+          <Item Name="[offset]">_Myoff</Item>
+      </Expand>
+  </Type>
+
+
+  <!-- VC 2015 -->
+  <Type Name="std::vector&lt;*&gt;">
+    <Intrinsic Name="size" Expression="(size_t)(_Mypair._Myval2._Mylast - _Mypair._Myval2._Myfirst)" />
+    <Intrinsic Name="capacity" Expression="(size_t)(_Mypair._Myval2._Myend - _Mypair._Myval2._Myfirst)" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[capacity]" ExcludeView="simple">capacity()</Item>
+      <Item Name="[allocator]" ExcludeView="simple">_Mypair</Item>
+      <ArrayItems>
+        <Size>size()</Size>
+        <ValuePointer>_Mypair._Myval2._Myfirst</ValuePointer>
+        </ArrayItems>
+    </Expand>
+  </Type>
+
+  <Type Name="std::vector&lt;wchar_t,*&gt;">
+    <AlternativeType Name="std::vector&lt;char,*&gt;" />
+    <AlternativeType Name="std::vector&lt;char8_t,*&gt;" />
+    <AlternativeType Name="std::vector&lt;char16_t,*&gt;" />
+    <AlternativeType Name="std::vector&lt;char32_t,*&gt;" />
+    <Intrinsic Name="data" Expression="_Mypair._Myval2._Myfirst" />
+    <Intrinsic Name="size" Expression="(size_t)(_Mypair._Myval2._Mylast - _Mypair._Myval2._Myfirst)" />
+    <Intrinsic Name="capacity" Expression="(size_t)(_Mypair._Myval2._Myend - _Mypair._Myval2._Myfirst)" />
+    <SmartPointer Usage="Indexable" DefaultExpansion="false">data()</SmartPointer>
+    <DisplayString Condition="size() > 0">{data(),[size()]na}</DisplayString>
+    <DisplayString Condition="size() == 0">{{empty}}</DisplayString>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">capacity()</Item>
+      <Item Name="[allocator]" ExcludeView="simple">_Mypair</Item>
+      <ArrayItems>
+        <Size>size()</Size>
+        <ValuePointer>data()</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <!-- This is for _ITERATOR_DEBUG_LEVEL == 0 and must have lower priority. -->
+  <Type Name="std::_Vector_iterator&lt;*&gt;" Priority="MediumLow">
+      <AlternativeType Name="std::_Vector_const_iterator&lt;*&gt;" />
+      <SmartPointer Usage="Indexable">_Ptr,na</SmartPointer>
+      <DisplayString>{*_Ptr}</DisplayString>
+      <Expand>
+          <Item Name="[ptr]">_Ptr</Item>
+      </Expand>
+  </Type>
+
+  <!-- This is for _ITERATOR_DEBUG_LEVEL != 0 and must have higher priority. -->
+  <Type Name="std::_Vector_iterator&lt;*&gt;" Priority="Medium">
+      <AlternativeType Name="std::_Vector_const_iterator&lt;*&gt;" />
+      <Intrinsic Name="my_cont_end" Expression="((_Myvec_t *)_Myproxy-&gt;_Mycont)-&gt;_Mylast" />
+      <SmartPointer Usage="Indexable">_Ptr,na</SmartPointer>
+      <DisplayString Condition="_Ptr == my_cont_end()">end</DisplayString>
+      <DisplayString Condition="_Ptr != my_cont_end()">{*_Ptr}</DisplayString>
+      <Expand>
+          <Item Name="[ptr]">_Ptr</Item>
+      </Expand>
+  </Type>
+
+  <!-- VC 2015 -->
+  <Type Name="std::map&lt;*&gt;" Priority="Medium">
+    <AlternativeType Name="std::multimap&lt;*&gt;" />
+    <AlternativeType Name="std::set&lt;*&gt;" />
+    <AlternativeType Name="std::multiset&lt;*&gt;" />
+    <DisplayString>{{ size={_Mypair._Myval2._Myval2._Mysize} }}</DisplayString>
+    <Expand>
+      <Item Name="[comparator]" ExcludeView="simple">_Mypair</Item>
+      <Item Name="[allocator]" ExcludeView="simple">_Mypair._Myval2</Item>
+      <TreeItems>
+        <Size>_Mypair._Myval2._Myval2._Mysize</Size>
+        <HeadPointer>_Mypair._Myval2._Myval2._Myhead-&gt;_Parent</HeadPointer>
+        <LeftPointer>_Left</LeftPointer>
+        <RightPointer>_Right</RightPointer>
+        <ValueNode Condition="_Isnil == 0">_Myval</ValueNode>
+      </TreeItems>
+    </Expand>
+  </Type>
+
+  <!-- Starting in VS 2015, Update 2, we added a new visualization for std::map that shows the key in the name column,
+       and the value in the value column.  If desired, the "ShowElementsByIndex" view can be used to fall back to the prior
+       behavior and show the index in the name column and the key-value pair in the value column. -->
+  <Type Name="std::map&lt;*&gt;" ExcludeView="ShowElementsByIndex" Priority="MediumHigh">
+    <AlternativeType Name="std::multimap&lt;*&gt;" />
+    <DisplayString>{{ size={_Mypair._Myval2._Myval2._Mysize} }}</DisplayString>
+    <Expand>
+      <Item Name="[comparator]" ExcludeView="simple">_Mypair</Item>
+      <Item Name="[allocator]" ExcludeView="simple">_Mypair._Myval2</Item>
+      <TreeItems>
+        <Size>_Mypair._Myval2._Myval2._Mysize</Size>
+        <HeadPointer>_Mypair._Myval2._Myval2._Myhead-&gt;_Parent</HeadPointer>
+        <LeftPointer>_Left</LeftPointer>
+        <RightPointer>_Right</RightPointer>
+        <ValueNode Condition="_Isnil == 0" Name="[{_Myval.first}]">_Myval,view(MapHelper)</ValueNode>
+      </TreeItems>
+    </Expand>
+  </Type>
+
+  <Type Name="std::pair&lt;*, *&gt;" IncludeView="MapHelper">
+    <DisplayString>{second}</DisplayString>
+  </Type>
+
+  <Type Name="std::_Tree_iterator&lt;*&gt;">
+      <AlternativeType Name="std::_Tree_const_iterator&lt;*&gt;" />
+      <SmartPointer Usage="Minimal">_Ptr-&gt;_Isnil ? nullptr : &amp;_Ptr-&gt;_Myval</SmartPointer>
+      <DisplayString Condition="_Ptr-&gt;_Isnil == 0">{_Ptr-&gt;_Myval}</DisplayString>
+      <DisplayString Condition="_Ptr-&gt;_Isnil != 0">end</DisplayString>
+      <Expand>
+          <Item Condition="_Ptr-&gt;_Isnil == 0" Name="[ptr]">&amp;_Ptr-&gt;_Myval</Item>
+      </Expand>
+  </Type>
+
+
+  <!-- VC 2015 - must have higher priority -->
+  <Type Name="stdext::hash_map&lt;*&gt;" Priority="Medium">
+      <AlternativeType Name="stdext::hash_multimap&lt;*&gt;" />
+      <AlternativeType Name="stdext::hash_set&lt;*&gt;" />
+      <AlternativeType Name="stdext::hash_multiset&lt;*&gt;" />
+      <DisplayString>{_List}</DisplayString>
+      <Expand>
+          <Item Name="[bucket_count]" IncludeView="detailed">_Maxidx</Item>
+          <Item Name="[load_factor]" IncludeView="detailed">((float)_List._Mypair._Myval2._Mysize) / ((float)_Maxidx)</Item>
+          <Item Name="[max_load_factor]" IncludeView="detailed">_Traitsobj._Max_buckets</Item>
+          <Item Name="[allocator]" ExcludeView="simple">_List._Mypair</Item>
+          <ExpandedItem>_List,view(simple)</ExpandedItem>
+      </Expand>
+  </Type>
+
+  <!-- VC 2015 - must have higher priority -->
+  <Type Name="std::unordered_map&lt;*&gt;" Priority="Medium">
+      <AlternativeType Name="std::unordered_multimap&lt;*&gt;" />
+      <AlternativeType Name="std::unordered_set&lt;*&gt;" />
+      <AlternativeType Name="std::unordered_multiset&lt;*&gt;" />
+      <DisplayString>{_List}</DisplayString>
+      <Expand>
+          <Item Name="[bucket_count]" IncludeView="detailed">_Maxidx</Item>
+          <Item Name="[load_factor]" IncludeView="detailed">((float)_List._Mypair._Myval2._Mysize) / ((float)_Maxidx)</Item>
+          <Item Name="[max_load_factor]" IncludeView="detailed">_Traitsobj._Mypair._Myval2._Myval2</Item>
+          <Item Name="[hash_function]" ExcludeView="simple">_Traitsobj._Mypair</Item>
+          <Item Name="[key_eq]" ExcludeView="simple">_Traitsobj._Mypair._Myval2</Item>
+          <Item Name="[allocator]" ExcludeView="simple">_List._Mypair</Item>
+          <ExpandedItem>_List,view(simple)</ExpandedItem>
+      </Expand>
+  </Type>
+
+  <Type Name="std::unordered_map&lt;*&gt;" Priority="MediumHigh" ExcludeView="ShowElementsByIndex">
+    <AlternativeType Name="std::unordered_multimap&lt;*&gt;" />
+    <DisplayString>{_List}</DisplayString>
+    <Expand>
+      <Item Name="[bucket_count]" IncludeView="detailed">_Maxidx</Item>
+      <Item Name="[load_factor]" IncludeView="detailed">((float)_List._Mypair._Myval2._Mysize) / ((float)_Maxidx)</Item>
+      <Item Name="[max_load_factor]" IncludeView="detailed">_Traitsobj._Mypair._Myval2._Myval2</Item>
+      <Item Name="[hash_function]" ExcludeView="simple">_Traitsobj._Mypair</Item>
+      <Item Name="[key_eq]" ExcludeView="simple">_Traitsobj._Mypair._Myval2</Item>
+      <Item Name="[allocator]" ExcludeView="simple">_List._Mypair</Item>
+      <ExpandedItem>_List,view(MapHelper)</ExpandedItem>
+    </Expand>
+  </Type>
+
+  <!-- Alternate view of std::list for internal list contained within an std::unordered_map.-->
+  <Type Name="std::list&lt;std::pair&lt;*,*&gt;,*&gt;" IncludeView="MapHelper">
+    <DisplayString>Test</DisplayString>
+    <Expand>
+      <LinkedListItems>
+        <Size>_Mypair._Myval2._Mysize</Size>
+        <HeadPointer>_Mypair._Myval2._Myhead-&gt;_Next</HeadPointer>
+        <NextPointer>_Next</NextPointer>
+        <ValueNode Name="[{_Myval.first}]">_Myval</ValueNode>
+      </LinkedListItems>
+    </Expand>
+  </Type>
+
+
+  <Type Name="std::queue&lt;*&gt;">
+      <AlternativeType Name="std::stack&lt;*&gt;" />
+      <DisplayString>{c}</DisplayString>
+      <Expand>
+          <Item Name="c">c</Item>
+      </Expand>
+  </Type>
+
+
+  <Type Name="std::priority_queue&lt;*&gt;">
+      <DisplayString>{c}</DisplayString>
+      <Expand>
+          <Item Name="c [heap]">c</Item>
+          <Item Name="comp">comp</Item>
+      </Expand>
+  </Type>
+
+
+  <!-- This is for _ITERATOR_DEBUG_LEVEL == 0 and must have lower priority. -->
+  <Type Name="std::reverse_iterator&lt;std::_Array_iterator&lt;*&gt; &gt;" Priority="MediumLow">
+      <AlternativeType Name="std::reverse_iterator&lt;std::_Array_const_iterator&lt;*&gt; &gt;" />
+      <SmartPointer Usage="Minimal">current._Ptr - 1,na</SmartPointer>
+      <DisplayString>reverse_iterator {current._Ptr[-1]}</DisplayString>
+      <Expand>
+          <Item Name="[ptr]">current._Ptr - 1</Item>
+      </Expand>
+  </Type>
+
+  <!-- This is for _ITERATOR_DEBUG_LEVEL != 0 and must have higher priority. -->
+  <Type Name="std::reverse_iterator&lt;std::_Array_iterator&lt;*&gt; &gt;" Priority="Medium">
+      <AlternativeType Name="std::reverse_iterator&lt;std::_Array_const_iterator&lt;*&gt; &gt;" />
+      <SmartPointer Usage="Minimal">current._Ptr + current._Idx - 1,na</SmartPointer>
+      <DisplayString Condition="current._Idx != 0">reverse_iterator {current._Ptr[current._Idx - 1]}</DisplayString>
+      <DisplayString Condition="current._Idx == 0">reverse_iterator rend</DisplayString>
+      <Expand>
+          <Item Condition="current._Idx != 0" Name="[ptr]">current._Ptr + current._Idx - 1</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::reverse_iterator&lt;std::_List_iterator&lt;*&gt; &gt;">
+      <AlternativeType Name="std::reverse_iterator&lt;std::_List_const_iterator&lt;*&gt; &gt;" />
+      <SmartPointer Usage="Minimal">&amp;current._Ptr-&gt;_Prev-&gt;_Myval,na</SmartPointer>
+      <DisplayString>reverse_iterator {**this}</DisplayString>
+  </Type>
+
+  <Type Name="std::reverse_iterator&lt;std::_Vector_iterator&lt;*&gt; &gt;">
+      <AlternativeType Name="std::reverse_iterator&lt;std::_Vector_const_iterator&lt;*&gt; &gt;" />
+      <SmartPointer Usage="Minimal">current._Ptr - 1,na</SmartPointer>
+      <DisplayString>reverse_iterator {**this}</DisplayString>
+      <Expand>
+          <Item Name="[ptr]">current._Ptr - 1</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::reverse_iterator&lt;*&gt;" Priority="Medium">
+      <DisplayString>reverse_iterator base() {current}</DisplayString>
+      <Expand>
+          <Synthetic Name="[NOTE]"><DisplayString>NOTE: *ri is equivalent to *prev(ri.base())</DisplayString></Synthetic>
+          <Item Name="base()">current</Item>
+      </Expand>
+  </Type>
+
+  <!-- This "partial specialization" for raw pointers or iterators marked as <SmartPointer Usage="Indexable">.
+       Must have higher priority than the "primary template" for arbitrary iterators. -->
+  <Type Name="std::reverse_iterator&lt;*&gt;" Priority="MediumHigh">
+      <SmartPointer Usage="Minimal">current - 1</SmartPointer>
+      <DisplayString>reverse_iterator {current[-1]}</DisplayString>
+      <Expand>
+          <Item Name="[ptr]">current - 1</Item>
+      </Expand>
+  </Type>
+
+
+  <Type Name="std::back_insert_iterator&lt;*&gt;">
+      <DisplayString>back_insert_iterator into {container}</DisplayString>
+      <Expand>
+          <Item Name="container">container</Item>
+      </Expand>
+  </Type>
+
+
+  <Type Name="std::front_insert_iterator&lt;*&gt;">
+      <DisplayString>front_insert_iterator into {container}</DisplayString>
+      <Expand>
+          <Item Name="container">container</Item>
+      </Expand>
+  </Type>
+
+
+  <Type Name="std::insert_iterator&lt;*&gt;">
+      <DisplayString>insert_iterator into {container} at {iter}</DisplayString>
+      <Expand>
+          <Item Name="container">container</Item>
+          <Item Name="iter">iter</Item>
+      </Expand>
+  </Type>
+
+
+  <Type Name="std::move_iterator&lt;*&gt;">
+      <DisplayString>move_iterator {_Current}</DisplayString>
+      <Expand>
+          <Item Name="[current]">_Current</Item>
+      </Expand>
+  </Type>
+
+
+  <Type Name="std::basic_const_iterator&lt;*&gt;">
+      <DisplayString>basic_const_iterator {_Current}</DisplayString>
+      <Expand>
+        <Item Name="current">_Current</Item>
+      </Expand>
+  </Type>
+
+
+  <Type Name="std::complex&lt;*&gt;">
+      <DisplayString Condition="(_Val[1] &lt; 0) &amp;&amp; (_Val[0] == 0)">-i*{-_Val[1]}</DisplayString>
+      <DisplayString Condition="(_Val[1] &lt; 0) &amp;&amp; (_Val[0] != 0)">{_Val[0]}-i*{-_Val[1]}</DisplayString>
+      <DisplayString Condition="_Val[1] == 0">{_Val[0]}</DisplayString>
+      <DisplayString Condition="(_Val[1] &gt; 0) &amp;&amp; (_Val[0] == 0)">i*{_Val[1]}</DisplayString>
+      <DisplayString Condition="(_Val[1] &gt; 0) &amp;&amp; (_Val[0] != 0)">{_Val[0]}+i*{_Val[1]}</DisplayString>
+      <Expand>
+          <Item Name="real">_Val[0]</Item>
+          <Item Name="imag">_Val[1]</Item>
+      </Expand>
+  </Type>
+
+
+  <Type Name="std::valarray&lt;*&gt;">
+      <DisplayString>{{ size={_Mysize} }}</DisplayString>
+      <Expand>
+          <ArrayItems>
+              <Size>_Mysize</Size>
+              <ValuePointer>_Myptr</ValuePointer>
+          </ArrayItems>
+      </Expand>
+  </Type>
+
+
+  <Type Name="std::basic_stringbuf&lt;*,*,*&gt;">
+      <Intrinsic Name="data" Expression="((!(_Mystate &amp; _Constant) &amp;&amp; (*_IPnext) != 0)
+        ? (*_IPfirst)
+        : (!(_Mystate &amp; _Noread) &amp;&amp; (*_IGnext) != 0)
+          ? (*_IGfirst)
+          : 0)" />
+      <Intrinsic Name="size" Expression="((!(_Mystate &amp; _Constant) &amp;&amp; (*_IPnext) != 0)
+        ? ((_Seekhigh &lt; (*_IPnext) ? (*_IPnext) : _Seekhigh) - (*_IPfirst))
+        : (!(_Mystate &amp; _Noread) &amp;&amp; (*_IGnext) != 0)
+          ? ((*_IGnext + *_IGcount) - (*_IGfirst))
+          : 0)" />
+      <DisplayString>{data(),[size()]}</DisplayString>
+      <Expand/>
+  </Type>
+
+  <Type Name="std::basic_istringstream&lt;*,*,*&gt;">
+      <DisplayString>{_Stringbuffer}</DisplayString>
+      <Expand>
+        <Item Name="stringbuf">_Stringbuffer</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::basic_ostringstream&lt;*,*,*&gt;">
+      <DisplayString>{_Stringbuffer}</DisplayString>
+      <Expand>
+        <Item Name="stringbuf">_Stringbuffer</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::basic_stringstream&lt;*,*,*&gt;">
+      <DisplayString>{_Stringbuffer}</DisplayString>
+      <Expand>
+        <Item Name="stringbuf">_Stringbuffer</Item>
+      </Expand>
+  </Type>
+
+
+  <Type Name="std::basic_regex&lt;*&gt;">
+      <DisplayString Condition="_Rep == 0">empty</DisplayString>
+      <DisplayString Condition="_Rep != 0">{_Visualization}</DisplayString>
+      <StringView Condition="_Rep != 0">_Visualization</StringView>
+      <Expand/>
+  </Type>
+
+
+  <Type Name="std::sub_match&lt;*&gt;">
+      <DisplayString Condition="matched">{first,[second - first]na}</DisplayString>
+      <DisplayString Condition="!matched">false</DisplayString>
+      <Expand>
+          <Item Name="matched">matched</Item>
+          <Item Name="first">first</Item>
+          <Item Name="second">second</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::sub_match&lt;std::_String_const_iterator&lt;*&gt; &gt;">
+      <AlternativeType Name="std::sub_match&lt;std::_String_iterator&lt;*&gt; &gt;" />
+      <DisplayString Condition="matched">{first._Ptr,[second._Ptr - first._Ptr]na}</DisplayString>
+      <DisplayString Condition="!matched">false</DisplayString>
+      <Expand>
+          <Item Name="matched">matched</Item>
+          <Item Name="first">first</Item>
+          <Item Name="second">second</Item>
+      </Expand>
+  </Type>
+
+
+  <Type Name="std::match_results&lt;*&gt;">
+      <DisplayString Condition="!_Ready">not ready</DisplayString>
+      <DisplayString Condition="_Ready">{_Matches}</DisplayString>
+      <Expand>
+          <ExpandedItem Condition="_Ready">_Matches,view(simple)</ExpandedItem>
+          <Item Condition="_Ready" Name="[prefix]">_Prefix</Item>
+          <Item Condition="_Ready" Name="[suffix]">_Suffix</Item>
+      </Expand>
+  </Type>
+
+
+  <Type Name="std::regex_iterator&lt;*&gt;">
+    <SmartPointer Usage="Minimal">&amp;_MyVal</SmartPointer>
+    <DisplayString Condition="_MyRe == 0">end</DisplayString>
+    <DisplayString Condition="_MyRe != 0">{_MyVal}</DisplayString>
+    <Expand>
+      <Item Condition="_MyRe != 0" Name="[begin]">_Begin</Item>
+      <Item Condition="_MyRe != 0" Name="[end]">_End</Item>
+      <Item Condition="_MyRe != 0" Name="[pregex]">_MyRe</Item>
+      <Item Condition="_MyRe != 0" Name="[flags]">_Flags</Item>
+      <Item Condition="_MyRe != 0" Name="[match]">_MyVal</Item>
+    </Expand>
+  </Type>
+
+
+  <Type Name="std::regex_token_iterator&lt;*&gt;">
+    <SmartPointer Usage="Minimal">_Res</SmartPointer>
+    <DisplayString Condition="_Res == 0">end</DisplayString>
+    <DisplayString Condition="_Res != 0">{*_Res}</DisplayString>
+    <Expand>
+      <Item Condition="_Res != 0" Name="[position]">_Pos</Item>
+      <Item Condition="_Res != 0" Name="[result]">_Res</Item>
+      <Item Condition="_Res != 0" Name="[suffix]">_Suffix</Item>
+      <Item Condition="_Res != 0" Name="[N]">_Cur</Item>
+      <Item Condition="_Res != 0" Name="[subs]">_Subs</Item>
+    </Expand>
+  </Type>
+
+
+  <Type Name="std::atomic&lt;*&gt;">
+      <!-- VS 2019 16.0 or earlier -->
+      <Intrinsic Optional="true" Name="value" Expression="*($T1*)&amp;_My_val"/>
+      <!-- VS 2019 16.1 or later -->
+      <Intrinsic Optional="true" Name="value" Expression="*($T1*)&amp;_Storage"/>
+      <DisplayString>{value()}</DisplayString>
+      <Expand>
+          <Item Name="[value]">value()</Item>
+      </Expand>
+  </Type>
+
+
+  <Type Name="std::atomic_flag">
+      <!-- VS 2019 16.0 or earlier -->
+      <Intrinsic Optional="true" Name="value" Expression="(_My_flag &amp; 1) != 0"/>
+      <!-- VS 2019 16.1 or later -->
+      <Intrinsic Optional="true" Name="value" Expression="_Storage._Storage._Value != 0"/>
+      <DisplayString>{value()}</DisplayString>
+      <Expand/>
+  </Type>
+
+  <Type Name="std::mutex">
+      <AlternativeType Name="std::recursive_mutex"/>
+      <DisplayString Condition="_Mtx_storage._Count == 0">unlocked</DisplayString>
+      <DisplayString Condition="_Mtx_storage._Count != 0">locked</DisplayString>
+      <Expand>
+          <Item Name="[locking_thread_id]" Condition="_Mtx_storage._Count != 0">_Mtx_storage._Thread_id</Item>
+          <Item Name="[ownership_levels]" Condition="_Mtx_storage._Count != 0">_Mtx_storage._Count</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::timed_mutex">
+    <AlternativeType Name="std::recursive_timed_mutex"/>
+    <DisplayString Condition="_My_locked == 0">unlocked</DisplayString>
+    <DisplayString Condition="_My_locked != 0">locked</DisplayString>
+    <Expand>
+      <Item Name="[locking_thread_id]" Optional="true">_My_owner</Item>
+      <Item Name="[ownership_levels]">_My_locked</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="std::lock_guard&lt;*&gt;">
+    <DisplayString>{&amp;_MyMutex}</DisplayString>
+    <Expand>
+      <Item Name="mutex">&amp;_MyMutex</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="std::unique_lock&lt;*&gt;">
+    <DisplayString Condition="_Pmtx == nullptr">empty</DisplayString>
+    <DisplayString Condition="_Pmtx != nullptr &amp;&amp; !_Owns">{*_Pmtx} - unowned</DisplayString>
+    <DisplayString Condition="_Pmtx != nullptr &amp;&amp; _Owns">{*_Pmtx} - owned</DisplayString>
+    <Expand>
+      <Item Name="mutex">_Pmtx</Item>
+      <Item Name="owned">_Owns</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="std::scoped_lock&lt;&gt;">
+    <DisplayString>()</DisplayString>
+  </Type>
+
+  <Type Name="std::scoped_lock&lt;*&gt;">
+    <DisplayString>({&amp;_MyMutex})</DisplayString>
+    <Expand>
+      <Item Name="[0]">&amp;_MyMutex</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="std::scoped_lock&lt;*,*&gt;">
+    <DisplayString>{_MyMutexes,view(asptr)}</DisplayString>
+    <Expand>
+      <ExpandedItem>_MyMutexes,view(asptr)</ExpandedItem>
+    </Expand>
+  </Type>
+
+  <Type Name="std::defer_lock_t">
+    <DisplayString>std::defer_lock</DisplayString>
+  </Type>
+
+  <Type Name="std::try_to_lock_t">
+    <DisplayString>std::try_to_lock</DisplayString>
+  </Type>
+
+  <Type Name="std::adopt_lock_t">
+    <DisplayString>std::adopt_lock</DisplayString>
+  </Type>
+
+  <Type Name="std::once_flag">
+    <DisplayString Condition="!_Opaque">incomplete</DisplayString>
+    <DisplayString Condition="_Opaque">complete</DisplayString>
+  </Type>
+
+  <!-- VC 2015 -->
+  <Type Name="std::_Associated_state&lt;*&gt;">
+      <Expand>
+          <Item Name="[retrieved]">_Retrieved</Item>
+          <Item Name="[result]">_Result</Item>
+          <Item Name="[exception]">_Exception</Item>
+      </Expand>
+  </Type>
+
+  <!-- VC 2015 -->
+  <Type Name="std::promise&lt;*&gt;">
+      <AlternativeType Name="std::packaged_task&lt;*&gt;"/>
+      <DisplayString Condition="_MyPromise._State._Assoc_state == nullptr">empty</DisplayString>
+      <DisplayString Condition="_MyPromise._State._Assoc_state != nullptr &amp;&amp; (*_MyPromise._State._Assoc_state)._Ready == 0">pending</DisplayString>
+      <DisplayString Condition="_MyPromise._State._Assoc_state != nullptr &amp;&amp; (*_MyPromise._State._Assoc_state)._Ready == 1">has_result</DisplayString>
+      <Expand>
+          <ExpandedItem Condition="_MyPromise._State._Assoc_state != nullptr &amp;&amp; (*_MyPromise._State._Assoc_state)._Ready == 1">*_MyPromise._State._Assoc_state</ExpandedItem>
+          <Item Name="[future_retrieved]" Condition="_MyPromise._State._Assoc_state != nullptr">_MyPromise._Future_retrieved</Item>
+      </Expand>
+  </Type>
+
+  <!-- VC 2015 -->
+  <Type Name="std::future&lt;*&gt;">
+      <AlternativeType Name="std::shared_future&lt;*&gt;"/>
+      <DisplayString Condition="_Assoc_state == nullptr">empty</DisplayString>
+      <DisplayString Condition="_Assoc_state != nullptr &amp;&amp; (*_Assoc_state)._Ready == 0">pending</DisplayString>
+      <DisplayString Condition="_Assoc_state != nullptr &amp;&amp; (*_Assoc_state)._Ready == 1">has_result</DisplayString>
+      <Expand>
+          <ExpandedItem Condition="_Assoc_state != nullptr &amp;&amp; (*_Assoc_state)._Ready == 1">*_Assoc_state</ExpandedItem>
+      </Expand>
+  </Type>
+
+
+  <Type Name="std::pointer_to_unary_function&lt;*&gt;">
+      <AlternativeType Name="std::pointer_to_binary_function&lt;*&gt;" />
+      <DisplayString>ptr_fun({_Pfun})</DisplayString>
+      <Expand/>
+  </Type>
+
+  <Type Name="std::mem_fun_t&lt;*&gt;">
+      <AlternativeType Name="std::mem_fun1_t&lt;*&gt;" />
+      <AlternativeType Name="std::const_mem_fun_t&lt;*&gt;" />
+      <AlternativeType Name="std::const_mem_fun1_t&lt;*&gt;" />
+      <DisplayString>mem_fun({_Pmemfun})</DisplayString>
+      <Expand/>
+  </Type>
+
+  <Type Name="std::mem_fun_ref_t&lt;*&gt;">
+      <AlternativeType Name="std::mem_fun1_ref_t&lt;*&gt;" />
+      <AlternativeType Name="std::const_mem_fun_ref_t&lt;*&gt;" />
+      <AlternativeType Name="std::const_mem_fun1_ref_t&lt;*&gt;" />
+      <DisplayString>mem_fun_ref({_Pmemfun})</DisplayString>
+      <Expand/>
+  </Type>
+
+  <Type Name="std::binder1st&lt;*&gt;">
+      <DisplayString>bind1st({op}, {value})</DisplayString>
+      <Expand>
+          <Item Name="op">op</Item>
+          <Item Name="value">value</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::binder2nd&lt;*&gt;">
+      <DisplayString>bind2nd({op}, {value})</DisplayString>
+      <Expand>
+          <Item Name="op">op</Item>
+          <Item Name="value">value</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::auto_ptr&lt;*&gt;">
+      <DisplayString Condition="_Myptr == 0">empty</DisplayString>
+      <DisplayString Condition="_Myptr != 0">auto_ptr {*_Myptr}</DisplayString>
+      <Expand>
+          <Item Condition="_Myptr != 0" Name="[ptr]">_Myptr</Item>
+      </Expand>
+  </Type>
+
+
+  <!-- Visualizer for experimental coroutines (/await) -->
+  <Type Name="std::experimental::coroutine_handle&lt;*&gt;">
+    <DisplayString Condition="_Ptr-&gt;_Index == 2">{_Ptr-&gt;_Fn,na}, #initial suspend</DisplayString>
+    <DisplayString Condition="_Ptr-&gt;_Index == 0">{_Ptr-&gt;_Fn,na}, #final suspend</DisplayString>
+    <DisplayString Condition="_Ptr-&gt;_Index != 2 &amp;&amp; _Ptr-&gt;_Index != 0">{_Ptr-&gt;_Fn,na}, suspend point #{(_Ptr-&gt;_Index)/2 - 1}</DisplayString>
+    <DisplayString>{_Ptr-&gt;_Fn,na}</DisplayString>
+    <Expand>
+      <Item Condition="_Ptr-&gt;_Index == 2" Name="Suspend Point">"initial suspend"</Item>
+      <Item Condition="_Ptr-&gt;_Index == 0" Name="Suspend Point">"final suspend"</Item>
+      <Item Condition="_Ptr-&gt;_Index != 2 &amp;&amp; _Ptr-&gt;_Index != 0" Name="Suspend Point">(_Ptr-&gt;_Index)/2 - 1</Item>
+      <ExpandedItem>this,view(ViewPromise)</ExpandedItem>
+    </Expand>
+  </Type>
+
+  <!-- Do not display the promise when promise type is void -->
+  <Type Name="std::experimental::coroutine_handle&lt;void&gt;" IncludeView="ViewPromise">
+    <Expand/>
+  </Type>
+
+  <!-- Evaluate and display the promise -->
+  <Type Name="std::experimental::coroutine_handle&lt;*&gt;" IncludeView="ViewPromise">
+    <Expand>
+      <Item Name="Promise">*reinterpret_cast&lt;$T1 *&gt;(reinterpret_cast&lt;char*&gt;(_Ptr) - _ALIGNED_SIZE)</Item>
+    </Expand>
+  </Type>
+
+  <!-- Visualizer for standard coroutines (/std:c++20, /await:strict) -->
+  <Type Name="std::coroutine_handle&lt;*&gt;" IncludeView="ViewPromise">
+    <Expand>
+      <Item Name="Promise">*reinterpret_cast&lt;$T1 *&gt;(reinterpret_cast&lt;char*&gt;(_Ptr) + 2*sizeof(void*))</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="std::coroutine_handle&lt;*&gt;">
+    <Intrinsic Name="suspend_point" SourceId="FA88A41F-A641-47C8-8373-4889B7564FCF" LanguageId="3A12D0B7-C26C-11D0-B442-00A0244A1DD2" Id="1" ReturnType="int">
+        <Parameter Type="void*" />
+    </Intrinsic>
+    <Intrinsic Name="suspend_point_line" SourceId="FA88A41F-A641-47C8-8373-4889B7564FCF" LanguageId="3A12D0B7-C26C-11D0-B442-00A0244A1DD2" Id="2" ReturnType="unsigned int">
+        <Parameter Type="void*" />
+    </Intrinsic>
+    <Intrinsic Name="primary_function" SourceId="FA88A41F-A641-47C8-8373-4889B7564FCF" LanguageId="3A12D0B7-C26C-11D0-B442-00A0244A1DD2" Id="3" ReturnType="void*">
+        <Parameter Type="void*" />
+    </Intrinsic>
+    <DisplayString Condition="_Ptr == nullptr">empty</DisplayString>
+    <DisplayString Condition="_Ptr != nullptr &amp;&amp; suspend_point(_Ptr) &lt; 1">{primary_function(_Ptr),na} #final suspend</DisplayString>
+    <DisplayString Condition="_Ptr != nullptr &amp;&amp; suspend_point(_Ptr) == 1">{primary_function(_Ptr),na} #initial suspend</DisplayString>
+    <DisplayString Condition="_Ptr != nullptr &amp;&amp; suspend_point(_Ptr) &gt; 1 &amp;&amp; suspend_point_line(_Ptr) == 0">{primary_function(_Ptr),na} #suspend point {suspend_point(_Ptr)}</DisplayString>
+    <DisplayString Condition="_Ptr != nullptr &amp;&amp; suspend_point(_Ptr) &gt; 1 &amp;&amp; suspend_point_line(_Ptr) != 0">{primary_function(_Ptr),na} #suspend point {suspend_point(_Ptr)}, line {suspend_point_line(_Ptr)}</DisplayString>
+    <Expand>
+      <ExpandedItem>this,view(ViewPromise)</ExpandedItem>
+    </Expand>
+  </Type>
+
+  <!-- Do not display the promise when promise type is void -->
+  <Type Name="std::coroutine_handle&lt;void&gt;" IncludeView="ViewPromise">
+    <Expand/>
+  </Type>
+
+  <Type Name="std::span&lt;*&gt;">
+    <Intrinsic Name="data" Expression="_Mydata" />
+    <Intrinsic Name="size" Expression="_Mysize" />
+    <Intrinsic Name="size_bytes" Expression="_Mysize * sizeof(element_type)" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <ArrayItems>
+        <Size>size()</Size>
+        <ValuePointer>data()</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <!-- This is for _ITERATOR_DEBUG_LEVEL == 0 and must have lower priority. -->
+  <Type Name="std::_Span_iterator&lt;*&gt;" Priority="MediumLow">
+    <SmartPointer Usage="Indexable">_Myptr,na</SmartPointer>
+    <DisplayString>{*_Myptr}</DisplayString>
+    <Expand>
+      <Item Name="[ptr]">_Myptr</Item>
+    </Expand>
+  </Type>
+
+  <!-- This is for _ITERATOR_DEBUG_LEVEL != 0 and must have higher priority. -->
+  <Type Name="std::_Span_iterator&lt;*&gt;" Priority="Medium">
+      <SmartPointer Usage="Indexable">_Myptr,na</SmartPointer>
+      <DisplayString Condition="_Myptr == _Myend">end</DisplayString>
+      <DisplayString Condition="_Myptr != _Myend">{*_Myptr}</DisplayString>
+      <Expand>
+          <Item Name="[ptr]">_Myptr</Item>
+      </Expand>
+  </Type>
+
+  <Type Name="std::default_sentinel_t">
+    <DisplayString>default sentinel</DisplayString>
+  </Type>
+
+  <Type Name="std::unreachable_sentinel_t">
+    <DisplayString>unreachable</DisplayString>
+  </Type>
+
+  <Type Name="std::ranges::empty_view&lt;*&gt;">
+    <DisplayString>{{}}</DisplayString>
+  </Type>
+
+  <Type Name="std::ranges::single_view&lt;*&gt;">
+    <DisplayString>[{ _Val._Val }]</DisplayString>
+    <Expand>
+      <ArrayItems>
+        <Size>1</Size>
+        <ValuePointer>&amp;_Val._Val</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <Type Name="std::ranges::iota_view&lt;*,*&gt;">
+    <Intrinsic Optional="true" Name="size" Expression="(size_t)(_Bound - _Value)" />
+    <DisplayString Optional="true">[{_Value}; {_Bound})</DisplayString>
+    <Expand>
+      <Item Optional="true" Name="[size]">size()</Item>
+      <CustomListItems Optional="true">
+        <Variable Name="val" InitialValue="_Value" />
+
+        <Size>size()</Size>
+        <Loop>
+          <Break Condition="val == _Bound" />
+          <Item>val</Item>
+          <Exec>++val</Exec>
+        </Loop>
+      </CustomListItems>
+    </Expand>
+  </Type>
+
+  <Type Name="std::ranges::iota_view&lt;*,std::unreachable_sentinel_t&gt;">
+    <DisplayString>[{_Value}; +&#8734;)</DisplayString>
+    <Expand>
+      <Item Name="[begin]">_Value</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="std::ranges::repeat_view&lt;*,*&gt;">
+    <DisplayString>[{_Value._Val} x {_Bound}]</DisplayString>
+    <Expand>
+      <Item Name="[size]">_Bound</Item>
+      <CustomListItems Optional="true">
+        <Variable Name="idx" InitialValue="0" />
+
+        <Loop>
+          <Break Condition="idx == _Bound"/>
+          <Item>_Value._Val</Item>
+          <Exec>++idx</Exec>
+        </Loop>
+      </CustomListItems>
+    </Expand>
+  </Type>
+
+  <Type Name="std::ranges::repeat_view&lt;*,std::unreachable_sentinel_t&gt;">
+    <DisplayString>[{_Value._Val} x +&#8734;]</DisplayString>
+    <Expand>
+      <Item Name="[+&#8734;]">_Value._Val</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="std::ranges::repeat_view&lt;*,*&gt;::_Iterator">
+    <DisplayString>{*_Value}</DisplayString>
+    <Expand>
+      <Item Name="[ptr]">_Value</Item>
+      <Item Name="[index]">_Current</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="std::ranges::repeat_view&lt;*,std::unreachable_sentinel_t&gt;::_Iterator">
+    <DisplayString>{*_Value}</DisplayString>
+    <Expand>
+      <Item Name="[ptr]">_Value</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="std::ranges::dangling">
+    <DisplayString>dangling</DisplayString>
+  </Type>
+
+  <Type Name="std::ranges::common_view&lt;*&gt;">
+    <DisplayString>{_Base}</DisplayString>
+  </Type>
+
+  <Type Name="std::ranges::basic_istream_view&lt;*&gt;">
+    <DisplayString>{_Stream}</DisplayString>
+    <Expand>
+      <Item Name="value">_Val</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="std::ranges::_Ioterator&lt;*&gt;">
+    <SmartPointer Usage="Minimal">&amp;_Current,na</SmartPointer>
+    <Expand>
+      <Item Name="[value]">_Current</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="std::ranges::_Iotinel&lt;*&gt;">
+    <DisplayString>{&amp;_Last,na}</DisplayString>
+    <Expand>
+      <Item Name="[bound]">_Last</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="std::ranges::take_while_view&lt;*&gt;">
+    <AlternativeType Name="std::ranges::drop_while_view&lt;*&gt;"/>
+    <AlternativeType Name="std::ranges::drop_view&lt;*&gt;"/>
+    <AlternativeType Name="std::ranges::join_view&lt;*&gt;"/>
+    <AlternativeType Name="std::ranges::transform_view&lt;*&gt;"/>
+    <AlternativeType Name="std::ranges::split_view&lt;*&gt;"/>
+    <AlternativeType Name="std::ranges::lazy_split_view&lt;*&gt;"/>
+    <AlternativeType Name="std::ranges::reverse_view&lt;*&gt;"/>
+    <AlternativeType Name="std::ranges::elements_view&lt;*&gt;"/>
+    <AlternativeType Name="std::ranges::take_view&lt;*&gt;"/>
+    <AlternativeType Name="std::ranges::ref_view&lt;*&gt;"/>
+    <AlternativeType Name="std::ranges::filter_view&lt;*&gt;"/>
+    <AlternativeType Name="std::ranges::owning_view&lt;*&gt;"/>
+    <AlternativeType Name="std::ranges::chunk_by_view&lt;*&gt;"/>
+    <AlternativeType Name="std::ranges::stride_view&lt;*&gt;"/>
+    <DisplayString>{_Range}</DisplayString>
+    <Expand>
+      <Item Optional="true" Name="pred">_Pred</Item>
+      <Item Optional="true" Name="next">_Next</Item>
+      <Item Optional="true" Name="count">_Count</Item>
+      <Item Optional="true" Name="function">_Fun</Item>
+      <Item Optional="true" Name="pattern">_Pattern</Item>
+      <Item Optional="true" Name="stride">_Stride</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="std::thread">
+    <DisplayString>{{ id={_Thr._Id} }}</DisplayString>
+  </Type>
+
+  <Type Name="std::thread::id">
+    <DisplayString>{_Id}</DisplayString>
+  </Type>
+
+  <Type Name="std::jthread">
+    <DisplayString>{_Impl}</DisplayString>
+  </Type>
+
+  <Type Name="std::filesystem::path">
+    <DisplayString>{_Text}</DisplayString>
+  </Type>
+
+  <Type Name="std::source_location">
+    <DisplayString>{_Function,sb}: ({_Line}, {_Column})</DisplayString>
+    <Expand>
+      <Item Name="[line]">_Line</Item>
+      <Item Name="[column]">_Column</Item>
+      <Item Name="[file]">_File,s</Item>
+      <Item Name="[function]">_Function,s</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="std::strong_ordering">
+    <DisplayString Condition="_Value == -1">less</DisplayString>
+    <DisplayString Condition="_Value == 0">equal</DisplayString>
+    <DisplayString Condition="_Value == 1">greater</DisplayString>
+    <Expand/>
+  </Type>
+
+  <Type Name="std::weak_ordering">
+    <DisplayString Condition="_Value == -1">less</DisplayString>
+    <DisplayString Condition="_Value == 0">equivalent</DisplayString>
+    <DisplayString Condition="_Value == 1">greater</DisplayString>
+    <Expand/>
+  </Type>
+
+  <Type Name="std::partial_ordering">
+    <DisplayString Condition="_Value == -1">less</DisplayString>
+    <DisplayString Condition="_Value == 0">equivalent</DisplayString>
+    <DisplayString Condition="_Value == 1">greater</DisplayString>
+    <DisplayString Condition="_Value == -128">unordered</DisplayString>
+    <Expand/>
+  </Type>
+
+  <Type Name="std::basic_format_parse_context&lt;*&gt;">
+    <DisplayString>{_Format_string}</DisplayString>
+    <Expand>
+      <Item Name="Arguments">_Num_args</Item>
+      <Item Name="Next arg id">_Next_arg_id</Item>
+    </Expand>
+  </Type>
+
+  <!-- std::format_args -->
+  <Type Name="std::basic_format_args&lt;std::basic_format_context&lt;std::back_insert_iterator&lt;std::_Fmt_buffer&lt;char&gt;&gt;, char&gt;&gt;">
+    <!-- decltype(std::make_format_args(...))-->
+    <AlternativeType Name="std::_Format_arg_store&lt;std::basic_format_context&lt;std::back_insert_iterator&lt;std::_Fmt_buffer&lt;char&gt;&gt;, char&gt;, *&gt;" />
+    <Intrinsic Name="storage" Expression="(char*)(&amp;_Index_array[_Num_args])" />
+    <DisplayString>{{ size={_Num_args} }}</DisplayString>
+    <Expand>
+      <IndexListItems>
+        <Size>_Num_args</Size>
+        <ValueNode Condition="_Index_array[$i]._Type_ == 0">"None"</ValueNode>
+        <!-- _Basic_format_arg_type::_Int_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 1">
+          *(int*)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_UInt_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 2">
+          *(unsigned int*)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_Long_long_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 3">
+          *(long long*)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_ULong_long_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 4">
+          *(unsigned long long*)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_Bool_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 5">
+          *(bool*)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_Char_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 6">
+          *(char*)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_Float_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 7">
+          *(float*)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_Double_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 8">
+          *(double*)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_Long_double_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 9">
+          *(long double*)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_Pointer_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 10">
+          *(void**)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_CString_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 11">
+          *(char**)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_String_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 12">
+          *(std::string_view*)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_Custom_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 13">
+          *(void**)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+      </IndexListItems>
+    </Expand>
+  </Type>
+
+  <!-- std::wformat_args -->
+  <Type Name="std::basic_format_args&lt;std::basic_format_context&lt;std::back_insert_iterator&lt;std::_Fmt_buffer&lt;wchar_t&gt;&gt;, wchar_t&gt;&gt;">
+    <!-- decltype(std::make_wformat_args(...))-->
+    <AlternativeType Name="std::_Format_arg_store&lt;std::basic_format_context&lt;std::back_insert_iterator&lt;std::_Fmt_buffer&lt;wchar_t&gt;&gt;, wchar_t&gt;, *&gt;" />
+    <Intrinsic Name="storage" Expression="(char*)(&amp;_Index_array[_Num_args])" />
+    <DisplayString>{{ size={_Num_args} }}</DisplayString>
+    <Expand>
+      <IndexListItems>
+        <Size>_Num_args</Size>
+        <!-- _Basic_format_arg_type::_Int_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 1">
+          *(int*)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_UInt_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 2">
+          *(unsigned int*)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_Long_long_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 3">
+          *(long long*)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_ULong_long_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 4">
+          *(unsigned long long*)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_Bool_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 5">
+          *(bool*)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_Char_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 6">
+          *(wchar_t*)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_Float_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 7">
+          *(float*)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_Double_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 8">
+          *(double*)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_Long_double_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 9">
+          *(long double*)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_Pointer_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 10">
+          *(void**)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_CString_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 11">
+          *(wchar_t**)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_String_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 12">
+          *(std::wstring_view*)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+        <!-- _Basic_format_arg_type::_Custom_type -->
+        <ValueNode Condition="_Index_array[$i]._Type_ == 13">
+          *(void**)(&amp;storage()[_Index_array[$i]._Index])
+        </ValueNode>
+      </IndexListItems>
+    </Expand>
+  </Type>
+
+  <Type Name="std::basic_format_arg&lt;*&gt;">
+    <DisplayString Condition="_Active_state == 0">No state: {_No_state}</DisplayString>
+    <DisplayString Condition="_Active_state == 1">Int state: {_Int_state}</DisplayString>
+    <DisplayString Condition="_Active_state == 2">UInt state: {_UInt_state}</DisplayString>
+    <DisplayString Condition="_Active_state == 3">Long long state: {_Long_long_state}</DisplayString>
+    <DisplayString Condition="_Active_state == 4">ULong long state: {_ULong_long_state}</DisplayString>
+    <DisplayString Condition="_Active_state == 5">Bool state: {_Bool_state}</DisplayString>
+    <DisplayString Condition="_Active_state == 6">Char state: {_Char_state}</DisplayString>
+    <DisplayString Condition="_Active_state == 7">Float state: {_Float_state}</DisplayString>
+    <DisplayString Condition="_Active_state == 8">Double state: {_Double_state}</DisplayString>
+    <DisplayString Condition="_Active_state == 9">Long double state: {_Long_double_state}</DisplayString>
+    <DisplayString Condition="_Active_state == 10">Pointer state: {_Pointer_state}</DisplayString>
+    <DisplayString Condition="_Active_state == 11">CString state: {_CString_state}</DisplayString>
+    <DisplayString Condition="_Active_state == 12">String state: {_String_state}</DisplayString>
+    <DisplayString Condition="_Active_state == 13">Custom state: {_Custom_state}</DisplayString>
+    <DisplayString Condition="_Active_state >= 14">Invalid state: {_Active_state}</DisplayString>
+  </Type>
+
+  <Type Name="std::basic_format_context&lt;*&gt;">
+    <DisplayString>{_Args}</DisplayString>
+    <Expand>
+      <Item Name="Iterator">_OutputIt</Item>
+      <Item Name="Loc">_Loc</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="std::exception">
+    <DisplayString>{what()}</DisplayString>
+  </Type>
+
+  <Type Name="std::default_searcher&lt;*&gt;">
+    <AlternativeType Name="std::boyer_moore_searcher&lt;*&gt;" />
+    <AlternativeType Name="std::boyer_moore_horspool_searcher&lt;*&gt;" />
+    <DisplayString>{_Data}</DisplayString>
+  </Type>
+
+  <Type Name="std::any">
+    <Intrinsic Name="has_value"   Expression="_Storage._TypeData != 0"/>
+    <Intrinsic Name="_Rep"        Expression="_Storage._TypeData &amp; _Rep_mask"/>
+    <Intrinsic Name="type"        Expression="(const type_info*)(_Storage._TypeData &amp; ~_Rep_mask)"/>
+    <Intrinsic Name="_Is_trivial" Expression="has_value() &amp;&amp; _Rep() == 0"/>
+    <Intrinsic Name="_Is_big"     Expression="has_value() &amp;&amp; _Rep() == 1"/>
+    <Intrinsic Name="_Is_small"   Expression="has_value() &amp;&amp; _Rep() == 2"/>
+    <DisplayString Condition="!has_value()">[empty]</DisplayString>
+    <DisplayString Condition="_Is_trivial()">[not empty (trivial)]</DisplayString>
+    <DisplayString Condition="_Is_small()">[not empty (small)]</DisplayString>
+    <DisplayString Condition="_Is_big()">[not empty (large)]</DisplayString>
+    <Expand>
+      <Item Name="[castable_ptr]" Condition="_Is_trivial()">(void*)(&amp;_Storage._TrivialData)</Item>
+      <Item Name="[castable_ptr]" Condition="_Is_small()">(void*)(&amp;_Storage._SmallStorage._Data)</Item>
+      <Item Name="[castable_ptr]" Condition="_Is_big()">_Storage._BigStorage._Ptr</Item>
+      <Synthetic Name="has_value">
+        <DisplayString>{has_value()}</DisplayString>
+      </Synthetic>
+      <Synthetic Name="type" Condition="has_value()">
+        <DisplayString>{type()}</DisplayString>
+      </Synthetic>
+      <Synthetic Name="[representation]" Condition="_Is_trivial()">
+        <DisplayString>(Small and Trivial Object)</DisplayString>
+      </Synthetic>
+      <Synthetic Name="[representation]" Condition="_Is_small()">
+        <DisplayString>(Small Object)</DisplayString>
+      </Synthetic>
+      <Synthetic Name="[representation]" Condition="_Is_big()">
+        <DisplayString>(Dynamic Allocation)</DisplayString>
+      </Synthetic>
+    </Expand>
+  </Type>
+
+  <Type Name="std::chrono::time_point&lt;std::chrono::system_clock,std::chrono::duration&lt;__int64,std::ratio&lt;1,10000000&gt; &gt; &gt;">
+    <!-- clang-cl -->
+    <AlternativeType Name="std::chrono::time_point&lt;std::chrono::system_clock,std::chrono::duration&lt;long long,std::ratio&lt;1,10000000&gt; &gt; &gt;" />
+
+    <!--
+      Same computation as in std::chrono::year_month_day::_Civil_from_days
+      and https://howardhinnant.github.io/date_algorithms.html#civil_from_days.
+    -->
+    <Intrinsic Name="z"     Expression="(_MyDur._MyRep / (24 * 60 * 60 * 10000000ull)) + 719468"/>
+    <Intrinsic Name="era"   Expression="(z() &gt;= 0 ? z() : z() - 146096) / 146097"/>
+    <Intrinsic Name="doe"   Expression="(unsigned)(z() - era() * 146097)"/>
+    <Intrinsic Name="yoe"   Expression="(doe() - doe()/1460 + doe()/36524 - doe()/146096) / 365"/>
+    <Intrinsic Name="doy"   Expression="doe() - (365*yoe() + yoe()/4 - yoe()/100)"/>
+    <Intrinsic Name="mp"    Expression="(5*doy() + 2)/153"/>
+    <Intrinsic Name="day"   Expression="doy() - (153*mp()+2)/5 + 1"/>
+    <Intrinsic Name="month" Expression="mp() &lt; 10 ? mp()+3 : mp()-9"/>
+    <Intrinsic Name="year"  Expression="((long long)yoe()) + era() * 400 + (month() &lt;= 2)"/>
+
+    <DisplayString Condition="_MyDur._MyRep &gt;= 0">
+      {year(),d}-{month()/10,d}{month()%10,d}-{day()/10,d}{day()%10,d} {
+        (_MyDur._MyRep % (24 * 60 * 60 * 10000000ull))/(10 * 60 * 60 * 10000000ull),d
+      }{
+        ((_MyDur._MyRep % (24 * 60 * 60 * 10000000ull))/(60 * 60 * 10000000ull)) % 10,d
+      }:{
+        (_MyDur._MyRep % (60 * 60 * 10000000ull))/(10 * 60 * 10000000ull),d
+      }{
+        (_MyDur._MyRep % (10 * 60 * 10000000ull)) / (60 * 10000000ull),d
+      }:{
+        (_MyDur._MyRep % (60 * 10000000ull)) / (10 * 10000000ull),d
+      }{
+        (_MyDur._MyRep % (10 * 10000000ull)) / 10000000ull,d
+      }.{
+        (_MyDur._MyRep % 10000000) / 1000000,d
+      }{
+        (_MyDur._MyRep % 1000000) / 100000,d
+      }{
+        (_MyDur._MyRep % 100000) / 10000,d
+      }{
+        (_MyDur._MyRep % 10000) / 1000,d
+      }{
+        (_MyDur._MyRep % 1000) / 100,d
+      }{
+        (_MyDur._MyRep % 100) / 10,d
+      }{
+        _MyDur._MyRep % 10,d
+      }
+    </DisplayString>
+    <Expand>
+      <Item Name="[ns/100]">_MyDur._MyRep</Item>
+      <Item Name="[us]">_MyDur._MyRep/10</Item>
+      <Item Name="[ms]">_MyDur._MyRep/(10 * 1000)</Item>
+      <Item Name="[s]">_MyDur._MyRep/(10 * 1000 * 1000)</Item>
+      <Synthetic Name="[clock]"><DisplayString>UTC</DisplayString></Synthetic>
+    </Expand>
+  </Type>
+
+  <Type Name="std::extents&lt;*&gt;">
+    <DisplayString>{{ rank={_Rank}, rank_dynamic={_Rank_dynamic} }}</DisplayString>
+    <Expand>
+      <!-- Mixed static and dynamic extents -->
+      <CustomListItems Condition="_Rank != _Rank_dynamic" Optional="true">
+        <Variable Name="idx" InitialValue="0" />
+        <Variable Name="statptr" InitialValue="(const rank_type*) _Static_extents._Elems" />
+        <Variable Name="dynptr" InitialValue="($T1*) _Array._Elems" />
+        <Loop>
+          <Break Condition="idx == _Rank" />
+          <If Condition="*statptr == -1">
+            <Item Name="[{idx}] dynamic extent">*dynptr</Item>
+            <Exec>++dynptr</Exec>
+          </If>
+          <Item Condition="*statptr != -1" Name="[{idx}] static extent">($T1) *statptr</Item>
+          <Exec>++idx, ++statptr</Exec>
+        </Loop>
+      </CustomListItems>
+
+    <!-- Fully dynamic extents -->
+    <CustomListItems Condition="_Rank == _Rank_dynamic" Optional="true">
+      <Variable Name="idx" InitialValue="0" />
+      <Variable Name="dynptr" InitialValue="($T1*) _Array._Elems" />
+      <Loop>
+        <Break Condition="idx == _Rank_dynamic" />
+        <Item Name="[{idx}] dynamic extent">*dynptr</Item>
+        <Exec>++idx, ++dynptr</Exec>
+      </Loop>
+    </CustomListItems>
+
+    <!-- Fully static extents -->
+    <CustomListItems Condition="_Rank_dynamic == 0" Optional="true">
+      <Variable Name="idx" InitialValue="0" />
+      <Variable Name="statptr" InitialValue="(const rank_type*) _Static_extents._Elems" />
+      <Loop>
+        <Break Condition="idx == _Rank" />
+        <Item Name="[{idx}] static extent">($T1) *statptr</Item>
+        <Exec>++idx, ++statptr</Exec>
+      </Loop>
+    </CustomListItems>
+    </Expand>
+  </Type>
+
+  <Type Name="std::flat_map&lt;*&gt;">
+   <AlternativeType Name="std::flat_multimap&lt;*&gt;"/>
+    <Intrinsic Name="size" Expression="_Data.keys.size()"/>
+    <Intrinsic Name="key_at" Expression="&amp;_Data.keys[index]">
+      <Parameter Name="index" Type="size_t" />
+    </Intrinsic>
+    <Intrinsic Name="value_at" Expression="&amp;_Data.values[index]">
+      <Parameter Name="index" Type="size_t" />
+    </Intrinsic>
+
+    <DisplayString>{{ size={size()} }}</DisplayString>
+
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <Item Name="[comparator]" ExcludeView="simple">_Key_compare</Item>
+      <CustomListItems>
+        <Variable Name="i" InitialValue="0" />
+        <Size>size()</Size>
+        <Loop>
+          <Item Name="[{*key_at(i)}]">*value_at(i)</Item>
+          <Exec>++i</Exec>
+        </Loop>
+      </CustomListItems>
+    </Expand>
+  </Type>
+
+  <!-- fallback when the primary visualization (above) fails to parse, e.g. some custom containers -->
+  <Type Name="std::flat_map&lt;*&gt;" Priority="MediumLow">
+    <AlternativeType Name="std::flat_multimap&lt;*&gt;"/>
+    <Intrinsic Name="size" Expression="_Data.keys.size()"/>
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[comparator]" ExcludeView="simple">_Key_compare</Item>
+      <Item Name="[keys]">_Data.keys</Item>
+      <Item Name="[values]">_Data.values</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="std::_Pairing_iterator_provider&lt;*&gt;::_Iterator">
+    <DisplayString>({_Key_it}, {_Mapped_it})</DisplayString>
+    <Expand>
+      <Item Name="[key]">_Key_it</Item>
+      <Item Name="[value]">_Mapped_it</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="std::flat_set&lt;*&gt;">
+    <AlternativeType Name="std::flat_multiset&lt;*&gt;"/>
+    <DisplayString>{_Data}</DisplayString>
+    <Expand>
+      <Item Name="[comparator]" ExcludeView="simple">_Key_compare</Item>
+      <ExpandedItem>_Data</ExpandedItem>
+    </Expand>
+  </Type>
+
+</AutoVisualizer>

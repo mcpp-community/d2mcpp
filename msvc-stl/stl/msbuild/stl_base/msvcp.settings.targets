@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="Dogfood">
+<!--
+Copyright (c) Microsoft Corporation.
+SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+-->
+    <PropertyGroup Label="Configuration">
+        <ConfigurationType>DynamicLibrary</ConfigurationType>
+        <GenerateImportLib>true</GenerateImportLib>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <FinalBinary>p</FinalBinary>
+
+        <DependsOnVCStartupLib>$(MsvcpFlavor)</DependsOnVCStartupLib>
+        <DependsOnVCRuntimeLib>$(MsvcpFlavor)</DependsOnVCRuntimeLib>
+
+        <TargetAppFamily Condition="'$(MsvcpFlavor)' == 'app'">true</TargetAppFamily>
+        <TargetCoreSystem Condition="'$(MsvcpFlavor)' == 'onecore'">true</TargetCoreSystem>
+        <TargetNetFx Condition="'$(MsvcpFlavor)' == 'netfx'">true</TargetNetFx>
+    </PropertyGroup>
+
+    <Import Project="$(MSBuildThisFileDirectory)..\..\..\..\crt_build.settings.targets"/>
+
+    <PropertyGroup>
+        <ClrLibSuffix Condition="'$(MsvcpFlavor)' == 'netfx'">_clr</ClrLibSuffix>
+
+        <MsvcpFlavorSuffix Condition="'$(MsvcpFlavor)' == 'app'">_app</MsvcpFlavorSuffix>
+        <MsvcpFlavorSuffix Condition="'$(MsvcpFlavor)' == 'netfx'">_clr$(NetFxVerX)</MsvcpFlavorSuffix>
+
+        <OutputName>msvcp$(VCToolsProdVerSuffix)$(BuildSuffix)$(MsvcpFlavorSuffix)</OutputName>
+        <LibOutputFileName>msvcprt_base$(BuildSuffix)$(ClrLibSuffix)</LibOutputFileName>
+        <LibOutputFile>$(LibOutputFileName).lib</LibOutputFile>
+
+        <ClDefines Condition="'$(MsvcpFlavor)' == 'app'">$(ClDefines);_CRT_APP</ClDefines>
+
+        <UseMsvcrt>false</UseMsvcrt>
+        <RCIntermediateOutputDirectory>$(IntermediateOutputDirectory)</RCIntermediateOutputDirectory>
+        <IntermediateImportLibOutput>$(CrtBuildDir)\msvcprt_base$(BuildSuffix).$(MsvcpFlavor).import_only.lib</IntermediateImportLibOutput>
+        <DllDefName>$(LibOutputFileName).$(MsvcpFlavor)</DllDefName>
+        <DllDef>$(IntermediateOutputDirectory)\$(DllDefName).def</DllDef>
+
+        <LinkGenerateDebugInformation>true</LinkGenerateDebugInformation>
+        <LinkProgramDataBaseFileName>$(OutputPath)\$(OutputName)$(_PDB_VER_NAME_)$(DllPdbFlavorSuffix)</LinkProgramDataBaseFileName>
+        <LinkProgramDataBaseFileName Condition="'$(BuildArchitecture)' =='arm64ec' and '$(Platform)' != '$(BuildArchitecture)'">$(OutputPath)\$(OutputName).arm64$(DllPdbFlavorSuffix)</LinkProgramDataBaseFileName>
+
+        <LinkAdditionalOptions>-debugtype:cv,fixup $(LinkAdditionalOptions)</LinkAdditionalOptions>
+        <LinkAdditionalOptions Condition="$(DebugBuild) != 'true'">-opt:ref,icf=3 $(LinkAdditionalOptions)</LinkAdditionalOptions>
+        <LinkAdditionalOptions Condition="$(DebugBuild) == 'true'">-opt:ref,noicf $(LinkAdditionalOptions)</LinkAdditionalOptions>
+        <LinkAdditionalOptions>-nodefaultlib:libcpmt$(BuildSuffix).lib $(LinkAdditionalOptions)</LinkAdditionalOptions>
+        <LinkAdditionalOptions>-nodefaultlib:$(LibOutputFile) $(LinkAdditionalOptions)</LinkAdditionalOptions>
+
+        <LinkGenerateMapFile>true</LinkGenerateMapFile>
+        <LinkRelease>true</LinkRelease>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <CppPreprocess Include="$(CrtRoot)\crtw32\msvcprt.src">
+            <Defines>LIBRARYNAME=$(OutputName.ToUpper());$(DllCppDefines)</Defines>
+        </CppPreprocess>
+        <DefFromI Include="$(IntermediateOutputDirectory)\msvcprt.i">
+            <DestFolder1>$(IntermediateOutputDirectory)</DestFolder1>
+            <DestFolder2>$(IntermediateOutputDirectory)</DestFolder2>
+            <DestFile>$(DllDefName)</DestFile>
+        </DefFromI>
+        <ResourceCompile Include="$(CrtRoot)\crtw32\msvcprt.rc"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <TargetLib Include="$(CrtLibPath)\msvcrt$(BuildSuffix)$(ClrLibSuffix).lib"/>
+        <TargetLib Include="$(CrtLibPath)\vcruntime$(BuildSuffix)$(ClrLibSuffix).lib"/>
+        <TargetLib Include="$(UniversalCRTLib)"/>
+        <TargetLib Condition="'$(BuildArchitecture)' == 'arm64' or '$(BuildArchitecture)' == 'arm64ec'" Include="$(SdkLibPath)\softintrin.lib"/>
+    </ItemGroup>
+
+    <!-- Copy the output dll and pdb to various destinations -->
+    <ItemGroup>
+        <CopyFilesForCrossTools Condition="'$(MsvcpFlavor)' == 'kernel32'" Include="
+           $(LinkOutputFile);
+           $(LinkProgramDataBaseFileName);
+        "/>
+    </ItemGroup>
+
+    <Import Project="$(MSBuildThisFileDirectory)\stl.files.settings.targets"/>
+
+    <Import Project="$(VCToolsRootPath)\crt\crt_build.targets"/>
+    <Target Name="GetBaseAddress"/>
+
+</Project>

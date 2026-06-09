@@ -1,0 +1,35 @@
+// Copyright (c) Microsoft Corporation.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+// initialize standard log stream
+
+#include <fstream>
+#include <iostream>
+
+#include "init_locks.hpp"
+
+#ifndef MRTDLL
+#pragma warning(disable : 4074)
+#pragma init_seg(compiler)
+static std::_Init_locks initlocks;
+#endif // MRTDLL
+
+_STD_BEGIN
+
+__PURE_APPDOMAIN_GLOBAL static filebuf flog(stderr);
+
+#if defined(_M_CEE_PURE)
+__PURE_APPDOMAIN_GLOBAL extern ostream clog(&flog);
+#else // ^^^ defined(_M_CEE_PURE) / !defined(_M_CEE_PURE) vvv
+__PURE_APPDOMAIN_GLOBAL extern _CRTDATA2_IMPORT ostream clog(&flog);
+#endif // ^^^ !defined(_M_CEE_PURE) ^^^
+
+struct _Init_clog { // ensures that clog is initialized
+    __CLR_OR_THIS_CALL _Init_clog() { // initialize clog
+        _Ptr_clog = &clog;
+    }
+};
+
+__PURE_APPDOMAIN_GLOBAL static _Init_clog init_clog;
+
+_STD_END

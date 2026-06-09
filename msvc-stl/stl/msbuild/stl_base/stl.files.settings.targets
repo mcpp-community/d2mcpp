@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="Dogfood">
+<!--
+Copyright (c) Microsoft Corporation.
+SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+-->
+
+    <ItemGroup>
+        <!-- Objs that exist only in libcpmt[d][01].lib. -->
+        <ClCompile Include="
+            $(CrtRoot)\github\stl\src\atomic_wait.cpp;
+            $(CrtRoot)\github\stl\src\memory_resource.cpp;
+            $(CrtRoot)\github\stl\src\parallel_algorithms.cpp;
+            $(CrtRoot)\github\stl\src\special_math.cpp;
+            $(CrtRoot)\github\stl\src\syncstream.cpp;
+            $(CrtRoot)\github\stl\src\tzdb.cpp;
+            $(CrtRoot)\github\stl\src\ulocale.cpp;
+            ">
+            <LinkCompiled>false</LinkCompiled>
+            <LibCompiled>true</LibCompiled>
+            <ImpLibCompiled>false</ImpLibCompiled>
+        </ClCompile>
+
+        <ClCompile Include="$(CrtRoot)\github\stl\src\excptptr.cpp;">
+          <ExceptionHandling>async</ExceptionHandling>
+        </ClCompile>
+
+        <ClCompile Include="$(CrtRoot)\github\stl\src\StlCompareStringA.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\StlCompareStringW.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\StlLCMapStringA.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\StlLCMapStringW.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\winapinls.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\_tolower.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\_toupper.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\atomic.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\cerr.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\cin.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\clog.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\cout.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\filesys.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\fiopen.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\future.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\iomanip.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\ios.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\iosptrs.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\iostream.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\locale.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\locale0.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\multprec.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\raisehan.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\stdhndlr.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\stdthrow.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\syserror.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\cond.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\cthread.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\mutex.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\pplerror.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\ppltasks.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\taskscheduler.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xnotify.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xtime.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\thread0.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\uncaught_exception.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\uncaught_exceptions.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\ushcerr.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\ushcin.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\ushclog.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\ushcout.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\ushiostr.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\wcerr.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\wcin.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\wclog.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\wcout.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\wiostrea.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\wlocale.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xalloc.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xcosh.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xdateord.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xdtest.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xexp.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xgetwctype.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xlgamma.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xlocale.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xlock.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xmbtowc.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xmtx.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xonce.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xrngabort.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xrngdev.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xsinh.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xstod.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xstof.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xstol.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xstoll.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xstoul.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xstoull.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xstrcoll.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xstrxfrm.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xthrow.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xtowlower.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xtowupper.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xvalues.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xwcscoll.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xwcsxfrm.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xwctomb.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xwstod.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\xwstof.cpp" />
+
+        <ClCompile Include="$(CrtRoot)\github\stl\src\winapisupp.cpp">
+            <HasCrtInitializers>true</HasCrtInitializers>
+        </ClCompile>
+
+        <!-- Objs that exist in both libcpmt[d][01].lib and msvcprt[d].lib
+             (controlled by ExtraImpLibCompiled). -->
+        <ClCompile Include="
+            $(CrtRoot)\github\stl\src\asan_noop.cpp;
+            $(CrtRoot)\github\stl\src\charconv.cpp;
+            $(CrtRoot)\github\stl\src\filesystem.cpp;
+            $(CrtRoot)\github\stl\src\format.cpp;
+            $(CrtRoot)\github\stl\src\locale0_implib.cpp;
+            $(CrtRoot)\github\stl\src\nothrow.cpp;
+            $(CrtRoot)\github\stl\src\print.cpp;
+            $(CrtRoot)\github\stl\src\regex.cpp;
+            $(CrtRoot)\github\stl\src\sharedmutex.cpp;
+            $(CrtRoot)\github\stl\src\stacktrace.cpp;
+            $(CrtRoot)\github\stl\src\syserror_import_lib.cpp;
+            $(CrtRoot)\github\stl\src\vector_algorithms.cpp;
+            $(CrtRoot)\github\stl\src\xcharconv_ryu_tables.cpp;
+            $(CrtRoot)\github\stl\src\xcharconv_tables_double.cpp;
+            $(CrtRoot)\github\stl\src\xcharconv_tables_float.cpp;
+            $(CrtRoot)\github\stl\src\xonce2.cpp;
+            ">
+            <ExtraImpLibCompiled>true</ExtraImpLibCompiled>
+            <PreprocessorDefinitions>$(ClDefines);_ENFORCE_ONLY_CORE_HEADERS</PreprocessorDefinitions>
+        </ClCompile>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(BuildArchitecture)' == 'i386' or '$(BuildArchitecture)' == 'amd64'">
+        <!-- Objs that exist in both libcpmt[d][01].lib and msvcprt[d].lib
+             (controlled by ExtraImpLibCompiled). -->
+        <BuildFiles Include="
+            $(CrtRoot)\github\stl\src\alias_init_once_begin_initialize.asm;
+            $(CrtRoot)\github\stl\src\alias_init_once_complete.asm;
+            ">
+            <BuildAs>asm</BuildAs>
+            <ExtraImpLibCompiled>true</ExtraImpLibCompiled>
+        </BuildFiles>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(CrtBuildModelIsDll)' == 'true'">
+        <!-- The following files are linked in msvcpXXX[d][_clr].dll. -->
+        <ClCompile Include="$(CrtRoot)\github\stl\src\dllmain.cpp" />
+        <ClCompile Include="$(CrtRoot)\github\stl\src\instances.cpp" />
+    </ItemGroup>
+
+    <Choose>
+      <When Condition="'$(CrtBuildModel)' != 'md'">
+        <!-- Only check exports of release, DLL, builds -->
+      </When>
+
+      <When Condition="'$(BuildArchitecture)' == 'i386' or '$(BuildArchitecture)' == 'chpe'">
+        <Choose>
+          <When Condition="'$(MsvcpFlavor)' == 'kernel32' or '$(MsvcpFlavor)' == 'netfx'">
+            <PropertyGroup>
+              <ExpectedExportsList>$(MSBuildThisFileDirectory)\i386.exports</ExpectedExportsList>
+            </PropertyGroup>
+          </When>
+          <Otherwise>
+            <PropertyGroup>
+              <ExpectedExportsList>$(MSBuildThisFileDirectory)\i386_onecore.exports</ExpectedExportsList>
+            </PropertyGroup>
+          </Otherwise>
+        </Choose>
+      </When>
+      <When Condition="'$(BuildArchitecture)' == 'amd64' or '$(BuildArchitecture)' == 'arm64ec'">
+        <Choose>
+          <When Condition="'$(MsvcpFlavor)' == 'kernel32' or '$(MsvcpFlavor)' == 'netfx'">
+            <PropertyGroup>
+              <ExpectedExportsList>$(MSBuildThisFileDirectory)\amd64.exports</ExpectedExportsList>
+            </PropertyGroup>
+          </When>
+          <Otherwise>
+            <PropertyGroup>
+              <ExpectedExportsList>$(MSBuildThisFileDirectory)\amd64_onecore.exports</ExpectedExportsList>
+            </PropertyGroup>
+          </Otherwise>
+        </Choose>
+      </When>
+      <When Condition="'$(BuildArchitecture)' == 'arm64'">
+        <PropertyGroup>
+          <ExpectedExportsList>$(MSBuildThisFileDirectory)\arm64.exports</ExpectedExportsList>
+        </PropertyGroup>
+      </When>
+    </Choose>
+
+</Project>
