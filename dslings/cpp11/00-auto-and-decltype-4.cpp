@@ -4,7 +4,7 @@
 //
 // Exercise/练习: cpp11 | 00 - auto and decltype | 类/结构体成员类型推导
 //
-// Tips/提示: 在D2X_YOUR_ANSWER处填写正确的推导类型
+// Tips/提示: 区分 decltype(obj) 与 decltype((obj)), 带括号是表达式会推导出引用类型
 //
 // Docs/文档:
 //   - https://en.cppreference.com/w/cpp/language/auto

@@ -4,7 +4,7 @@
 //
 // Exercise/练习: cpp11 | 00 - auto and decltype | 复杂类型推导
 //
-// Tips/提示: 使用 auto 和 decltype 修复代码中的错误
+// Tips/提示: 迭代器用 auto, std::function 的模板参数用 decltype(函数名), 替代手写长类型
 //
 // Docs/文档:
 //   - https://en.cppreference.com/w/cpp/language/auto

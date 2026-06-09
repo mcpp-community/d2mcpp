@@ -4,7 +4,7 @@
 //
 // Exercise: cpp11 | 00 - auto and decltype | Automatic Type Deduction
 //
-// Tips: Use auto and decltype to fix errors in the code
+// Tips: Use auto to deduce from the initializer, and decltype to take an already-declared variable's type
 //
 // Docs:
 //   - https://en.cppreference.com/w/cpp/language/auto
@@ -39,6 +39,8 @@ int main() {
     d2x_assert_eq(a1, a2);
     d2x_assert_eq(b, b1);
     d2x_assert_eq(b1, b2);
+    d2x_assert_eq(c, c1);
+    d2x_assert_eq(c1, c2);
 
     D2X_WAIT
 

@@ -4,7 +4,7 @@
 //
 // Exercise: cpp11 | 00 - auto and decltype | Function Return Type Deduction
 //
-// Tips: Use auto and decltype to fix errors in the code
+// Tips: Use a trailing return auto ... -> decltype(a - b) so the template function deduces its return type
 //
 // Docs:
 //   - https://en.cppreference.com/w/cpp/language/auto

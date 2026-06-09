@@ -4,7 +4,7 @@
 //
 // Exercise: cpp11 | 00 - auto and decltype | Complex Type Deduction
 //
-// Tips: Use auto and decltype to fix errors in the code
+// Tips: Use auto for the iterator and decltype(func) for the std::function template argument, instead of spelling the long type
 //
 // Docs:
 //   - https://en.cppreference.com/w/cpp/language/auto

@@ -22,12 +22,13 @@ int main() {
     char c = 'c';
     auto c1 = c;          // c1: char
     decltype(c) c2 = c;   // c2: char
-    (void)c1; (void)c2;
 
     d2x_assert_eq(a, a1);
     d2x_assert_eq(a1, a2);
     d2x_assert_eq(b, b1);
     d2x_assert_eq(b1, b2);
+    d2x_assert_eq(c, c1);
+    d2x_assert_eq(c1, c2);
 
     return 0;
 }

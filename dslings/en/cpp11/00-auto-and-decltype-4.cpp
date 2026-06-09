@@ -4,7 +4,7 @@
 //
 // Exercise: cpp11 | 00 - auto and decltype | Class/Struct Member Type Deduction
 //
-// Tips: Fill in the correct deduced type at D2X_YOUR_ANSWER
+// Tips: Distinguish decltype(obj) from decltype((obj)) — the parenthesized form is an expression and deduces a reference type
 //
 // Docs:
 //   - https://en.cppreference.com/w/cpp/language/auto

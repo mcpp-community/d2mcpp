@@ -4,7 +4,7 @@
 //
 // Exercise: cpp11 | 00 - auto and decltype | Expression Type Deduction
 //
-// Tips: Use auto and decltype to fix errors in the code
+// Tips: A float-containing expression should deduce to double — don't let int truncate the precision
 //
 // Docs:
 //   - https://en.cppreference.com/w/cpp/language/auto

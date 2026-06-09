@@ -44,7 +44,7 @@ decltype(b) b3; // Can be used without initialization
 
 > Often used for complex expression type deduction to ensure calculation precision
 
-```c++
+```cpp
 int a = 1;
 
 auto b1 = a + 2;
@@ -58,7 +58,7 @@ decltype(2 + 'a') c2 = 2 + 'a';
 
 **Iterator Type Deduction**
 
-```c++
+```cpp
 std::vector<int> v = {1, 2, 3};
 
 auto it = v.begin(); // Automatically deduce iterator type
@@ -72,7 +72,7 @@ for (; it != v.end(); ++it) {
 
 > For complex types like functions or lambda expressions, auto and decltype are commonly used. Generally, lambda definitions use auto, while template type parameters use decltype.
 
-```c++
+```cpp
 int add_func(int a, int b) {
     return a + b;
 }
@@ -135,7 +135,65 @@ int main() {
 }
 ```
 
-## II. Important Notes - The Impact of Parentheses
+## II. Real-World Case - auto/decltype in the STL
+
+> The examples above illustrate syntax; the real value of auto/decltype shows up most directly in the standard library's own implementation. Below we use the in-repo [MSVC STL](https://github.com/mcpp-community/d2mcpp/tree/main/msvc-stl) as the source ([`msvc-stl/stl/inc/xutility`](https://github.com/mcpp-community/d2mcpp/blob/main/msvc-stl/stl/inc/xutility#L2200-L2235)); `_EXPORT_STD` / `_NODISCARD` / `_CONSTEXPR17` / `_STD` are internal library macros — ignore them when reading.
+
+### Trailing return type + decltype: std::begin / std::end
+
+`std::begin` / `std::end` (added in C++11) must adapt to any container; their return type depends entirely on `_Cont.begin()` and cannot be written ahead of time, so they "borrow" it via `auto ... -> decltype(...)`
+
+```cpp
+// MSVC STL · msvc-stl/stl/inc/xutility (abridged)
+_EXPORT_STD template <class _Container>
+_NODISCARD _CONSTEXPR17 auto begin(_Container& _Cont) noexcept(noexcept(_Cont.begin())) -> decltype(_Cont.begin()) {
+    return _Cont.begin();
+}
+
+_EXPORT_STD template <class _Container>
+_NODISCARD _CONSTEXPR17 auto end(_Container& _Cont) noexcept(noexcept(_Cont.end())) -> decltype(_Cont.end()) {
+    return _Cont.end();
+}
+```
+
+This is exactly the trailing-return form from the "Function Return Type Deduction" section, living inside the standard library itself: `auto` as the placeholder + `decltype(_Cont.begin())` precisely deducing the differing iterator types of `vector<int>`, `list<T>`, and so on.
+
+### Reusing another function's return type with decltype: std::cbegin / std::cend
+
+Going further, `std::cbegin` simply reuses `begin`'s return type via `decltype(_STD begin(_Cont))` — it doesn't care what that type is, only that it "matches what begin returns"
+
+```cpp
+// MSVC STL · msvc-stl/stl/inc/xutility (abridged)
+_EXPORT_STD template <class _Container>
+_NODISCARD constexpr auto cbegin(const _Container& _Cont) noexcept(noexcept(_STD begin(_Cont)))
+    -> decltype(_STD begin(_Cont)) {
+    return _STD begin(_Cont);
+}
+```
+
+> Takeaway: when a type "is decided by template parameters and simply cannot be written by hand", the standard library reaches for exactly the auto + decltype toolkit taught in this chapter — one of the core motivations for introducing them in C++11.
+
+## III. Important Notes
+
+### auto and const / reference stripping
+
+> auto deduction **strips top-level const and references**; to keep them you must write `const auto&` / `auto&` explicitly, whereas decltype preserves the declared type exactly
+
+```cpp
+const int ci = 1;
+int n = 2;
+int& ri = n;
+
+auto a = ci;          // int — top-level const stripped
+auto b = ri;          // int — reference stripped (b is an independent copy of n)
+
+const auto& r1 = ci;  // const int& — preserved via const auto&
+auto&& r2 = ci;       // const int& — forwarding reference keeps it
+
+decltype(ci) d = ci;  // const int — decltype preserves exactly
+```
+
+This is also why `auto a = obj.a;` in "Class/Struct Member Type Deduction" yields `int` rather than `const int` — auto stripped the top-level const.
 
 ### Difference between decltype(obj) and decltype( (obj) )
 
@@ -181,9 +239,51 @@ decltype(b) // Deduction result is declared type int &&
 decltype( (b) ) // Deduction result is int &
 ```
 
-## III. Additional Resources
+## IV. Practice Code
+
+### Practice Topics
+
+- 0 - [Declaration & Definition](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-0.cpp)
+- 1 - [Expression Type Deduction](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-1.cpp)
+- 2 - [Complex Type Deduction - Iterator / Function](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-2.cpp)
+- 3 - [Function Return Type Deduction](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-3.cpp)
+- 4 - [Class/Struct Member Type Deduction](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-4.cpp)
+- 5 - [const & Reference Stripping and Preservation](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-5.cpp)
+
+### Auto-Checker Commands
+
+<details>
+<summary>Don't have d2x yet? Click to expand setup</summary>
+
+```bash
+# 1. Install xlings (Linux / macOS)
+curl -fsSL https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.sh | bash
+# Windows PowerShell:
+# irm https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.ps1 | iex
+
+# 2. Install d2x and fetch this tutorial
+xlings install d2x -y
+d2x install d2mcpp
+
+# 3. Enter the project directory & run the checker
+cd d2mcpp
+```
+
+</details>
+
+```
+d2x checker auto-and-decltype
+```
+
+### Exercise Discussion
+
+- [auto/decltype exercise thread](https://forum.d2learn.org/post/357)
+
+## V. Additional Resources
 
 - [Discussion Forum](https://forum.d2learn.org/category/20)
 - [d2mcpp Tutorial Repository](https://github.com/mcpp-community/d2mcpp)
+- [mcpp-community Organization](https://github.com/mcpp-community)
 - [Tutorial Video List](https://space.bilibili.com/65858958/lists/5208246)
 - [Tutorial Support Tool - xlings](https://github.com/openxlings/xlings)
+- [Exercise Checker - d2x](https://github.com/d2learn/d2x)

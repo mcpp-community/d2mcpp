@@ -27,6 +27,9 @@ target("cpp11-00-auto-and-decltype-3-ref")
 target("cpp11-00-auto-and-decltype-4-ref")
     add_files("00-auto-and-decltype-4.cpp")
 
+target("cpp11-00-auto-and-decltype-5-ref")
+    add_files("00-auto-and-decltype-5.cpp")
+
 -- target: cpp11-01-default-and-delete
 
 target("cpp11-01-default-and-delete-0-ref")

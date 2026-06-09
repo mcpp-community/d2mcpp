@@ -21,6 +21,9 @@ target("cpp11-00-auto-and-decltype-3")
 target("cpp11-00-auto-and-decltype-4")
     set_kind("binary")
     add_files("00-auto-and-decltype-4.cpp")
+target("cpp11-00-auto-and-decltype-5")
+    set_kind("binary")
+    add_files("00-auto-and-decltype-5.cpp")
 
 -- target: cpp11-01-default-and-delete
 
