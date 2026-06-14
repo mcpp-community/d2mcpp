@@ -12,7 +12,7 @@ auto 和 decltype 是C++11引入的强有力的**类型自动推导**工具. 不
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference-auto](https://en.cppreference.com/w/cpp/language/auto) / [cppreference-decltype](https://en.cppreference.com/w/cpp/language/decltype) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/00-auto-and-decltype.md) | [视频解读](https://www.bilibili.com/video/BV1xkdYYUEyH) / [动画演示](https://www.bilibili.com/video/BV1EzJs6HEf7) | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-0.cpp) |  |
+| [cppreference-auto](https://en.cppreference.com/w/cpp/language/auto) / [cppreference-decltype](https://en.cppreference.com/w/cpp/language/decltype) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/00-auto-and-decltype.md) | [视频解读](https://www.bilibili.com/video/BV1EzJs6HEf7) / [练习讲解](https://www.bilibili.com/video/BV1xkdYYUEyH) | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-0.cpp) |  |
 
 
 **为什么引入?**

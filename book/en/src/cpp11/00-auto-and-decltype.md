@@ -12,7 +12,7 @@ auto and decltype are powerful **type deduction** tools introduced in C++11. The
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference-auto](https://en.cppreference.com/w/cpp/language/auto) / [cppreference-decltype](https://en.cppreference.com/w/cpp/language/decltype) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/00-auto-and-decltype.md) | [Video Explanation](https://www.bilibili.com/video/BV1xkdYYUEyH) / [Animation](https://www.bilibili.com/video/BV1EzJs6HEf7) | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-0.cpp) |  |
+| [cppreference-auto](https://en.cppreference.com/w/cpp/language/auto) / [cppreference-decltype](https://en.cppreference.com/w/cpp/language/decltype) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/00-auto-and-decltype.md) | [Video Explanation](https://www.bilibili.com/video/BV1EzJs6HEf7) / [Exercise Walkthrough](https://www.bilibili.com/video/BV1xkdYYUEyH) | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-0.cpp) |  |
 
 
 **Why were they introduced?**
