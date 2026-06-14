@@ -180,6 +180,9 @@ target("cpp11-16-generalized-unions-0")
 target("cpp11-16-generalized-unions-1")
     add_files("16-generalized-unions-1.cpp")
 
+target("cpp11-16-generalized-unions-2")
+    add_files("16-generalized-unions-2.cpp")
+
 -- target: cpp11-17-pod-type
 
 target("cpp11-17-pod-type-0")

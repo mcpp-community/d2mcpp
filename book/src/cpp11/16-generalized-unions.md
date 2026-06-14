@@ -14,7 +14,7 @@
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference-union](https://cppreference.com/w/cpp/language/union.html) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/16-generalized-unions.md) | [视频解读]() | [练习代码]() |  |
+| [cppreference-union](https://cppreference.com/w/cpp/language/union.html) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/16-generalized-unions.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/16-generalized-unions-0.cpp) |  |
 
 **为什么引入**
 
@@ -126,7 +126,55 @@ int main() {
 }
 ```
 
-## 二、注意事项
+## 二、真实案例 - STL 中的广义联合体
+
+**std::variant 的内部存储 - 递归广义联合体**
+> 以仓库内置的 [MSVC STL](https://github.com/mcpp-community/d2mcpp/tree/main/msvc-stl) 中的 `std::variant` 实现为例 (源码: [`msvc-stl/stl/inc/variant`](https://github.com/mcpp-community/d2mcpp/blob/main/msvc-stl/stl/inc/variant#L343-L399)), `_CONSTEXPR20` / `_STD` 是库内部宏, 阅读时可忽略
+
+```cpp
+// MSVC STL · msvc-stl/stl/inc/variant (有删节)
+template <class _First, class... _Rest>
+class _Variant_storage_<false, _First, _Rest...> {
+public:
+    union {
+        remove_cv_t<_First> _Head;
+        _Variant_storage<_Rest...> _Tail;
+    };
+
+    _CONSTEXPR20 ~_Variant_storage_() {
+        // 联合体不知道哪个成员活跃, 析构由外层 variant 控制
+    }
+    // ...
+};
+```
+
+`std::variant` 通过递归联合体在一块内存里容纳多个不同类型, 非平凡析构版本必须显式定义析构函数 — 这正是 C++11 广义联合体的核心能力: 联合体可以包含有非平凡特殊成员函数的成员, 但需要手动管理生命周期
+
+**std::any 的小对象优化 - 联合体做类型擦除存储**
+> `std::any` 使用联合体将小对象、大对象指针和原始缓冲区合并到同一块内存 (源码: [`msvc-stl/stl/inc/any`](https://github.com/mcpp-community/d2mcpp/blob/main/msvc-stl/stl/inc/any#L362-L376))
+
+```cpp
+// MSVC STL · msvc-stl/stl/inc/any (有删节)
+class any {
+    struct _Storage_t {
+        union {
+            unsigned char _TrivialData[_Any_trivial_space_size];
+            _Small_storage_t _SmallStorage;
+            _Big_storage_t _BigStorage;
+        };
+        uintptr_t _TypeData;
+    };
+
+    union {
+        _Storage_t _Storage{};
+        max_align_t _Dummy;
+    };
+};
+```
+
+> 小结: `std::variant`、`std::any` 的核心存储都依赖广义联合体。C++11 之前联合体只能容纳 POD 类型, 标准库不得不用原始字节缓冲区 + placement new 的迂回方案; 广义联合体让代码可以直接表达"多选一"的内存布局, 并由外层封装负责跟踪活跃成员与管理生命周期, 因而更易维护
+
+## 三、注意事项
 
 **可访问性**
 
@@ -170,11 +218,21 @@ m.a = 1;
 double c = m.b; // 错误：未定义行为
 ```
 
-## 三、练习代码
+## 四、练习代码
 
-TODO
+### 练习代码主题
 
-## 四、其他
+- 0 - [联合体默认成员初始化 - 最多一个变体成员可带默认初始化器](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/16-generalized-unions-0.cpp)
+- 1 - [联合体包含非平凡类型及生命周期管理 - placement new 构造 / 显式析构](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/16-generalized-unions-1.cpp)
+- 2 - [带标签的鉴别联合体 - 用 enum + union 实现简易 variant](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/16-generalized-unions-2.cpp)
+
+### 练习代码自动检测命令
+
+```
+d2x checker generalized-unions
+```
+
+## 五、其他
 
 - [交流讨论](https://forum.d2learn.org/category/20)
 - [d2mcpp教程仓库](https://github.com/mcpp-community/d2mcpp)
