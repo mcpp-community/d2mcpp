@@ -30,7 +30,7 @@ def mcpp_video_end(scene, logo, obj_group=VGroup()):
 
     ending = VGroup(
         Text("开源交互式教程", color=RED).scale(0.9),
-        Tex(r"\textit{\underline{https://github.com/mcpp-community/d2mcpp}}"),
+        Tex(r"\textit{\underline{github.com/mcpp-community/d2mcpp}}"),
     ).arrange(DOWN, buff=0.15).scale(0.8)
 
     scene.play(

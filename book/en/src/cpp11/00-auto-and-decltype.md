@@ -12,7 +12,7 @@ auto and decltype are powerful **type deduction** tools introduced in C++11. The
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference-auto](https://en.cppreference.com/w/cpp/language/auto) / [cppreference-decltype](https://en.cppreference.com/w/cpp/language/decltype) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/00-auto-and-decltype.md) | [Video Explanation](https://www.bilibili.com/video/BV1xkdYYUEyH) | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-0.cpp) |  |
+| [cppreference-auto](https://en.cppreference.com/w/cpp/language/auto) / [cppreference-decltype](https://en.cppreference.com/w/cpp/language/decltype) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/00-auto-and-decltype.md) | [Video Explanation](https://www.bilibili.com/video/BV1xkdYYUEyH) / [Animation](https://www.bilibili.com/video/BV1EzJs6HEf7) | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-0.cpp) |  |
 
 
 **Why were they introduced?**
@@ -61,10 +61,14 @@ decltype(2 + 'a') c2 = 2 + 'a';
 ```cpp
 std::vector<int> v = {1, 2, 3};
 
+// std::vector<int>::iterator it = v.begin();
 auto it = v.begin(); // Automatically deduce iterator type
 // decltype(v.begin()) it = v.begin();
 for (; it != v.end(); ++it) {
-    std::cout << *it << " ";
+    if (*it == 2) {
+        v.insert(it, 0);
+        break;
+    }
 }
 ```
 
@@ -137,41 +141,42 @@ int main() {
 
 ## II. Real-World Case - auto/decltype in the STL
 
-> The examples above illustrate syntax; the real value of auto/decltype shows up most directly in the standard library's own implementation. Below we use the in-repo [MSVC STL](https://github.com/mcpp-community/d2mcpp/tree/main/msvc-stl) as the source ([`msvc-stl/stl/inc/xutility`](https://github.com/mcpp-community/d2mcpp/blob/main/msvc-stl/stl/inc/xutility#L2200-L2235)); `_EXPORT_STD` / `_NODISCARD` / `_CONSTEXPR17` / `_STD` are internal library macros — ignore them when reading.
+> The examples above illustrate syntax; the practical value of auto/decltype is demonstrated most directly in the standard library's own implementation. The following picks two common pieces of code from the in-repo [MSVC STL](https://github.com/mcpp-community/d2mcpp/tree/main/msvc-stl) to demonstrate `auto` and `decltype` respectively; `_STD` and the like are internal library macros and qualifiers — focus on the `auto` / `decltype` when reading.
 
-### Trailing return type + decltype: std::begin / std::end
+### auto deduces iterator and element types: traversing a container
 
-`std::begin` / `std::end` (added in C++11) must adapt to any container; their return type depends entirely on `_Cont.begin()` and cannot be written ahead of time, so they "borrow" it via `auto ... -> decltype(...)`
-
-```cpp
-// MSVC STL · msvc-stl/stl/inc/xutility (abridged)
-_EXPORT_STD template <class _Container>
-_NODISCARD _CONSTEXPR17 auto begin(_Container& _Cont) noexcept(noexcept(_Cont.begin())) -> decltype(_Cont.begin()) {
-    return _Cont.begin();
-}
-
-_EXPORT_STD template <class _Container>
-_NODISCARD _CONSTEXPR17 auto end(_Container& _Cont) noexcept(noexcept(_Cont.end())) -> decltype(_Cont.end()) {
-    return _Cont.end();
-}
-```
-
-This is exactly the trailing-return form from the "Function Return Type Deduction" section, living inside the standard library itself: `auto` as the placeholder + `decltype(_Cont.begin())` precisely deducing the differing iterator types of `vector<int>`, `list<T>`, and so on.
-
-### Reusing another function's return type with decltype: std::cbegin / std::cend
-
-Going further, `std::cbegin` simply reuses `begin`'s return type via `decltype(_STD begin(_Cont))` — it doesn't care what that type is, only that it "matches what begin returns"
+Traversing a container is the most common scenario for `auto`. Below is a traversal from path normalization in `<filesystem>`: `auto _Pos` deduces the iterator type, and `const auto _Elem` deduces the element type obtained by dereferencing — the very same form as `auto it = v.begin()` from "Complex type deduction - iterators" in `## I`.
 
 ```cpp
-// MSVC STL · msvc-stl/stl/inc/xutility (abridged)
-_EXPORT_STD template <class _Container>
-_NODISCARD constexpr auto cbegin(const _Container& _Cont) noexcept(noexcept(_STD begin(_Cont)))
-    -> decltype(_STD begin(_Cont)) {
-    return _STD begin(_Cont);
-}
+// MSVC STL · msvc-stl/stl/inc/filesystem (abridged, original indentation kept)
+            auto _New_end = _Vec.begin();
+            for (auto _Pos = _Vec.begin(); _Pos != _Vec.end();) {
+                const auto _Elem = *_Pos++;
+                // ...(decide whether to write _Elem back to _New_end; omitted)
+            }
 ```
 
-> Takeaway: when a type "is decided by template parameters and simply cannot be written by hand", the standard library reaches for exactly the auto + decltype toolkit taught in this chapter — one of the core motivations for introducing them in C++11.
+`_Vec` is the container of path components; both its iterator type and its element type are left to `auto`, with no need to spell out the concrete types.
+
+### decltype takes the type of a variable: the binary search in std::lower_bound
+
+The most direct use of `decltype` is "take the type of a variable or expression". In the standard library's binary search `std::lower_bound`, `auto` first deduces the range length `_Count`, then `decltype(_Count)` denotes "the same type as `_Count`" to convert `_Count / 2` back to that type:
+
+```cpp
+// MSVC STL · msvc-stl/stl/inc/xutility (abridged) —— std::lower_bound
+    auto _UFirst = _STD _Get_unwrapped(_First);
+    auto _Count  = _STD distance(_UFirst, _STD _Get_unwrapped(_Last));
+
+    while (0 < _Count) { // divide and conquer, find half that contains answer
+        const auto _Count2 = static_cast<decltype(_Count)>(_Count / 2);
+        const auto _UMid   = _STD next(_UFirst, _Count2);
+        // ...(compare at _UMid, narrow the range; omitted)
+    }
+```
+
+This is the same use as `decltype(b) b2` from "Declaration and definition" in `## I`: `decltype(_Count)` is simply "the type of `_Count`". `auto` deduces the type, and `decltype` reuses that same type elsewhere.
+
+> Takeaway: traversing a container, reusing the type of some variable — these everyday forms are, inside the standard library, exactly the auto + decltype toolkit taught in this chapter. This is one of the core motivations for introducing them in C++11.
 
 ## III. Important Notes
 
@@ -180,17 +185,21 @@ _NODISCARD constexpr auto cbegin(const _Container& _Cont) noexcept(noexcept(_STD
 > auto deduction **strips top-level const and references**; to keep them you must write `const auto&` / `auto&` explicitly, whereas decltype preserves the declared type exactly
 
 ```cpp
-const int ci = 1;
-int n = 2;
-int& ri = n;
+int a = 1;
+int &b = a;
+const int c = 1;
+const int &d = c;
 
-auto a = ci;          // int — top-level const stripped
-auto b = ri;          // int — reference stripped (b is an independent copy of n)
+auto a1 = a; // int
+auto b1 = b; // int
+auto c1 = c; // int
+auto d1 = d; // int
 
-const auto& r1 = ci;  // const int& — preserved via const auto&
-auto&& r2 = ci;       // const int& — forwarding reference keeps it
+const auto c2 = c;  // const int
+const auto &d2 = d; // const int &
 
-decltype(ci) d = ci;  // const int — decltype preserves exactly
+decltype(c) c3 = c; // const int
+decltype(d) d3 = d; // const int &
 ```
 
 This is also why `auto a = obj.a;` in "Class/Struct Member Type Deduction" yields `int` rather than `const int` — auto stripped the top-level const.

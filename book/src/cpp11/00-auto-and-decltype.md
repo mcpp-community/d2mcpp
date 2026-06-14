@@ -12,7 +12,7 @@ auto 和 decltype 是C++11引入的强有力的**类型自动推导**工具. 不
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference-auto](https://en.cppreference.com/w/cpp/language/auto) / [cppreference-decltype](https://en.cppreference.com/w/cpp/language/decltype) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/00-auto-and-decltype.md) | [视频解读](https://www.bilibili.com/video/BV1xkdYYUEyH) | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-0.cpp) |  |
+| [cppreference-auto](https://en.cppreference.com/w/cpp/language/auto) / [cppreference-decltype](https://en.cppreference.com/w/cpp/language/decltype) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/00-auto-and-decltype.md) | [视频解读](https://www.bilibili.com/video/BV1xkdYYUEyH) / [动画演示](https://www.bilibili.com/video/BV1EzJs6HEf7) | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-0.cpp) |  |
 
 
 **为什么引入?**
@@ -61,10 +61,14 @@ decltype(2 + 'a') c2 = 2 + 'a';
 ```cpp
 std::vector<int> v = {1, 2, 3};
 
+// std::vector<int>::iterator it = v.begin();
 auto it = v.begin(); // 自动推导it类型
 // decltype(v.begin()) it = v.begin();
 for (; it != v.end(); ++it) {
-    std::cout << *it << " ";
+    if (*it == 2) {
+        v.insert(it, 0);
+        break;
+    }
 }
 ```
 
@@ -137,41 +141,42 @@ int main() {
 
 ## 二、真实案例 - STL 中的 auto/decltype
 
-> 前面的例子是为了讲语法, 而 auto/decltype 真正的价值, 在标准库自己的实现里体现得最直接。下面以仓库内置的 [MSVC STL](https://github.com/mcpp-community/d2mcpp/tree/main/msvc-stl) 为例 (源码: [`msvc-stl/stl/inc/xutility`](https://github.com/mcpp-community/d2mcpp/blob/main/msvc-stl/stl/inc/xutility#L2200-L2235)); `_EXPORT_STD` / `_NODISCARD` / `_CONSTEXPR17` / `_STD` 是库内部宏, 阅读时可忽略
+> 前述示例用于讲解语法, 而 auto/decltype 的实际价值, 在标准库自身的实现中体现得最为直接。下面从仓库内置的 [MSVC STL](https://github.com/mcpp-community/d2mcpp/tree/main/msvc-stl) 中选取两段常见代码, 分别演示 `auto` 与 `decltype`; `_STD` 等是库内部的宏与限定写法, 阅读时关注 `auto` / `decltype` 即可
 
-### 后置返回类型 + decltype:std::begin / std::end
+### auto 推导迭代器与元素类型:遍历容器
 
-`std::begin` / `std::end` (C++11 新增) 要适配任意容器, 返回类型完全取决于 `_Cont.begin()`, 没法提前写死, 于是直接用 `auto ... -> decltype(...)` 把返回类型"借"过来
-
-```cpp
-// MSVC STL · msvc-stl/stl/inc/xutility (有删节)
-_EXPORT_STD template <class _Container>
-_NODISCARD _CONSTEXPR17 auto begin(_Container& _Cont) noexcept(noexcept(_Cont.begin())) -> decltype(_Cont.begin()) {
-    return _Cont.begin();
-}
-
-_EXPORT_STD template <class _Container>
-_NODISCARD _CONSTEXPR17 auto end(_Container& _Cont) noexcept(noexcept(_Cont.end())) -> decltype(_Cont.end()) {
-    return _Cont.end();
-}
-```
-
-这正是本章「函数返回值类型推导」一节讲的后置返回写法在标准库里的真身: `auto` 占位 + `decltype(_Cont.begin())` 精确推导出 `vector<int>::iterator`、`list<T>::iterator` 等各不相同的迭代器类型
-
-### 用 decltype 复用另一个函数的返回类型:std::cbegin / std::cend
-
-更进一步, `std::cbegin` 干脆用 `decltype(_STD begin(_Cont))` 直接复用了 `begin` 的返回类型 —— 不必关心它到底是什么, 只要"和 begin 返回的一样"就行
+遍历容器是 `auto` 最常见的场景。下面是 `<filesystem>` 规范化路径时的一段遍历:`auto _Pos` 推导出迭代器类型, `const auto _Elem` 推导出解引用后的元素类型 —— 与 `## 一`「复杂类型推导 - 迭代器」里的 `auto it = v.begin()` 完全是同一种写法
 
 ```cpp
-// MSVC STL · msvc-stl/stl/inc/xutility (有删节)
-_EXPORT_STD template <class _Container>
-_NODISCARD constexpr auto cbegin(const _Container& _Cont) noexcept(noexcept(_STD begin(_Cont)))
-    -> decltype(_STD begin(_Cont)) {
-    return _STD begin(_Cont);
-}
+// MSVC STL · msvc-stl/stl/inc/filesystem (有删节, 缩进保留源码层级)
+            auto _New_end = _Vec.begin();
+            for (auto _Pos = _Vec.begin(); _Pos != _Vec.end();) {
+                const auto _Elem = *_Pos++;
+                // ...（根据 _Elem 决定是否写回 _New_end, 略）
+            }
 ```
 
-> 小结: 面对"类型由模板参数决定、人手根本写不出来"的场景, 标准库用的正是本章这套 auto + decltype 工具。这也是 C++11 当初引入它们的核心动机之一
+`_Vec` 是路径分量的容器, 它的迭代器类型与元素类型都交给 `auto` 推导, 无需写出具体类型
+
+### decltype 取变量的类型:std::lower_bound 的二分查找
+
+`decltype` 最直接的用法就是"取某个变量或表达式的类型"。标准库的二分查找 `std::lower_bound` 里, 先用 `auto` 推导出区间长度 `_Count`, 再用 `decltype(_Count)` 表示"与 `_Count` 相同的类型", 把 `_Count / 2` 转换回该类型:
+
+```cpp
+// MSVC STL · msvc-stl/stl/inc/xutility (有删节) —— std::lower_bound
+    auto _UFirst = _STD _Get_unwrapped(_First);
+    auto _Count  = _STD distance(_UFirst, _STD _Get_unwrapped(_Last));
+
+    while (0 < _Count) { // divide and conquer, find half that contains answer
+        const auto _Count2 = static_cast<decltype(_Count)>(_Count / 2);
+        const auto _UMid   = _STD next(_UFirst, _Count2);
+        // ...（在 _UMid 处比较, 缩小区间, 略）
+    }
+```
+
+这正是 `## 一`「声明定义」中 `decltype(b) b2` 的同款用法: `decltype(_Count)` 就是"`_Count` 的类型"。`auto` 负责把类型推导出来, `decltype` 负责在别处复用同一个类型
+
+> 小结: 遍历容器、复用某个变量的类型 —— 这些日常写法在标准库内部用的正是本章这套 auto + decltype 工具。这也是 C++11 引入二者的核心动机之一
 
 ## 三、注意事项
 
@@ -180,17 +185,21 @@ _NODISCARD constexpr auto cbegin(const _Container& _Cont) noexcept(noexcept(_STD
 > auto 推导会**剥离顶层 const 和引用**, 想保留得显式写 `const auto&` / `auto&`; decltype 则精确保留声明类型
 
 ```cpp
-const int ci = 1;
-int n = 2;
-int& ri = n;
+int a = 1;
+int &b = a;
+const int c = 1;
+const int &d = c;
 
-auto a = ci;          // int —— 顶层 const 被剥离
-auto b = ri;          // int —— 引用被剥离, b 是 n 的独立副本
+auto a1 = a; // int
+auto b1 = b; // int
+auto c1 = c; // int
+auto d1 = d; // int
 
-const auto& r1 = ci;  // const int& —— 用 const auto& 保留
-auto&& r2 = ci;       // const int& —— 万能引用按需保留
+const auto c2 = c;  // const int
+const auto &d2 = d; // const int &
 
-decltype(ci) d = ci;  // const int —— decltype 精确保留
+decltype(c) c3 = c; // const int
+decltype(d) d3 = d; // const int &
 ```
 
 这也解释了前面「类/结构体成员类型推导」里 `auto a = obj.a;` 为什么得到的是 `int` 而非 `const int` —— 顶层 const 被 auto 剥离了
