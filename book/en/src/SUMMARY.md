@@ -30,6 +30,8 @@
 
 # C++14 Core Language Features
 
+- [Generic Lambdas](./cpp14/00-generic-lambdas.md)
+
 # Additional Resources
 
 - [Changelog](changelog.md)

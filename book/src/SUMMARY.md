@@ -30,6 +30,8 @@
 
 # C++14核心语言特性
 
+- [泛型 lambda - generic lambdas](./cpp14/00-generic-lambdas.md)
+
 # 其他
 
 - [更新日志](changelog.md)

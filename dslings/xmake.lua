@@ -17,6 +17,7 @@ if lang == "zh" then
         add_files("hello-mcpp.cpp")
 
     includes("cpp11")
+    includes("cpp14")
 else
     includes("en")
 end

@@ -8,3 +8,4 @@
 -- contributors, not the compiler, so we keep a single zh-style copy.
 
 includes("cpp11/xmake.lua")
+includes("cpp14/xmake.lua")
