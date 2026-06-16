@@ -117,7 +117,51 @@ add5(10);   // 15
 add5(3.14); // 8.14
 ```
 
-## II. Notes
+## II. Real-World Case — Transparent Functors and Generic Lambdas in the STL
+
+> C++14 introduced transparent operator functors (e.g. `std::less<>` / `std::greater<>`) alongside generic lambdas — both motivated by the same goal: eliminating the need to hard-code concrete types. The examples below cite the vendored [MSVC STL](https://github.com/mcpp-community/d2mcpp/tree/main/msvc-stl) (source: [`msvc-stl/stl/inc/functional`](https://github.com/mcpp-community/d2mcpp/blob/main/msvc-stl/stl/inc/functional#L3420-L3429)); `_EXPORT_STD` / `requires` are internal macros and concepts and can be ignored while reading
+
+### std::greater Transparent Specialization — A Comparator That "Sees" Any Type
+
+In C++11, `std::greater<T>` locked in the template parameter `T` — `std::greater<int>` could only compare `int`. C++14 added `std::greater<>` (equivalent to `std::greater<void>`), where `operator()` is itself a template accepting any comparable types:
+
+```cpp
+// MSVC STL · msvc-stl/stl/inc/functional (abridged)
+_EXPORT_STD struct greater_equal {
+    template <class _Ty1, class _Ty2>
+        requires totally_ordered_with<_Ty1, _Ty2>
+    _NODISCARD constexpr bool operator()(_Ty1&& _Left, _Ty2&& _Right) const
+        noexcept(...) {
+        return !static_cast<bool>(static_cast<_Ty1&&>(_Left)
+            < static_cast<_Ty2&&>(_Right));
+    }
+
+    using is_transparent = int; // signals to STL algorithms: this comparator
+                                // supports heterogeneous types
+};
+```
+
+The `operator()` is a template member function — exactly the same underlying mechanism as a generic lambda. The `is_transparent` tag tells algorithms like `std::sort` and `std::set`: "this comparator can compare values of different types"
+
+### Transparent Comparators and Generic Lambdas — Two Sides of the Same Coin
+
+Transparent functors and generic lambdas are interchangeable for the same use case:
+
+```cpp
+std::vector<int> v = {5, 1, 4, 2, 8};
+
+// option 1: C++14 transparent comparator
+std::sort(v.begin(), v.end(), std::greater<>());
+
+// option 2: C++14 generic lambda
+std::sort(v.begin(), v.end(), [](auto a, auto b) { return a > b; });
+```
+
+Both eliminate the C++11 redundancy of writing separate comparators for `int`, `double`, `string`, etc.
+
+> Summary: C++14's transparent functors and generic lambdas are two expressions of the same idea — "parameterize the argument types". Transparent functors apply it to callable objects; generic lambdas apply it to lambdas. Understanding how the `is_transparent` tag connects both to STL algorithms shows why the standard library introduced these two features together in C++14
+
+## III. Notes
 
 ### A Generic Lambda Is a Class with a Templated operator()
 
@@ -145,7 +189,7 @@ This pattern is common with generic lambdas and is a typical use case for `declt
 
 The parameter count is still fixed — `[](auto a, auto b)` accepts exactly two arguments. For variadic parameters, you still need variadic templates (C++20 later added support for `...` parameter packs in lambdas)
 
-## III. Exercise Code
+## IV. Exercise Code
 
 ### Exercise Code Topics
 
@@ -154,11 +198,30 @@ The parameter count is still fixed — `[](auto a, auto b)` accepts exactly two 
 
 ### Exercise Auto-Checker Command
 
+<details>
+<summary>Don't have d2x? Click for setup</summary>
+
+```bash
+# 1. Install xlings (Linux / macOS)
+curl -fsSL https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.sh | bash
+# Windows PowerShell:
+# irm https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.ps1 | iex
+
+# 2. Install d2x and get the tutorial
+xlings install d2x -y
+d2x install d2mcpp
+
+# 3. Enter the project directory & run the checker
+cd d2mcpp
+```
+
+</details>
+
 ```
 d2x checker generic-lambdas
 ```
 
-## IV. Other
+## V. Other
 
 - [Discussion Forum](https://forum.d2learn.org/category/20)
 - [d2mcpp Tutorial Repository](https://github.com/mcpp-community/d2mcpp)

@@ -117,7 +117,50 @@ add5(10);   // 15
 add5(3.14); // 8.14
 ```
 
-## 二、注意事项
+## 二、真实案例 - STL 中的透明比较器与泛型 lambda
+
+> C++14 同步引入了**透明运算符仿函数** (transparent operator functors, 如 `std::less<>` / `std::greater<>`), 它们和泛型 lambda 是同一动机的两个出口: 都消除了"必须写死类型"的限制。下面以仓库内置的 [MSVC STL](https://github.com/mcpp-community/d2mcpp/tree/main/msvc-stl) 为例 (源码: [`msvc-stl/stl/inc/functional`](https://github.com/mcpp-community/d2mcpp/blob/main/msvc-stl/stl/inc/functional#L3420-L3429)), `_EXPORT_STD` / `requires` 是库内部宏和概念约束, 阅读时可忽略
+
+### std::greater 的透明特化 — 让比较器"看懂"任意类型
+
+C++11 的 `std::greater<T>` 绑死了模板参数 `T`, 比如 `std::greater<int>` 只能比较 `int`。C++14 新增了 `std::greater<>` (等价于 `std::greater<void>`), 它的 `operator()` 本身是一个模板, 可以接受任意可比较的类型:
+
+```cpp
+// MSVC STL · msvc-stl/stl/inc/functional (有删节)
+_EXPORT_STD struct greater_equal {
+    template <class _Ty1, class _Ty2>
+        requires totally_ordered_with<_Ty1, _Ty2>
+    _NODISCARD constexpr bool operator()(_Ty1&& _Left, _Ty2&& _Right) const
+        noexcept(...) {
+        return !static_cast<bool>(static_cast<_Ty1&&>(_Left)
+            < static_cast<_Ty2&&>(_Right));
+    }
+
+    using is_transparent = int; // 向 STL 算法声明: 此比较器支持异构类型
+};
+```
+
+`operator()` 是一个模板成员函数 — 这和泛型 lambda 的底层实现完全一致。`is_transparent` 标签告诉 `std::sort` / `std::set` 等算法: "可以用这个比较器比较不同类型的值"
+
+### 透明比较器 + 泛型 lambda — 同一场景的两种写法
+
+泛型 lambda 和透明比较器可以互换:
+
+```cpp
+std::vector<int> v = {5, 1, 4, 2, 8};
+
+// 方式一: C++14 透明比较器
+std::sort(v.begin(), v.end(), std::greater<>());
+
+// 方式二: C++14 泛型 lambda
+std::sort(v.begin(), v.end(), [](auto a, auto b) { return a > b; });
+```
+
+两者都能避免 C++11 中为 `int` / `double` / `string` 分别写比较器的冗余
+
+> 小结: C++14 的透明比较器和泛型 lambda 都是 "参数类型参数化" 思路的产物 — 一个作用在仿函数上, 一个作用在 lambda 上。理解了两者共用 `is_transparent` 标签和 STL 算法的配合方式, 就能明白标准库为什么要同时引入这两个特性
+
+## 三、注意事项
 
 ### 泛型 lambda 是一个有模板 operator() 的类
 
@@ -145,7 +188,7 @@ auto forwarder = [](auto&& x) -> decltype(auto) {
 
 泛型 lambda 的参数个数仍然是固定的 — `[](auto a, auto b)` 接受恰好两个参数。如果要变参, 仍然需要可变参数模板 (C++20 后才支持 lambda 中使用 `...` 参数包)
 
-## 三、练习代码
+## 四、练习代码
 
 ### 练习代码主题
 
@@ -154,11 +197,30 @@ auto forwarder = [](auto&& x) -> decltype(auto) {
 
 ### 练习代码自动检测命令
 
+<details>
+<summary>还没有 d2x?点击展开获取方式</summary>
+
+```bash
+# 1. 安装 xlings(Linux / macOS)
+curl -fsSL https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.sh | bash
+# Windows PowerShell:
+# irm https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.ps1 | iex
+
+# 2. 安装 d2x 并拉取本教程
+xlings install d2x -y
+d2x install d2mcpp
+
+# 3. 进入项目目录 & 运行检查命令
+cd d2mcpp
+```
+
+</details>
+
 ```
 d2x checker generic-lambdas
 ```
 
-## 四、其他
+## 五、其他
 
 - [交流讨论](https://forum.d2learn.org/category/20)
 - [d2mcpp教程仓库](https://github.com/mcpp-community/d2mcpp)
