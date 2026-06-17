@@ -18,7 +18,7 @@ C++14 allows lambda parameters to use `auto`, turning the lambda's `operator()` 
 **Why introduced?**
 
 - In C++11, lambda parameter types must be explicitly specified — the same lambda cannot be reused for different argument types because `operator()` is a plain member function, not a template
-- Many lambdas express type-independent logic (e.g. `[](auto a, auto b) { return a < b; }` works for `int`, `double`, `string`), but C++11 required writing a separate lambda for each type
+- Many lambdas express type-independent logic (e.g. comparing two values), but C++11 required writing separate lambdas for each concrete type (e.g. `[](int a, int b) { return a < b; }` for int, `[](double a, double b) { return a < b; }` for double)
 - C++14 allows `auto` in lambda parameters; the compiler generates an implicit template for `operator()`, essentially bringing function templates into the lambda world
 
 **How does it work?**
@@ -119,29 +119,27 @@ add5(3.14); // 8.14
 
 ## II. Real-World Case — Transparent Functors and Generic Lambdas in the STL
 
-> C++14 introduced transparent operator functors (e.g. `std::less<>` / `std::greater<>`) alongside generic lambdas — both motivated by the same goal: eliminating the need to hard-code concrete types. The examples below cite the vendored [MSVC STL](https://github.com/mcpp-community/d2mcpp/tree/main/msvc-stl) (source: [`msvc-stl/stl/inc/functional`](https://github.com/mcpp-community/d2mcpp/blob/main/msvc-stl/stl/inc/functional#L3420-L3429)); `_EXPORT_STD` / `requires` are internal macros and concepts and can be ignored while reading
+> C++14 introduced transparent operator functors (e.g. `std::less<>` / `std::greater<>`) alongside generic lambdas — both motivated by the same goal: eliminating the need to hard-code concrete types. The examples below cite the vendored [MSVC STL](https://github.com/mcpp-community/d2mcpp/tree/main/msvc-stl) (source: [`msvc-stl/stl/inc/xutility`](https://github.com/mcpp-community/d2mcpp/blob/main/msvc-stl/stl/inc/xutility#L902-L912)); `_NODISCARD` / `constexpr` are internal annotations and can be ignored while reading
 
 ### std::greater Transparent Specialization — A Comparator That "Sees" Any Type
 
 In C++11, `std::greater<T>` locked in the template parameter `T` — `std::greater<int>` could only compare `int`. C++14 added `std::greater<>` (equivalent to `std::greater<void>`), where `operator()` is itself a template accepting any comparable types:
 
 ```cpp
-// MSVC STL · msvc-stl/stl/inc/functional (abridged)
-_EXPORT_STD struct greater_equal {
+// MSVC STL · msvc-stl/stl/inc/xutility (abridged)
+template <>
+struct greater<void> {
     template <class _Ty1, class _Ty2>
-        requires totally_ordered_with<_Ty1, _Ty2>
-    _NODISCARD constexpr bool operator()(_Ty1&& _Left, _Ty2&& _Right) const
-        noexcept(...) {
-        return !static_cast<bool>(static_cast<_Ty1&&>(_Left)
-            < static_cast<_Ty2&&>(_Right));
+    _NODISCARD constexpr auto operator()(_Ty1&& _Left, _Ty2&& _Right) const
+        noexcept(...) -> decltype(static_cast<_Ty1&&>(_Left) > static_cast<_Ty2&&>(_Right)) {
+        return static_cast<_Ty1&&>(_Left) > static_cast<_Ty2&&>(_Right);
     }
 
-    using is_transparent = int; // signals to STL algorithms: this comparator
-                                // supports heterogeneous types
+    using is_transparent = int;
 };
 ```
 
-The `operator()` is a template member function — exactly the same underlying mechanism as a generic lambda. The `is_transparent` tag tells algorithms like `std::sort` and `std::set`: "this comparator can compare values of different types"
+The `operator()` is a template member function — exactly the same underlying mechanism as a generic lambda. The `is_transparent` tag signals to associative containers like `std::set` and `std::map` that this comparator supports heterogeneous lookup, allowing a `std::string` to be used to search a `std::set<std::string>` without constructing a temporary object
 
 ### Transparent Comparators and Generic Lambdas — Two Sides of the Same Coin
 
@@ -185,9 +183,9 @@ auto forwarder = [](auto&& x) -> decltype(auto) {
 
 This pattern is common with generic lambdas and is a typical use case for `decltype(auto)` (another C++14 feature)
 
-### Generic Lambdas Are Not Variadic
+### Generic Lambdas Can Be Variadic
 
-The parameter count is still fixed — `[](auto a, auto b)` accepts exactly two arguments. For variadic parameters, you still need variadic templates (C++20 later added support for `...` parameter packs in lambdas)
+C++14 generic lambdas support parameter packs — `[](auto... xs)` accepts any number (and types) of arguments. The compiler generates a templated `operator()` with a parameter pack. C++20 later added explicit template parameter lists for lambdas (`[]<typename... Ts>(Ts... xs)`), but variadic generic lambdas were already usable in C++14
 
 ## IV. Exercise Code
 

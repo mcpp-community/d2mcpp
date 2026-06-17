@@ -119,28 +119,27 @@ add5(3.14); // 8.14
 
 ## 二、真实案例 - STL 中的透明比较器与泛型 lambda
 
-> C++14 同步引入了**透明运算符仿函数** (transparent operator functors, 如 `std::less<>` / `std::greater<>`), 它们和泛型 lambda 是同一动机的两个出口: 都消除了"必须写死类型"的限制。下面以仓库内置的 [MSVC STL](https://github.com/mcpp-community/d2mcpp/tree/main/msvc-stl) 为例 (源码: [`msvc-stl/stl/inc/functional`](https://github.com/mcpp-community/d2mcpp/blob/main/msvc-stl/stl/inc/functional#L3420-L3429)), `_EXPORT_STD` / `requires` 是库内部宏和概念约束, 阅读时可忽略
+> C++14 同步引入了**透明运算符仿函数** (transparent operator functors, 如 `std::less<>` / `std::greater<>`), 它们和泛型 lambda 是同一动机的两个出口: 都消除了"必须写死类型"的限制。下面以仓库内置的 [MSVC STL](https://github.com/mcpp-community/d2mcpp/tree/main/msvc-stl) 为例 (源码: [`msvc-stl/stl/inc/xutility`](https://github.com/mcpp-community/d2mcpp/blob/main/msvc-stl/stl/inc/xutility#L902-L912)), `_NODISCARD` / `constexpr` 是库内部标注, 阅读时可忽略
 
 ### std::greater 的透明特化 — 让比较器"看懂"任意类型
 
 C++11 的 `std::greater<T>` 绑死了模板参数 `T`, 比如 `std::greater<int>` 只能比较 `int`。C++14 新增了 `std::greater<>` (等价于 `std::greater<void>`), 它的 `operator()` 本身是一个模板, 可以接受任意可比较的类型:
 
 ```cpp
-// MSVC STL · msvc-stl/stl/inc/functional (有删节)
-_EXPORT_STD struct greater_equal {
+// MSVC STL · msvc-stl/stl/inc/xutility (有删节)
+template <>
+struct greater<void> {
     template <class _Ty1, class _Ty2>
-        requires totally_ordered_with<_Ty1, _Ty2>
-    _NODISCARD constexpr bool operator()(_Ty1&& _Left, _Ty2&& _Right) const
-        noexcept(...) {
-        return !static_cast<bool>(static_cast<_Ty1&&>(_Left)
-            < static_cast<_Ty2&&>(_Right));
+    _NODISCARD constexpr auto operator()(_Ty1&& _Left, _Ty2&& _Right) const
+        noexcept(...) -> decltype(static_cast<_Ty1&&>(_Left) > static_cast<_Ty2&&>(_Right)) {
+        return static_cast<_Ty1&&>(_Left) > static_cast<_Ty2&&>(_Right);
     }
 
-    using is_transparent = int; // 向 STL 算法声明: 此比较器支持异构类型
+    using is_transparent = int;
 };
 ```
 
-`operator()` 是一个模板成员函数 — 这和泛型 lambda 的底层实现完全一致。`is_transparent` 标签告诉 `std::sort` / `std::set` 等算法: "可以用这个比较器比较不同类型的值"
+`operator()` 是一个模板成员函数 — 这和泛型 lambda 的底层实现完全一致。`is_transparent` 标签向 `std::set` / `std::map` 等关联容器声明此比较器支持异构查找, 可以直接用 `std::string` 查找 `std::set<std::string>` 而不需要构造临时对象
 
 ### 透明比较器 + 泛型 lambda — 同一场景的两种写法
 
@@ -184,9 +183,9 @@ auto forwarder = [](auto&& x) -> decltype(auto) {
 
 这种写法在泛型 lambda 里很常见, 也是 `decltype(auto)` (C++14 的另一特性) 的典型使用场景
 
-### 泛型 lambda 不是 variadic
+### 泛型 lambda 可以是 variadic
 
-泛型 lambda 的参数个数仍然是固定的 — `[](auto a, auto b)` 接受恰好两个参数。如果要变参, 仍然需要可变参数模板 (C++20 后才支持 lambda 中使用 `...` 参数包)
+C++14 的泛型 lambda 支持参数包 — `[](auto... xs)` 可以接受任意数量(和类型)的参数, 编译器为 `operator()` 生成带参数包的模板。C++20 进一步允许显式模板参数列表 (`[]<typename... Ts>(Ts... xs)`), 但变参泛型 lambda 在 C++14 就已经可用
 
 ## 四、练习代码
 
