@@ -31,6 +31,7 @@
 # C++14 Core Language Features
 
 - [Generic Lambdas](./cpp14/00-generic-lambdas.md)
+- [Relaxed constexpr](./cpp14/01-relaxed-constexpr.md)
 
 # Additional Resources
 

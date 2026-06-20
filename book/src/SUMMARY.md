@@ -31,6 +31,7 @@
 # C++14核心语言特性
 
 - [泛型 lambda - generic lambdas](./cpp14/00-generic-lambdas.md)
+- [放宽的 constexpr - relaxed constexpr](./cpp14/01-relaxed-constexpr.md)
 
 # 其他
 
