@@ -9,3 +9,13 @@ target("cpp14-00-generic-lambdas-0")
 target("cpp14-00-generic-lambdas-1")
     set_kind("binary")
     add_files("00-generic-lambdas-1.cpp")
+
+-- target: cpp14-02-variable-templates
+
+target("cpp14-02-variable-templates-0")
+    set_kind("binary")
+    add_files("02-variable-templates-0.cpp")
+
+target("cpp14-02-variable-templates-1")
+    set_kind("binary")
+    add_files("02-variable-templates-1.cpp")

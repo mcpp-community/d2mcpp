@@ -31,6 +31,7 @@
 # C++14核心语言特性
 
 - [泛型 lambda - generic lambdas](./cpp14/00-generic-lambdas.md)
+- [变量模板 - variable templates](./cpp14/02-variable-templates.md)
 
 # 其他
 
