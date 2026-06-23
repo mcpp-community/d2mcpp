@@ -31,6 +31,7 @@
 # C++14核心语言特性
 
 - [泛型 lambda - generic lambdas](./cpp14/00-generic-lambdas.md)
+- [数字分隔符 - digit separators](./cpp14/06-digit-separators.md)
 
 # 其他
 
