@@ -31,6 +31,7 @@
 # C++14 Core Language Features
 
 - [Generic Lambdas](./cpp14/00-generic-lambdas.md)
+- [Aggregate NSDMI](./cpp14/08-aggregate-nsdmi.md)
 
 # Additional Resources
 

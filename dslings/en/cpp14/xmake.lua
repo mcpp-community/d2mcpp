@@ -9,3 +9,9 @@ target("cpp14-00-generic-lambdas-0")
 target("cpp14-00-generic-lambdas-1")
     set_kind("binary")
     add_files("00-generic-lambdas-1.cpp")
+
+-- target: cpp14-08-aggregate-nsdmi
+
+target("cpp14-08-aggregate-nsdmi-0")
+    set_kind("binary")
+    add_files("08-aggregate-nsdmi-0.cpp")

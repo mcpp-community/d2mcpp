@@ -31,6 +31,7 @@
 # C++14核心语言特性
 
 - [泛型 lambda - generic lambdas](./cpp14/00-generic-lambdas.md)
+- [聚合 NSDMI - aggregate NSDMI](./cpp14/08-aggregate-nsdmi.md)
 
 # 其他
 
