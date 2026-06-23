@@ -31,6 +31,7 @@
 # C++14核心语言特性
 
 - [泛型 lambda - generic lambdas](./cpp14/00-generic-lambdas.md)
+- [返回类型推导 - return type deduction](./cpp14/03-return-type-deduction.md)
 
 # 其他
 

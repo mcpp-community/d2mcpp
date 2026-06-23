@@ -9,3 +9,9 @@ target("cpp14-00-generic-lambdas-0")
 target("cpp14-00-generic-lambdas-1")
     set_kind("binary")
     add_files("00-generic-lambdas-1.cpp")
+
+-- target: cpp14-03-return-type-deduction
+
+target("cpp14-03-return-type-deduction-0")
+    set_kind("binary")
+    add_files("03-return-type-deduction-0.cpp")
