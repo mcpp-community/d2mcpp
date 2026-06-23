@@ -31,6 +31,7 @@
 # C++14核心语言特性
 
 - [泛型 lambda - generic lambdas](./cpp14/00-generic-lambdas.md)
+- [deprecated 属性 - deprecated attribute](./cpp14/07-deprecated-attribute.md)
 
 # 其他
 

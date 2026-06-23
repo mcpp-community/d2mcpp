@@ -9,3 +9,9 @@ target("cpp14-00-generic-lambdas-0")
 target("cpp14-00-generic-lambdas-1")
     set_kind("binary")
     add_files("00-generic-lambdas-1.cpp")
+
+-- target: cpp14-07-deprecated-attribute
+
+target("cpp14-07-deprecated-attribute-0")
+    set_kind("binary")
+    add_files("07-deprecated-attribute-0.cpp")

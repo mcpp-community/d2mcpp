@@ -31,6 +31,7 @@
 # C++14 Core Language Features
 
 - [Generic Lambdas](./cpp14/00-generic-lambdas.md)
+- [deprecated Attribute](./cpp14/07-deprecated-attribute.md)
 
 # Additional Resources
 
