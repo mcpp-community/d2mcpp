@@ -32,6 +32,8 @@
 
 - [泛型 lambda - generic lambdas](./cpp14/00-generic-lambdas.md)
 
+- [二进制字面量 - binary literals](./cpp14/05-binary-literals.md)
+
 # 其他
 
 - [更新日志](changelog.md)

@@ -32,6 +32,8 @@
 
 - [Generic Lambdas](./cpp14/00-generic-lambdas.md)
 
+- [Binary Literals](./cpp14/05-binary-literals.md)
+
 # Additional Resources
 
 - [Changelog](changelog.md)
