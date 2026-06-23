@@ -31,6 +31,7 @@
 # C++14核心语言特性
 
 - [泛型 lambda - generic lambdas](./cpp14/00-generic-lambdas.md)
+- [decltype(auto)](./cpp14/04-decltype-auto.md)
 
 # 其他
 

@@ -31,6 +31,7 @@
 # C++14 Core Language Features
 
 - [Generic Lambdas](./cpp14/00-generic-lambdas.md)
+- [decltype(auto)](./cpp14/04-decltype-auto.md)
 
 # Additional Resources
 

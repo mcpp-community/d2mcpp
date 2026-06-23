@@ -9,3 +9,13 @@ target("cpp14-00-generic-lambdas-0")
 target("cpp14-00-generic-lambdas-1")
     set_kind("binary")
     add_files("00-generic-lambdas-1.cpp")
+
+-- target: cpp14-04-decltype-auto
+
+target("cpp14-04-decltype-auto-0")
+    set_kind("binary")
+    add_files("04-decltype-auto-0.cpp")
+
+target("cpp14-04-decltype-auto-1")
+    set_kind("binary")
+    add_files("04-decltype-auto-1.cpp")
