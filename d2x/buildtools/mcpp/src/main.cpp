@@ -90,11 +90,20 @@ int cmd_check(const fs::path& root, std::string_view id) {
     }
 
     d2x::emit::stage("run");
-    auto ran = d2x::runner::run_current();
+
+    // 侧信道放在构建目录里：与生成物同生共死，不污染仓库
+    auto result_file = d2x::manifest::build_dir(root) / "_current" / "result.ndjson";
+    auto ran = d2x::runner::run_current(result_file);
     d2x::emit::output(ran.output);
 
-    auto outcome = d2x::runner::judge_run(ran.exit_code, ran.output);
-    d2x::emit::verdict(d2x::runner::to_string(outcome), "run", ran.exit_code);
+    auto report = d2x::runner::judge_run(ran.exit_code, result_file);
+
+    std::vector<std::string> diags;
+    for (const auto& f : report.failures) {
+        diags.push_back(d2x::emit::diagnostic(f.file, f.line, f.expr, f.expected, f.actual));
+    }
+
+    d2x::emit::verdict(d2x::runner::to_string(report.outcome), "run", ran.exit_code, diags);
     return 0;
 }
 

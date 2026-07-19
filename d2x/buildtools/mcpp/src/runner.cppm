@@ -62,15 +62,8 @@ export Captured capture(const std::string& cmd) {
     return result;
 }
 
-// d2mcpp 的练习断言协议，定义在 d2x/cpp/common.hpp：
-//   d2x_assert / d2x_assert_eq 失败时打印 ❌
-//   D2X_WAIT 宏打印一句提示，学员删掉它才算真正完成
-//
 // 这套判定是「课程约定」，不是「构建工具行为」——所以它属于 Provider，
 // 而不是 d2x 框架。换一门 Rust 课程，这里会完全不同。
-export constexpr std::string_view kFailMark = "\xE2\x9D\x8C";  // U+274C ❌
-export constexpr std::string_view kWaitMark = "D2X_WAIT";
-
 export enum class Outcome { Pass, Fail, Blocked };
 
 export std::string_view to_string(Outcome o) {
@@ -82,14 +75,99 @@ export std::string_view to_string(Outcome o) {
     return "fail";
 }
 
-// 运行阶段的输出判定。退出码为 0 只是必要条件：
-//   出现 ❌      → 断言没过，Fail
-//   出现 D2X_WAIT → 答案已对但路障还在，Blocked（既非失败也不该前进）
-export Outcome judge_run(int exit_code, std::string_view output) {
-    if (exit_code != 0) return Outcome::Fail;
-    if (output.find(kFailMark) != std::string_view::npos) return Outcome::Fail;
-    if (output.find(kWaitMark) != std::string_view::npos) return Outcome::Blocked;
-    return Outcome::Pass;
+export struct Failure {
+    std::string expr;
+    std::string expected;
+    std::string actual;
+    std::string file;
+    int         line{};
+};
+
+export struct RunReport {
+    Outcome              outcome{Outcome::Pass};
+    std::vector<Failure> failures;
+};
+
+// 从侧信道 NDJSON 里取一个字段。这里不引入 JSON 库：
+// 格式由我们自己的 harness 产出，字段固定、无嵌套、无数组。
+std::string field(std::string_view line, std::string_view key) {
+    auto pat = std::format("\"{}\":", key);
+    auto at = line.find(pat);
+    if (at == std::string_view::npos) return {};
+    at += pat.size();
+    if (at >= line.size()) return {};
+
+    if (line[at] == '"') {                       // 字符串值
+        ++at;
+        std::string out;
+        while (at < line.size() && line[at] != '"') {
+            if (line[at] == '\\' && at + 1 < line.size()) {
+                ++at;
+                switch (line[at]) {
+                    case 'n': out += '\n'; break;
+                    case 't': out += '\t'; break;
+                    case 'r': out += '\r'; break;
+                    default:  out += line[at];
+                }
+            } else {
+                out += line[at];
+            }
+            ++at;
+        }
+        return out;
+    }
+    auto end = line.find_first_of(",}", at);     // 裸值（数字/布尔）
+    return std::string(line.substr(at, end == std::string_view::npos ? end : end - at));
+}
+
+// 判定顺序：
+//   有 ok:false            → Fail，每条失败都能转成一个 Diagnostic
+//   无失败但有 wait        → Blocked（答案已对，只差拆路障）
+//   侧信道文件不存在        → 退回「退出码为 0 即通过」
+//
+// 最后一条让 harness 自动变成可选的：纯观察型练习可以是零依赖的
+// 纯 C++ 文件，学员能原样拷进 Compiler Explorer。
+export RunReport judge_run(int exit_code, const fs::path& result_file) {
+    RunReport report;
+
+    if (exit_code != 0) {
+        report.outcome = Outcome::Fail;
+        // 即使退出码非 0，已写入的断言仍然有价值（崩溃前过了几条）
+    }
+
+    std::ifstream in(result_file);
+    if (!in) {
+        // 没有侧信道：练习没用 harness，退出码就是全部信息
+        report.outcome = (exit_code == 0) ? Outcome::Pass : Outcome::Fail;
+        return report;
+    }
+
+    bool saw_wait = false;
+    for (std::string line; std::getline(in, line); ) {
+        auto kind = field(line, "kind");
+        if (kind == "wait") { saw_wait = true; continue; }
+        if (kind != "assert") continue;
+        if (field(line, "ok") == "true") continue;
+
+        int line_no = 0;
+        auto raw = field(line, "line");
+        std::from_chars(raw.data(), raw.data() + raw.size(), line_no);
+
+        report.failures.push_back(Failure{
+            .expr     = field(line, "expr"),
+            .expected = field(line, "expected"),
+            .actual   = field(line, "actual"),
+            .file     = field(line, "file"),
+            .line     = line_no,
+        });
+    }
+
+    if (!report.failures.empty()) report.outcome = Outcome::Fail;
+    else if (exit_code != 0)      report.outcome = Outcome::Fail;
+    else if (saw_wait)            report.outcome = Outcome::Blocked;
+    else                          report.outcome = Outcome::Pass;
+
+    return report;
 }
 
 // mcpp 需要在 workspace 根（.d2x/build/）下执行。Provider 是独立进程，
@@ -102,7 +180,16 @@ export Captured build_current() {
     return capture("mcpp build -q -p _current");
 }
 
-export Captured run_current() {
+// 运行前把侧信道路径告诉 harness，并清掉上一轮的残留 ——
+// harness 是追加写的，不清会把上次的失败算进这次。
+export Captured run_current(const fs::path& result_file) {
+    std::error_code ec;
+    fs::remove(result_file, ec);
+#ifndef _WIN32
+    ::setenv("D2X_RESULT_FILE", result_file.string().c_str(), 1);
+#else
+    ::_putenv_s("D2X_RESULT_FILE", result_file.string().c_str());
+#endif
     return capture("mcpp run -q -p _current");
 }
 

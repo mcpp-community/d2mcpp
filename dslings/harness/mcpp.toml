@@ -1,0 +1,15 @@
+[package]
+name        = "harness"
+version     = "0.1.0"
+description = "d2mcpp 练习脚手架：断言、路障、填空占位符，以及判定用的侧信道上报"
+license     = "Apache-2.0"
+standard    = "c++23"
+
+# include/ 会传播给消费者，所以练习里 `#include <d2x/cpp/common.hpp>`
+# 这个既有路径原样可用 —— 104 个练习和书本一行都不用改。
+# 路径命名以后可以单独重整，不必和这次机制改造捆在一起。
+[build]
+include_dirs = ["include"]
+
+[targets.harness]
+kind = "lib"

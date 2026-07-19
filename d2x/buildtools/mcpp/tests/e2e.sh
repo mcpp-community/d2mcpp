@@ -14,8 +14,16 @@ cd "$REPO_ROOT"
 
 PROVIDER=(mcpp run -q -p d2x/buildtools/mcpp --)
 
-# 任何退出路径都还原被改动的练习文件，绝不把仓库留在脏状态
-restore() { git checkout -- dslings/ 2>/dev/null || true; }
+# 任何退出路径都还原被改动的练习文件，绝不把仓库留在脏状态。
+#
+# 只还原练习源文件，绝不整目录还原 dslings/ —— 脚手架库 dslings/harness/
+# 也在这个目录下，整目录还原会把开发中的改动一起抹掉（踩过一次）。
+EXERCISE_DIRS=(dslings/cpp* dslings/en dslings/hello-mcpp.cpp)
+restore() {
+    for d in "${EXERCISE_DIRS[@]}"; do
+        [ -e "$d" ] && git checkout -- "$d" 2>/dev/null || true
+    done
+}
 trap restore EXIT
 
 outcome_of() {   # $1 = exercise id

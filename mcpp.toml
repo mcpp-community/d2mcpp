@@ -4,4 +4,4 @@
 # member、以及只含当前一题的 _current）自成一个独立 workspace，由
 # Provider 生成——不放进这里，避免「根清单引用尚未生成的成员」的循环。
 [workspace]
-members = ["d2x/buildtools/mcpp"]
+members = ["d2x/buildtools/mcpp", "dslings/harness"]

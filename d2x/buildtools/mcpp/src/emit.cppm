@@ -83,9 +83,24 @@ export void output(std::string_view chunk) {
     line(std::format(R"({{"event":"output","chunk":{}}})", str(chunk)));
 }
 
-export void verdict(std::string_view outcome, std::string_view stage_name, int exit_code) {
-    line(std::format(R"({{"event":"verdict","outcome":{},"stage":{},"exit_code":{},"diagnostics":[]}})",
-                     str(outcome), str(stage_name), exit_code));
+export void verdict(std::string_view outcome, std::string_view stage_name, int exit_code,
+                    const std::vector<std::string>& diagnostics = {}) {
+    line(std::format(R"({{"event":"verdict","outcome":{},"stage":{},"exit_code":{},"diagnostics":{}}})",
+                     str(outcome), str(stage_name), exit_code, array(diagnostics)));
+}
+
+// 一条失败的断言 → 一个 Diagnostic。d2x 的前端据此做行内高亮和跳转，
+// 学员不用在几十行输出里找是哪一条没过。
+export std::string diagnostic(std::string_view file, int line_no,
+                              std::string_view expr,
+                              std::string_view expected, std::string_view actual) {
+    auto message = expected.empty() && actual.empty()
+        ? std::format("断言未通过: {}", expr)
+        : std::format("断言未通过: {} —— 期望 {}，实际 {}", expr, expected, actual);
+
+    return std::format(
+        R"({{"file":{},"line":{},"col":0,"severity":"error","message":{}}})",
+        str(file), line_no, str(message));
 }
 
 export void error(std::string_view message) {

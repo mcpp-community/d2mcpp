@@ -49,8 +49,11 @@ void write_package_header(std::ostream& out, std::string_view name) {
     std::println(out, "[build]");
     // 显式清空源码 glob：练习不是这个包的「源码」，它们只是各自 target 的入口。
     std::println(out, "sources      = []");
-    // 仓库根进搜索路径——155 个练习全部 #include <d2x/cpp/common.hpp>
-    std::println(out, "include_dirs = [\"{}\"]", kToRoot);
+    std::println(out, "");
+    // 脚手架走正经的库依赖，而不是把仓库根塞进 include 搜索路径。
+    // 后者会让练习能 #include 仓库里任何文件，是个隐患。
+    std::println(out, "[dependencies]");
+    std::println(out, "harness = {{ path = \"{}/dslings/harness\" }}", kToRoot);
 }
 
 void write_target(std::ostream& out, const fs::path& repo_root, const Exercise& ex) {
