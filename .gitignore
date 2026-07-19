@@ -40,11 +40,9 @@ __pycache__
 # d2x project files
 .xlings
 .vscode
-.xmake
 .zed
 llm.config.xlings
 media
-build
 .cache/
 dslings/compile_commands.json
 # d2x Provider 生成物（mcpp workspace 清单）与学习进度

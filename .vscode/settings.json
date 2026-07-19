@@ -8,8 +8,7 @@
 
     "C_Cpp.files.exclude": {
         "**/.vscode": true,
-        "**/build": true,
-        "**/.xmake": true,
+        "**/target": true,
         "**/.xlings": true,
         "**/.DS_Store": true
     },

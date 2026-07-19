@@ -60,7 +60,7 @@
 
 <explanation>
 
-<!-- Practice Topics list ALL exercises (-0, -1, …, matching the dslings/xmake count)
+<!-- Practice Topics list ALL exercises (-0, -1, …, matching the dslings file count)
      as an index; but the checker block shows only the SINGLE entry command
      `d2x checker <name>` — d2x auto-advances through the rest, no need to list each.
      Each exercise's own checker name + a Tips line specific to that exercise live in

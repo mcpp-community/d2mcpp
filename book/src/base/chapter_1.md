@@ -156,7 +156,7 @@ Homepage: https://github.com/openxlings/xlings
 ```bash
 {
     "version": "0.1.1",
-    "buildtools": "xmake d2x-buildtools",
+    "buildtools": "mcpp run -q -p d2x/buildtools/mcpp --",
     "lang": "en",  < -- 修改这里
     ...
 }
@@ -171,7 +171,7 @@ Homepage: https://github.com/openxlings/xlings
 ```bash
 {
     "version": "0.1.1",
-    "buildtools": "xmake d2x-buildtools",
+    "buildtools": "mcpp run -q -p d2x/buildtools/mcpp --",
     "lang": "en",  < -- 修改这里
     ...
 }

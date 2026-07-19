@@ -16,12 +16,10 @@ book/en/src/SUMMARY.md                # en TOC  (register here)
 book/src/changelog.md                 # zh changelog (add entry)
 book/en/src/changelog.md              # en changelog (add entry)
 
-dslings/<std>/NN-topic-K.cpp          # zh exercise(s)
-dslings/en/<std>/NN-topic-K.cpp       # en exercise(s)
-dslings/<std>/xmake.lua               # register exercise target(s)
+dslings/<std>/NN-topic-K.cpp          # zh exercise(s)   — no registration needed
+dslings/en/<std>/NN-topic-K.cpp       # en exercise(s)   — no registration needed
 
 solutions/<std>/NN-topic-K.cpp        # reference solution(s)
-solutions/xmake.lua                   # register solution target(s) (includes <std>)
 ```
 
 Repo-level shared basis (NOT per-lesson, created once, never edited by hand):
@@ -37,54 +35,50 @@ The `## 二、真实案例` section of every chapter links into `msvc-stl/` for 
 verbatim STL excerpt; you do not add files here per lesson — only refresh the
 snapshot via `msvc-stl/SOURCE.md` when needed.
 
-A new `<std>` section that does not exist yet also needs: an `includes("<std>")`
-line wired from `dslings/xmake.lua` and `solutions/xmake.lua`, a `dslings/<std>/`
+A new `<std>` section that does not exist yet needs only: a `dslings/<std>/`
 and `dslings/en/<std>/` directory, a `solutions/<std>/` directory, and the
 section heading in both `SUMMARY.md` files (e.g. `# C++14核心语言特性` /
-`# C++14 Core Language Features`).
+`# C++14 Core Language Features`). No build-file wiring — the Provider
+discovers `dslings/<std>/` by directory convention.
 
-## xmake registration — exercises (`dslings/<std>/xmake.lua`)
+## Exercise registration — there is none
 
-Append one target per exercise file. Binary kind is the default; only set it
-where existing siblings do. Example for a two-exercise chapter:
+Exercises are discovered by **directory convention**, not registered anywhere.
+Dropping `dslings/<std>/NN-topic-K.cpp` into place is the whole job: the d2x
+Provider (`d2x/buildtools/mcpp/`) derives the exercise id, order and chapter
+from the path, and generates the mcpp manifests under `.d2x/build/`.
 
-```lua
--- target: <std>-NN-topic
+This is deliberate. rustlings' most expensive lesson (PR #1355) was the Rust
+edition living in *two* places — the `rustc` args and `rust-project.json` —
+which drifted and caused bugs. Any standalone registration file is a second
+source of truth. Here the only truths are the directory layout and the exercise
+file's own header comment.
 
-target("<std>-NN-topic-0")
-    add_files("NN-topic-0.cpp")
+### Per-exercise compile flags
 
-target("<std>-NN-topic-1")
-    add_files("NN-topic-1.cpp")
+When a lesson needs non-default flags, declare them in the exercise file's own
+header — near the code they affect, impossible to drift:
+
+```cpp
+// d2x:cxxflags: -O0 -fno-elide-constructors
 ```
 
-Per-target options seen in the repo, use only when the lesson needs them:
+Real examples in the repo: `04-rvalue-references` (observe moves — but note
+C++17 guaranteed elision means `-fno-elide-constructors` can no longer force
+prvalue materialisation, so this lesson needs rewriting) and `07-constexpr-0`
+(`-Wpedantic -Werror` to make the VLA an error).
 
-```lua
-target("cpp11-04-rvalue-references")
-    set_optimize("none")
-    add_cxxflags("-fno-elide-constructors")   -- observe moves; note C++17 guaranteed elision can't be disabled
-    add_files("04-rvalue-references.cpp")
-```
+### C++ standard
 
-If an exercise needs a non-default standard, make it an **explicit, commented
-exception** — never a bare TODO:
+All exercises compile as **c++23**. mcpp currently rejects `c++11/14/17/20`
+(`src/manifest/types.cppm` whitelist) and the project chose not to patch mcpp
+upstream. The `cppNN/` directories therefore denote *when a feature was
+introduced* — they no longer change compile flags.
 
-```lua
-target("cppNN-NN-topic-0")
-    set_languages("c++17")   -- exception: <one-line reason this lesson needs c++17>
-    add_files("NN-topic-0.cpp")
-```
+## Solution registration — there is none either
 
-The default standard is set at the top of `dslings/<std>/xmake.lua`. Per the
-design principle, that should be the **introduction standard** of the section
-(e.g. `set_languages("c++11")` for `cpp11`). Avoid per-host standard forks; if
-one is unavoidable, comment why.
-
-## xmake registration — solutions (`solutions/xmake.lua` + `solutions/<std>/xmake.lua`)
-
-Mirror the exercise targets so CI builds the reference solutions too. Follow the
-existing pattern in `solutions/<std>/xmake.lua`.
+Drop the file at `solutions/<std>/NN-topic-K.cpp`. CI swaps it over the exercise
+and asserts it passes; see `d2x/buildtools/mcpp/tests/e2e.sh`.
 
 ## SUMMARY registration
 
@@ -113,8 +107,11 @@ to an absolute `YYYY/MM/DD`.
 Run from the project root; report real output, do not assert success blind:
 
 ```bash
-# build the exercise + solution targets (lang defaults come from xmake)
-xmake f -c >/dev/null && xmake build cppNN-NN-topic-0
+# check a single exercise through the same path `d2x checker` uses
+mcpp run -q -p d2x/buildtools/mcpp -- check cppNN-NN-topic-0
+
+# or validate every exercise + solution at once
+bash d2x/buildtools/mcpp/tests/e2e.sh
 
 # drive the auto-checker against the exercise (expects the unsolved exercise to fail,
 # the solution to pass) — name omits the NN- prefix

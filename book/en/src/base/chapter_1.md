@@ -158,7 +158,7 @@ Edit the `lang` attribute in the project configuration file `.d2x.json`. `zh` co
 ```bash
 {
     "version": "0.1.1",
-    "buildtools": "xmake d2x-buildtools",
+    "buildtools": "mcpp run -q -p d2x/buildtools/mcpp --",
     "lang": "en",
     ...
 }

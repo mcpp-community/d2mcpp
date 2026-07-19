@@ -4,7 +4,7 @@ description: >-
   Authoring conventions, design principles, and file formats for the d2mcpp
   (D2X) Modern C++ tutorial project. Use this whenever you add or edit a C++
   language-feature lesson — a book chapter, a dslings exercise, a reference
-  solution, or when registering them in SUMMARY/xmake/changelog. Trigger it for
+  solution, or when registering them in SUMMARY/changelog. Trigger it for
   any request like "add a chapter for X", "write a dslings exercise for fold
   expressions", "add the constexpr lesson", "fill the cpp14 section", or
   anything touching book/src, book/en/src, dslings/, or solutions/. Even small
@@ -19,7 +19,7 @@ quartet: **Book (mdBook) + Code (dslings exercises) + Solution + Auto-checker
 (`d2x checker`)**, all of it **bilingual (zh + en)**. A "lesson" is never one
 file — it is a coordinated set across several directories. The cardinal sin here
 is producing a half-set (a chapter with no exercise, a zh file with no en
-counterpart, an exercise not registered in xmake). This skill exists so every
+counterpart, an exercise missing from solutions/). This skill exists so every
 lesson lands complete and consistent.
 
 Read `references/anatomy.md` for the full directory map and the exact list of
@@ -48,7 +48,8 @@ Honor that axis:
   remark, P0136 inheriting-constructor semantics fix.
 - **Compile each chapter at its introduction standard.** Do not globally pin a
   newer standard. If one exercise genuinely needs a later standard, make it an
-  **explicit, commented exception** in xmake — never a bare `-- TODO` hack.
+  **explicit, commented exception** via a `// d2x:cxxflags:` header directive
+  in the exercise file — never a bare `TODO` hack.
 
 Background and the full per-feature evolution analysis live in
 `.agents/docs/2026-06-08-cpp11-feature-evolution-and-cxx20-baseline.md`. Consult
@@ -70,8 +71,7 @@ When adding a feature numbered `NN` with slug `topic` (e.g. `06-scoped-enums`):
 3. `dslings/<std>/NN-topic-K.cpp` — one or more exercises (`K` = 0,1,2…), zh comments
 4. `dslings/en/<std>/NN-topic-K.cpp` — en exercises (translate comments only)
 5. `solutions/<std>/NN-topic-K.cpp` — reference solution per exercise
-6. Register each exercise target in `dslings/<std>/xmake.lua`
-7. Register each solution target in `solutions/xmake.lua`
+6. (nothing to register — exercises are discovered by directory convention)
 8. Add the chapter line to **both** `book/src/SUMMARY.md` and `book/en/src/SUMMARY.md`
 9. Add a changelog entry to **both** `book/src/changelog.md` and `book/en/src/changelog.md`
 
@@ -106,7 +106,7 @@ Use `assets/chapter.zh.md` / `assets/chapter.en.md`. Required structure, in orde
 6. `## 二、真实案例` corroborates the feature with **real, verbatim STL code**
    quoted from the in-repo `msvc-stl/` basis — see "The 真实案例 section" below.
 7. `## 四、练习代码` lists **every** exercise topic of the chapter (`-0`, `-1`, …,
-   matching the dslings/xmake count) with dslings links as an index, but the checker
+   matching the dslings file count) with dslings links as an index, but the checker
    block shows only the **single entry** command `d2x checker <name>` — `d2x` auto-
    advances through the remaining exercises, so do NOT list one command per exercise.
    Then a `### 练习交流讨论` link to the chapter's forum thread. Each exercise's own
@@ -179,4 +179,4 @@ Use `assets/solution.cpp`. It is the corrected exercise with:
 Before claiming a lesson complete, verify the whole set exists and is wired up,
 and that the exercise/solution actually build & check. See
 `references/anatomy.md` for the verification commands (`d2x checker <name>` and
-the xmake build) — run them; do not assert success without the output.
+the mcpp build) — run them; do not assert success without the output.
