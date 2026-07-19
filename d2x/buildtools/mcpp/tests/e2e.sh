@@ -24,6 +24,17 @@ restore() {
         [ -e "$d" ] && git checkout -- "$d" 2>/dev/null || true
     done
 }
+
+# 本脚本会把参考答案覆盖到练习上再还原，所以运行前练习必须是干净的 ——
+# 否则未提交的改动会被 restore 悄悄丢掉（作者踩过两次：一次丢了脚手架，
+# 一次丢了刚修好的练习）。宁可拒绝运行，也不能吃掉别人的工作。
+if ! git diff --quiet -- "${EXERCISE_DIRS[@]}" 2>/dev/null; then
+    echo "拒绝运行：练习目录有未提交的改动，本测试会在结束时还原它们。"
+    echo "请先提交或 stash："
+    git diff --stat -- "${EXERCISE_DIRS[@]}" | sed 's/^/  /'
+    exit 2
+fi
+
 trap restore EXIT
 
 outcome_of() {   # $1 = exercise id

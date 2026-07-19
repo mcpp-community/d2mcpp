@@ -21,6 +21,7 @@
 
 struct Object;
 static Object * object_address = nullptr;
+static int move_ctor_calls = 0;   // 移动构造被调用的次数, 供断言检查
 
 struct Object {
     int data = 0;
@@ -29,7 +30,7 @@ struct Object {
         object_address = this;
     }
     Object(const Object&) { std::cout << "Object(const Object&):" << this << std::endl; }
-    Object(Object&&) { std::cout << "Object(Object&&):" << this << std::endl; }
+    Object(Object&&) { ++move_ctor_calls; std::cout << "Object(Object&&):" << this << std::endl; }
     ~Object() { std::cout << "~Object():" << this << std::endl; }
 };
 
@@ -37,8 +38,13 @@ int main() { // Disable compiler optimization
     {
         std::cout << "----> Temporary object - rvalue 1" << std::endl;
         Object();
-        std::cout << "----> Temporary object - rvalue 2" << std::endl;
-        Object obj = Object();
+        std::cout << "----> Temporary object - rvalue 2 (named object + std::move)" << std::endl;
+        // NOTE: `Object obj = Object();` will NOT show a move constructor.
+        // Since C++17 a prvalue initialises the target directly (guaranteed
+        // copy elision), and -fno-elide-constructors cannot bring that move
+        // back. Moving from a named object is the standard-independent way.
+        Object named;
+        Object obj = std::move(named);
 
         std::cout << "--------Code modifiable area - Start--------" << std::endl;
 
@@ -51,6 +57,9 @@ int main() { // Disable compiler optimization
         objRef.data = 1; // Modify the value of the extended lifetime temporary object (do not directly modify this line)
         std::cout << "objRef.data = " << objRef.data << " - " << &objRef << std::endl;
         d2x_assert((&objRef == object_address));
+        // 钉住移动构造确实发生过。教学漂移之所以能静默发生, 正是因为
+        // 从前没有任何断言检查它 —— 输出少了一行, 没人发现。
+        d2x_assert((move_ctor_calls >= 1));
     }
 
     D2X_WAIT
