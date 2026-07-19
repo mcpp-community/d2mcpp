@@ -4,6 +4,10 @@
 // 是 PR #1355：edition 同时写在 rustc 参数和 rust-project.json 里，两边漂移
 // 酿成 bug。任何独立声明文件都是第二套真相源。这里的真相只有两处，且都
 // 无法漂移：目录结构，和练习文件自己的头部注释。
+module;
+
+#include <cstdio>   // stderr
+
 export module d2x.provider.discovery;
 
 import std;
@@ -108,6 +112,21 @@ std::string humanize(std::string_view topic) {
     return out;
 }
 
+// 练习 id 直接来自文件名，而它有两个危险去向：
+//   1. d2x 把它拼进一条 shell 命令（`<provider> check <id>`）
+//   2. 我们把它写进生成的 TOML（`[targets.<id>]`）
+// 带反引号、`]`、引号或换行的文件名能在任一处越界。
+//
+// 在源头挡住比在两个下游各自转义更可靠 —— 课程里本就不该出现这种文件名，
+// 与其想办法安全地传递它，不如明确拒绝并让作者改名。
+export bool valid_id(std::string_view id) {
+    if (id.empty()) return false;
+    return std::ranges::all_of(id, [](unsigned char c) {
+        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
+            || (c >= '0' && c <= '9') || c == '-' || c == '_' || c == '.';
+    });
+}
+
 // 扫描练习根目录。lang=zh 用 dslings/，lang=en 用 dslings/en/。
 export std::vector<Exercise> scan(const fs::path& repo_root, std::string_view lang) {
     fs::path base = repo_root / "dslings";
@@ -138,6 +157,15 @@ export std::vector<Exercise> scan(const fs::path& repo_root, std::string_view la
             ex.chapter = std_dir.empty() ? "intro" : std_dir;
             ex.title   = humanize(stem);
             ex.order   = std_rank(std_dir) * 100'000;
+        }
+
+        // 拒绝而不是转义：这类文件名是课程作者的笔误或恶意 PR，
+        // 静默接受只会把问题推到下游。
+        if (!valid_id(ex.id)) {
+            std::println(stderr,
+                "d2x-buildtools-mcpp: 跳过 '{}' —— 练习 id 只允许 [A-Za-z0-9._-]",
+                ex.file.string());
+            return;
         }
         found.push_back(std::move(ex));
     };

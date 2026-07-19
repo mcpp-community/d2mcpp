@@ -51,10 +51,10 @@ inline std::string show(const T& v) {
                            __FILE__, __LINE__); \
     if (!d2x_ok_) {\
         HONLY_LOGW("❌ | %s == %s (%s == %s)", \
-            #a, #b, std::to_string(a).c_str(), std::to_string(b).c_str()); \
+            #a, #b, d2x::detail::show(a).c_str(), d2x::detail::show(b).c_str()); \
     } else {\
         HONLY_LOGI_P("✅ | %s == %s (%s == %s)", \
-            #a, #b, std::to_string(a).c_str(), std::to_string(b).c_str()); \
+            #a, #b, d2x::detail::show(a).c_str(), d2x::detail::show(b).c_str()); \
     } \
 }
 

@@ -44,9 +44,14 @@ for line in "${LINES[@]}"; do
     id=$(printf '%s' "$line"   | grep -o '"id":"[^"]*"'      | head -1 | cut -d'"' -f4)
     file=$(printf '%s' "$line" | grep -o '"files":\["[^"]*"' | head -1 | cut -d'"' -f4)
 
-    rel="${file#"$REPO_ROOT"/}"                 # dslings/cpp11/xx.cpp
-    sol="solutions/${rel#dslings/}"             # solutions/cpp11/xx.cpp
-    sol="${sol#en/}"                            # en 目录共用同一份参考答案
+    # en/ 必须先剥，再拼 solutions/ —— 顺序反了的话 sol 已经以 "solutions/"
+    # 开头，`${sol#en/}` 匹配不到任何东西，是个静默 no-op，结果所有英文练习
+    # 都因为找不到 solutions/en/... 而被 SKIP，测试全绿却一个都没验。
+    # 这正是本脚本头部注释里说要防的那种「空转」。
+    rel="${file#"$REPO_ROOT"/}"                 # dslings[/en]/cpp11/xx.cpp
+    rel="${rel#dslings/en/}"                    # en 镜像共用同一份参考答案
+    rel="${rel#dslings/}"                       # cpp11/xx.cpp
+    sol="solutions/${rel}"                      # solutions/cpp11/xx.cpp
 
     # 1) 未完成态必须不通过
     got=$(outcome_of "$id")
@@ -71,4 +76,13 @@ done
 
 echo
 echo "==> 参考答案通过 $pass · 失败 $fail · 跳过 $skipped"
+
+# 防空转：一个参考答案都没验到时必须红，而不是「0 失败」蒙混过关。
+# 旧 CI 就是这么绿了很久的 —— 它只挑 -ref 目标，而 solutions/ 早被注释掉，
+# 循环一次都没进，job 照样退出 0。
+if [ "$pass" -eq 0 ]; then
+    echo "FAIL: 没有验证到任何参考答案 —— 测试本身失效了，不是「全部通过」"
+    exit 1
+fi
+
 [ "$fail" -eq 0 ]

@@ -13,6 +13,7 @@
 
 struct Object;
 static Object * object_address = nullptr;
+static int move_ctor_calls = 0;   // 移动构造被调用的次数, 供断言检查
 
 struct Object {
     int data = 0;
@@ -21,7 +22,7 @@ struct Object {
         object_address = this;
     }
     Object(const Object&) { std::cout << "Object(const Object&):" << this << std::endl; }
-    Object(Object&&) { std::cout << "Object(Object&&):" << this << std::endl; }
+    Object(Object&&) { ++move_ctor_calls; std::cout << "Object(Object&&):" << this << std::endl; }
     ~Object() { std::cout << "~Object():" << this << std::endl; }
 };
 
@@ -29,8 +30,13 @@ int main() { // 关闭编译器优化
     {
         std::cout << "----> 临时对像 - 右值1" << std::endl;
         Object();
-        std::cout << "----> 临时对像 - 右值2" << std::endl;
-        Object obj = Object();
+        std::cout << "----> 临时对像 - 右值2(具名对象 + std::move)" << std::endl;
+        // 注意: 不能写 `Object obj = Object();` 来观察移动构造 ——
+        // C++17 起 prvalue 直接初始化目标, 保证复制省略, 连
+        // -fno-elide-constructors 也无法让那次移动发生。
+        // 从具名对象 std::move 才是标准无关的观察方式。
+        Object named;
+        Object obj = std::move(named);
         (void)obj;
 
         std::cout << "--------代码可修改区域-开始--------" << std::endl;
@@ -43,6 +49,9 @@ int main() { // 关闭编译器优化
         objRef.data = 1; // 修改被延长生命周期的临时对象的值(不要直接改动这行代码)
         std::cout << "objRef.data = " << objRef.data << " - " << &objRef << std::endl;
         d2x_assert((&objRef == object_address));
+        // 钉住移动构造确实发生过。教学漂移之所以能静默发生, 正是因为
+        // 从前没有任何断言检查它 —— 输出少了一行, 没人发现。
+        d2x_assert((move_ctor_calls >= 1));
     }
 
     return 0;
