@@ -1,0 +1,7 @@
+# d2mcpp 根 workspace。
+#
+# 这里只登记「提交进仓库」的包。生成物（.d2x/build/ 下按 C++ 标准分的
+# member、以及只含当前一题的 _current）自成一个独立 workspace，由
+# Provider 生成——不放进这里，避免「根清单引用尚未生成的成员」的循环。
+[workspace]
+members = ["d2x/buildtools/mcpp"]

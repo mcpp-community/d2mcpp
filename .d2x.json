@@ -1,7 +1,7 @@
 {
     "version": "0.1.1",
-    "buildtools": "xmake d2x-buildtools",
-    "lang": "en",
+    "buildtools": "mcpp run -q -p d2x/buildtools/mcpp --",
+    "lang": "zh",
     "llm": {
         "api_key": "",
         "api_url": "https://api.deepseek.com/v1",
