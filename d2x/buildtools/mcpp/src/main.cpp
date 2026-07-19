@@ -98,9 +98,16 @@ int cmd_check(const fs::path& root, std::string_view id) {
 
     auto report = d2x::runner::judge_run(ran.exit_code, result_file);
 
+    // 侧信道里的 file 来自 __FILE__，而生成的清单加了 -fmacro-prefix-map
+    // 让它相对仓库根（学员看到的报错才不会顶着一长串 /home/... 前缀）。
+    // 但协议要求绝对路径 —— d2x 靠它开编辑器、靠它监听文件变更 —— 所以
+    // 在协议边界上还原。展示归展示，定位归定位。
     std::vector<std::string> diags;
     for (const auto& f : report.failures) {
-        diags.push_back(d2x::emit::diagnostic(f.file, f.line, f.expr, f.expected, f.actual));
+        auto abs = f.file.empty() || fs::path(f.file).is_absolute()
+                 ? f.file
+                 : (root / f.file).lexically_normal().string();
+        diags.push_back(d2x::emit::diagnostic(abs, f.line, f.expr, f.expected, f.actual));
     }
 
     d2x::emit::verdict(d2x::runner::to_string(report.outcome), "run", ran.exit_code, diags);

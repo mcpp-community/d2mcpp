@@ -39,7 +39,7 @@ std::string relative_to_member(const fs::path& repo_root, const fs::path& file) 
     return std::format("{}/{}", kToRoot, rel);
 }
 
-void write_package_header(std::ostream& out, std::string_view name) {
+void write_package_header(std::ostream& out, std::string_view name, const fs::path& repo_root) {
     std::println(out, "# 由 d2x-buildtools-mcpp 生成，请勿手工编辑。");
     std::println(out, "[package]");
     std::println(out, "name     = \"{}\"", name);
@@ -49,6 +49,12 @@ void write_package_header(std::ostream& out, std::string_view name) {
     std::println(out, "[build]");
     // 显式清空源码 glob：练习不是这个包的「源码」，它们只是各自 target 的入口。
     std::println(out, "sources      = []");
+    // 让 __FILE__ 变成相对仓库根的路径。mcpp 传给编译器的是绝对路径，
+    // 于是 d2x_assert 的报错会印出一长串 /home/... 前缀，对学员是噪声。
+    // 这只影响宏展开出来的字符串，不影响编译器自身诊断里的路径。
+    // 前缀必须是编译器实际看到的绝对路径，不能用 kToRoot 那种相对形式。
+    std::println(out, "cxxflags     = [\"-fmacro-prefix-map={}/=\"]",
+                 repo_root.generic_string());
     std::println(out, "");
     // 脚手架走正经的库依赖，而不是把仓库根塞进 include 搜索路径。
     // 后者会让练习能 #include 仓库里任何文件，是个隐患。
@@ -96,7 +102,7 @@ export void write_full(const fs::path& repo_root, const std::vector<Exercise>& a
     std::vector<std::string> members;
     for (const auto& [name, list] : by_member) {
         std::ostringstream buf;
-        write_package_header(buf, name);
+        write_package_header(buf, name, repo_root);
         for (const auto* ex : list) write_target(buf, repo_root, *ex);
         write_if_changed(root / name / "mcpp.toml", buf.str());
         members.push_back(name);
@@ -105,7 +111,7 @@ export void write_full(const fs::path& repo_root, const std::vector<Exercise>& a
     // _current 也是这个 workspace 的成员，占位清单先写空壳
     members.push_back("_current");
     write_if_changed(root / "_current" / "mcpp.toml",
-                     [&] { std::ostringstream b; write_package_header(b, "_current"); return b.str(); }());
+                     [&] { std::ostringstream b; write_package_header(b, "_current", repo_root); return b.str(); }());
 
     std::ostringstream ws;
     std::println(ws, "# 由 d2x-buildtools-mcpp 生成，请勿手工编辑。");
@@ -124,7 +130,7 @@ export void write_full(const fs::path& repo_root, const std::vector<Exercise>& a
 // 切题 0.118s、切回 0.018s。
 export void write_current(const fs::path& repo_root, const Exercise& ex) {
     std::ostringstream buf;
-    write_package_header(buf, "_current");
+    write_package_header(buf, "_current", repo_root);
     write_target(buf, repo_root, ex);
     write_if_changed(build_dir(repo_root) / "_current" / "mcpp.toml", buf.str());
 }
