@@ -9,7 +9,7 @@
 //   src/cpp11/tests/00-auto-and-decltype/0.cpp → id: cpp11-00-auto-and-decltype-0
 //   src/en/cpp11/tests/...                     lang=en 时启用，与 zh 互斥
 //
-// 每个 <std>/ 是真实 mcpp 工程，练习就是它的 tests/ —— 学员可以绕过 d2x
+// 每个 <std>/ 是真实 mcpp 工程，练习就是它的 tests/ —— 学习者可以绕过 d2x
 // 直接 `mcpp test -p cpp11` 看进度表，Provider 走的是同一条路。
 module;
 

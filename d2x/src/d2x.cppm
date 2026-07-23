@@ -20,9 +20,9 @@ import std;
 //                   `mcpp test` 不需要懂任何 d2x 概念就能显示对错。
 //   侧信道 v2    —— D2X_RESULT_FILE 指定的 NDJSON 文件，Provider 读它
 //                   把「为什么失败」变成结构化诊断、把 wait 区分成 blocked。
-//                   未设置时不写文件：学员直接跑二进制零摩擦。
+//                   未设置时不写文件：学习者直接跑二进制零摩擦。
 //
-// 可见输出的设计（学员每天面对的三行）：
+// 可见输出的设计（学习者每天面对的三行）：
 //   ✅ | <what> (<actual> == <expected>)                     绿
 //   ❌ | <what> (<actual> == <expected>)  --> <file>:<line>  红
 //   🚧 | Delete the d2x::wait() to continue  --> <file>:<line>  黄
@@ -75,7 +75,7 @@ inline std::string escape(std::string_view s) {
 // 进程异常终止不丢已写入的行；无需依赖静态析构顺序。
 inline void emit(const std::string& json_line) {
     const char* path = std::getenv("D2X_RESULT_FILE");
-    if (!path || !*path) return;                 // 学员直接运行：什么都不做
+    if (!path || !*path) return;                 // 学习者直接运行：什么都不做
 
     if (std::FILE* f = std::fopen(path, "a")) {
         std::fputs(json_line.c_str(), f);
@@ -113,7 +113,7 @@ inline std::string show_impl(const auto& v) {
     else return {};
 }
 
-// 展示用路径：能剥掉当前工作目录前缀就剥（学员从仓库根跑时看到
+// 展示用路径：能剥掉当前工作目录前缀就剥（学习者从仓库根跑时看到
 // src/cpp11/tests/... 而不是一长串 /home/...）。剥不掉就原样。
 inline std::string show_path(const char* file) {
     if (!file) return {};
@@ -136,7 +136,7 @@ constexpr std::string_view kReset  = "\033[0m";
 
 export namespace d2x {
 
-// 检查点。`what` 是给学员看的语义标签（通常是表达式原文——c++23 没有
+// 检查点。`what` 是给学习者看的语义标签（通常是表达式原文——c++23 没有
 // 反射拿不到 #expr，由撰稿或迁移脚本填写）。
 inline bool check(bool ok, std::string_view what = {},
                   std::source_location loc = std::source_location::current()) {
@@ -184,7 +184,7 @@ constexpr decltype(auto) dont_delete_this(T&& x) {
     return std::forward<T>(x);
 }
 
-// 显式路障：学员读完说明、删掉这一行才算真正完成这一题。
+// 显式路障：学习者读完说明、删掉这一行才算真正完成这一题。
 // 记录后照常返回（不中断程序）——后续检查点还要跑；退出码由 exit_hook
 // 收口，Provider 再根据侧信道把「只剩 wait」区分成 blocked。
 inline void wait(std::source_location loc = std::source_location::current()) {

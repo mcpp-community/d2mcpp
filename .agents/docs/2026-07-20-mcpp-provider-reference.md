@@ -40,7 +40,7 @@ dslings/harness/               练习脚手架库，standard = "c++23"
 .d2x/build/<std>/mcpp.toml     该标准下全部 target —— 供 clangd
 .d2x/build/_current/mcpp.toml  只含当前一题 —— 供 checker
 .d2x/build/_current/result.ndjson   判定用侧信道
-.d2x/state.json                学员进度（d2x 写）
+.d2x/state.json                学习者进度（d2x 写）
 ```
 
 ---
@@ -132,9 +132,9 @@ member 含全部 3 题（后两题未做完）→ mcpp build -p → exit=1   ←
 
 - `main` 用 `../../../` 逃逸出包根，**练习源文件原地不动**
 - 脚手架走 `[dependencies] path` 依赖，而非把仓库根塞进 include 搜索路径（后者会让练习能 `#include` 仓库里任何文件）
-- `-fmacro-prefix-map=<repo_root>/=` 让 `__FILE__` 相对仓库根，学员看到的报错不再顶着一长串 `/home/...`
+- `-fmacro-prefix-map=<repo_root>/=` 让 `__FILE__` 相对仓库根，学习者看到的报错不再顶着一长串 `/home/...`
 - 所有清单**内容比对后才落盘**，不推进 mtime，保住 mcpp 的快速路径
-- `check` 会先 `write_full` 再 `write_current`——全新仓库上学员直接跑 `d2x checker` 时根清单还不存在，否则 mcpp 报退出码 2
+- `check` 会先 `write_full` 再 `write_current`——全新仓库上学习者直接跑 `d2x checker` 时根清单还不存在，否则 mcpp 报退出码 2
 
 ---
 
@@ -154,7 +154,7 @@ member 含全部 3 题（后两题未做完）→ mcpp build -p → exit=1   ←
 
 **逐条追加而非退出时统一写** —— 练习段错误时，崩溃之前的断言结果照样保留。
 
-`D2X_RESULT_FILE` 环境变量未设置时 harness 只打印不写文件：**学员直接跑二进制零摩擦**。
+`D2X_RESULT_FILE` 环境变量未设置时 harness 只打印不写文件：**学习者直接跑二进制零摩擦**。
 
 ### 判定顺序
 
@@ -165,11 +165,11 @@ member 含全部 3 题（后两题未做完）→ mcpp build -p → exit=1   ←
 | 无失败、有 `wait` | `blocked` |
 | **文件不存在**（练习没用 harness） | 退回「编译通过 + 退出 0 = `pass`」 |
 
-最后一条让 **harness 自动变成可选的**，不需要额外机制：纯观察型练习（现有 18 个只用 `D2X_WAIT`）可以写成零依赖的纯 C++ 文件，学员能原样拷进 Compiler Explorer。
+最后一条让 **harness 自动变成可选的**，不需要额外机制：纯观察型练习（现有 18 个只用 `D2X_WAIT`）可以写成零依赖的纯 C++ 文件，学习者能原样拷进 Compiler Explorer。
 
 ### 路径：展示 vs 定位
 
-侧信道里的 `file` 因 `-fmacro-prefix-map` 是相对路径（学员看着舒服），但协议要求绝对路径（d2x 靠它开编辑器、监听变更）。**在协议边界上还原成绝对。**
+侧信道里的 `file` 因 `-fmacro-prefix-map` 是相对路径（学习者看着舒服），但协议要求绝对路径（d2x 靠它开编辑器、监听变更）。**在协议边界上还原成绝对。**
 
 ---
 
@@ -201,7 +201,7 @@ member 含全部 3 题（后两题未做完）→ mcpp build -p → exit=1   ←
 
 断言两件事，缺一不可：**每个练习未完成时不通过**、**每个参考答案放进去后通过**。等价于 rustlings 的 `cargo dev check --require-solutions`。
 
-走的是 `d2x checker` 内部同一条 Provider 路径，所以绿灯等价于学员本地能跑通，而非另一条平行路径。
+走的是 `d2x checker` 内部同一条 Provider 路径，所以绿灯等价于学习者本地能跑通，而非另一条平行路径。
 
 **两道防线：**
 

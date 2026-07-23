@@ -9,7 +9,7 @@
 //
 // 练习即测试：check 就是一次 `mcpp test -p <member> <name> --message-format
 // json`，编译/退出码事实来自 mcpp 的 JSON 记录，运行期语义（断言/路障）
-// 来自 harness 的侧信道 v2 —— 学员绕过 d2x 直接 `mcpp test -p cpp11`
+// 来自 harness 的侧信道 v2 —— 学习者绕过 d2x 直接 `mcpp test -p cpp11`
 // 走的是完全相同的链路，不存在平行路径。
 //
 // 用法（由 .d2x.json 的 buildtools 字段驱动，从仓库根执行，无需 cd）：
@@ -79,7 +79,7 @@ int cmd_check(const fs::path& root, std::string_view id) {
         return 1;
     }
 
-    // 侧信道放在 .d2x/ 下：学员进度旁边，不污染工程目录。
+    // 侧信道放在 .d2x/ 下：学习者进度旁边，不污染工程目录。
     auto result_file = root / ".d2x" / "result.ndjson";
 
     // 从仓库根 spawn（Provider 由 d2x 在仓库根启动，mcpp 自己解析 workspace）

@@ -90,7 +90,7 @@ export void verdict(std::string_view outcome, std::string_view stage_name, int e
 }
 
 // 一条失败的断言 → 一个 Diagnostic。d2x 的前端据此做行内高亮和跳转，
-// 学员不用在几十行输出里找是哪一条没过。
+// 学习者不用在几十行输出里找是哪一条没过。
 export std::string diagnostic(std::string_view file, int line_no,
                               std::string_view expr,
                               std::string_view expected, std::string_view actual) {

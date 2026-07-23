@@ -185,14 +185,15 @@ export struct RunReport {
     std::vector<Failure> failures;
 };
 
-// 判定顺序：
+// 判定顺序（与代码一致，注意 wait 先于退出码——d2x 库里 wait 会把退出码
+// 顶成 1，若先看退出码，blocked 会全部误判成 fail）：
 //   有 ok:false            → Fail，每条失败都能转成一个 Diagnostic
-//   无失败但退出码非 0     → Fail（纯崩溃 / 练习自己 return 非 0）
 //   无失败、有 wait        → Blocked（答案已对，只差拆路障）
+//   无失败但退出码非 0     → Fail（纯崩溃 / 练习自己 return 非 0）
 //   侧信道文件不存在        → 退回「退出码为 0 即通过」
 //
 // 最后一条让 harness 自动变成可选的：纯观察型练习可以是零依赖的
-// 纯 C++ 文件，学员能原样拷进 Compiler Explorer。
+// 纯 C++ 文件，学习者能原样拷进 Compiler Explorer。
 export RunReport judge_run(int exit_code, const fs::path& result_file) {
     RunReport report;
 

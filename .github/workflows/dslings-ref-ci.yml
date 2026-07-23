@@ -1,11 +1,11 @@
 name: Validate exercises and reference solutions
 
 # 断言两件事，缺一不可：
-#   1. 每个练习「未完成时」不通过   —— 否则学员会被直接跳过，练习形同虚设
+#   1. 每个练习「未完成时」不通过   —— 否则学习者会被直接跳过，练习形同虚设
 #   2. 每个参考答案「放进去后」通过 —— 否则参考答案本身是错的
 #
 # 练习即测试：e2e 走 `mcpp test`，与 `d2x checker` 内部的 Provider 是同一条
-# 链路，所以 CI 绿灯等价于学员本地能跑通，而不是另一条平行的构建路径。
+# 链路，所以 CI 绿灯等价于学习者本地能跑通，而不是另一条平行的构建路径。
 #
 # ⚠️ 依赖 mcpp「测试能力批次」(逐测试隔离 / 过滤 / --message-format json /
 # tests 吃 [build].flags，本地分支 feat/test-isolation-json)。在 mcpp 发布

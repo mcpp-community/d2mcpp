@@ -23,7 +23,7 @@ d2x/buildtools/mcpp/                  Provider(C++26)
 
 - **零生成物**：`.d2x/build/` 及三套清单生成已删除；`.d2x/` 下只剩学习进度
   `state.json`（d2x 写）与判定侧信道 `result.ndjson`（harness 写）。
-- id 推导与旧布局**逐字节一致**（`cpp11-00-auto-and-decltype-0`），学员进度不丢。
+- id 推导与旧布局**逐字节一致**（`cpp11-00-auto-and-decltype-0`），学习者进度不丢。
 
 ## 2. 双入口
 
@@ -41,7 +41,7 @@ Provider 只是把 mcpp 的 JSON 记录 × 侧信道合并成协议 verdict。
 
 | 设施 | 说明 |
 |---|---|
-| `d2x::check(cond, "原文")` / `check_eq(a, b, "a == b")` | 第三参是给学员看的表达式原文（迁移脚本自动从宏参数生成，教学输出零漂移）；`std::formattable` 探测转印值（SFINAE 安全，requires 里直接写 std::format 会踩未特化 formatter 的 static_assert） |
+| `d2x::check(cond, "原文")` / `check_eq(a, b, "a == b")` | 第三参是给学习者看的表达式原文（迁移脚本自动从宏参数生成，教学输出零漂移）；`std::formattable` 探测转印值（SFINAE 安全，requires 里直接写 std::format 会踩未特化 formatter 的 static_assert） |
 | `D2X_YOUR_ANSWER` | **纯约定，无定义**。裸标识符的编译报错正好指着要填的位置 |
 | `d2x::wait()` | 路障；记录后继续执行（后续断言照跑） |
 | `d2x::dont_delete_this(expr)` | 恒等透传（旧 D2X_DONT_DELETE_THIS） |
