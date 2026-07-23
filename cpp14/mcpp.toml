@@ -1,0 +1,11 @@
+# cpp14 练习工程。练习 = tests/<章节>/<序号>.cpp,由 mcpp test 直接驱动:
+#   mcpp test -p cpp14              全部练习(进度表)
+#   mcpp test -p cpp14 00-generic   只跑匹配的练习
+# 内容只用 cpp14 的特性;编译统一 c++23(cppNN 目录表示特性引入于哪个标准)。
+[package]
+name     = "cpp14"
+version  = "0.1.0"
+standard = "c++23"
+
+[dependencies]
+harness = { path = "../harness" }

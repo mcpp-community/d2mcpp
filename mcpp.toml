@@ -1,7 +1,4 @@
-# d2mcpp 根 workspace。
-#
-# 这里只登记「提交进仓库」的包。生成物（.d2x/build/ 下按 C++ 标准分的
-# member、以及只含当前一题的 _current）自成一个独立 workspace，由
-# Provider 生成——不放进这里，避免「根清单引用尚未生成的成员」的循环。
+# d2mcpp 根 workspace。练习即测试:每个 C++ 标准一个真实工程,
+# 练习是它的 tests/,mcpp test 直接就是进度表;d2x checker 驱动同一条链。
 [workspace]
-members = ["d2x/buildtools/mcpp", "dslings/harness"]
+members = ["harness", "cpp14", "d2x/buildtools/mcpp", "dslings/harness"]
