@@ -64,12 +64,29 @@ d2x checker [name]
 
 > Note: Exercise names support fuzzy matching
 
-### Sync Latest Practice Code
+### View Learning Progress
 
-> Since the project is continuously updated, you can use the following command for automatic synchronization (if synchronization fails, you may need to manually update the project code using git)
+> Read-only progress overview grouped by chapter, without entering practice mode
 
 ```bash
-d2x update
+d2x status
+```
+
+### Native Mode (optional)
+
+> Every C++ standard directory is a real mcpp project and the exercises are its tests/ — you can practice with plain mcpp, no d2x involved:
+
+```bash
+mcpp test -p src/en/cpp11              # progress table for the whole cpp11 section
+mcpp test -p src/en/cpp11 03-trailing  # run only exercises matching the name
+```
+
+### Sync Latest Practice Code
+
+> The project is continuously updated; update via git (save/commit your modified exercises first):
+
+```bash
+git pull
 ```
 
 ## 2. Automated Detection Program Introduction

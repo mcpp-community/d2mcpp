@@ -67,11 +67,14 @@ irm https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_i
 </details>
 
 ```bash
-xlings install d2x -y
-d2x install d2mcpp
+xlings install d2x -y        # exercise framework CLI
+d2x install d2mcpp           # get the course, environment auto-configured
 cd d2mcpp
-d2x checker
+d2x checker                  # practice loop: edit -> save -> auto-check -> advance
+d2x status                   # progress overview
 ```
+
+> Exercises are real mcpp tests — `mcpp test -p src/cpp11` works too (no d2x involved).
 
 **👉 [more details...](https://mcpp-community.github.io/d2mcpp/base/chapter_1.html)**
 

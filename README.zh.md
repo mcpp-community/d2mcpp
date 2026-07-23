@@ -67,11 +67,14 @@ irm https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_i
 </details>
 
 ```bash
-xlings install d2x -y
-d2x install d2mcpp
+xlings install d2x -y        # 练习框架 CLI
+d2x install d2mcpp           # 一键获取课程,环境自动配置
 cd d2mcpp
-d2x checker
+d2x checker                  # 练习循环: 编辑 -> 保存 -> 自动检测 -> 推进
+d2x status                   # 进度总览
 ```
+
+> 练习就是真实的 mcpp 测试 —— 不经过 d2x,直接 `mcpp test -p src/cpp11` 同样可用。
 
 **👉 [更多细节...](https://mcpp-community.github.io/d2mcpp/base/chapter_1.html)**
 
