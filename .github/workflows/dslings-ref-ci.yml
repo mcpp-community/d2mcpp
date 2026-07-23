@@ -7,9 +7,8 @@ name: Validate exercises and reference solutions
 # 练习即测试：e2e 走 `mcpp test`，与 `d2x checker` 内部的 Provider 是同一条
 # 链路，所以 CI 绿灯等价于学习者本地能跑通，而不是另一条平行的构建路径。
 #
-# ⚠️ 依赖 mcpp「测试能力批次」(逐测试隔离 / 过滤 / --message-format json /
-# tests 吃 [build].flags，本地分支 feat/test-isolation-json)。在 mcpp 发布
-# 携带这些能力的版本并更新安装 pin 之前，本 workflow 会失败 —— 这是预期的。
+# 依赖 mcpp >= 0.0.104(测试能力批次:逐测试隔离 / 过滤 / --list / --timeout /
+# --message-format json / tests 吃 [build].flags)。pin 见 .xlings.json。
 
 on:
   push:
@@ -52,7 +51,6 @@ jobs:
           echo "$HOME/.xlings/subos/current/bin" >> "$GITHUB_PATH"
 
       # 按 .xlings.json 安装 mcpp。mcpp 自带工具链沙箱，无需另装 gcc。
-      # 需要携带「测试能力批次」的 mcpp 版本（见文件头注释）。
       - name: Install mcpp
         run: |
           set -eu
