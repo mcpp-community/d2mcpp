@@ -20,10 +20,10 @@
 
 ## Tasks
 
-- [ ] **T1 harness/ 新包**:顶层 `harness/`,纯模块 `d2x.harness`(check/check_eq/wait,source_location,`what` 可选参),atexit 退出码(失败或 wait 未拆→`_Exit(1)`),侧信道 v2 内联进模块(report.hpp 内容并入,include 路径退役)。单测:临时 fixture 直接 mcpp test。
-- [ ] **T2 试点 cpp14**:`cpp14/mcpp.toml`(dep harness path)+ `cpp14/tests/00-generic-lambdas/{0,1}.cpp`(内容转换:include→import,宏→函数)+ solutions 镜像;根 workspace 更新;`mcpp test -p cpp14` 原生验证(未完成→fail,答案→pass)。
-- [ ] **T3 Provider 瘦身**:discovery 扫 `cpp*/tests`+`intro/tests`(en 前缀 `en/`);check = spawn `mcpp test <name> --message-format json -p <member>` + 读侧信道 + 合并判定;manifest.cppm 删除;runner.cppm 换成 mcpp-test 解析器;unsetenv workaround 删(mcpp c1bf311 已根治)。
-- [ ] **T4 批量迁移**:脚本迁 cpp11×49 + en/×52 + intro(hello-mcpp)+ solutions;两道特殊 cxxflags 题改用 `[build] flags = [{glob=...}]`(先验证 glob 对 tests/ 生效,不生效则保留头部指令+Provider 透传······不,tests 由 mcpp 驱动,必须 toml 承载,验证是硬前提);删 dslings/。
-- [ ] **T5 e2e.sh 重写**:两次全量 `mcpp test`(pristine 全 fail + overlay 全 pass)×zh/en + Provider 协议冒烟(枚举 52、check 单题事件流);hello-mcpp 补答案入 e2e。
-- [ ] **T6 d2x 端到端**:构建 d2x(feat/exercise-framework-protocol,musl mcpp on PATH),`d2x checker` 跑通新链路;.d2x.json 不变。
-- [ ] **T7 文档收尾**:book 路径 sed、authoring skill、CI workflow(注明需 mcpp 下一发版)、参考文档更新记录、CHANGELOG 式提交。
+- [x] **T1 harness/ 新包**:顶层 `harness/`,纯模块 `d2x.harness`(check/check_eq/wait,source_location,`what` 可选参),atexit 退出码(失败或 wait 未拆→`_Exit(1)`),侧信道 v2 内联进模块(report.hpp 内容并入,include 路径退役)。单测:临时 fixture 直接 mcpp test。
+- [x] **T2 试点 cpp14**:`cpp14/mcpp.toml`(dep harness path)+ `cpp14/tests/00-generic-lambdas/{0,1}.cpp`(内容转换:include→import,宏→函数)+ solutions 镜像;根 workspace 更新;`mcpp test -p cpp14` 原生验证(未完成→fail,答案→pass)。
+- [x] **T3 Provider 瘦身**:discovery 扫 `cpp*/tests`+`intro/tests`(en 前缀 `en/`);check = spawn `mcpp test <name> --message-format json -p <member>` + 读侧信道 + 合并判定;manifest.cppm 删除;runner.cppm 换成 mcpp-test 解析器;unsetenv workaround 删(mcpp c1bf311 已根治)。
+- [x] **T4 批量迁移**:脚本迁 cpp11×49 + en/×52 + intro(hello-mcpp)+ solutions;两道特殊 cxxflags 题改用 `[build] flags = [{glob=...}]`(先验证 glob 对 tests/ 生效,不生效则保留头部指令+Provider 透传······不,tests 由 mcpp 驱动,必须 toml 承载,验证是硬前提);删 dslings/。
+- [x] **T5 e2e.sh 重写**:两次全量 `mcpp test`(pristine 全 fail + overlay 全 pass)×zh/en + Provider 协议冒烟(枚举 52、check 单题事件流);hello-mcpp 补答案入 e2e。
+- [x] **T6 d2x 端到端**:构建 d2x(feat/exercise-framework-protocol,musl mcpp on PATH),`d2x checker` 跑通新链路;.d2x.json 不变。
+- [x] **T7 文档收尾**:book 路径 sed、authoring skill、CI workflow(注明需 mcpp 下一发版)、参考文档更新记录、CHANGELOG 式提交。

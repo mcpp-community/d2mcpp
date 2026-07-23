@@ -6,6 +6,8 @@
 - d2x 侧协议规范：d2x 仓库 `.agents/docs/2026-07-20-d2x-architecture-reference.md`
 - 本文定位：**当前实现的参考手册**——目录约定、生成物、判定机制、维护须知
 
+
+> **⚠️ 2026-07-23 起本文的 §4(清单生成)与 §5(判定机制)已被「练习即测试」迁移取代,现状见 [`2026-07-23-exercises-as-tests-reference.md`](2026-07-23-exercises-as-tests-reference.md)。**
 ---
 
 ## 1. 全景
