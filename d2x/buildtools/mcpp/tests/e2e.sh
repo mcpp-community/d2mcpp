@@ -1,99 +1,118 @@
 #!/usr/bin/env bash
-# Provider 端到端测试。
+# d2mcpp 端到端验证 —— 两条硬断言,缺一不可:
 #
-# 断言两件事，缺一不可：
-#   1. 每个练习「未完成时」不通过   —— 否则学员会被直接跳过，练习形同虚设
-#   2. 每个参考答案「放进去后」通过 —— 否则参考答案本身是错的
+#   1) 每个练习未完成时不通过 (pristine 全量 mcpp test 必须 0 passed)
+#   2) 每份参考答案放进去后通过 (overlay 后全量 mcpp test 必须全绿)
 #
-# 这是 rustlings `cargo dev check --require-solutions` 的等价物。d2mcpp 现有的
-# dslings-ref-ci.yml 因为 solutions/ 在 xmake.lua 里被注释掉，实际校验零个目标。
+# 这是 rustlings `cargo dev check --require-solutions` 的等价物。
+#
+# 两道防线(各自都咬过人,见 .agents/docs 参考文档):
+#   - 脏树检查: 练习/答案目录有未提交改动时拒绝运行 —— 脚本要把答案覆盖到
+#     练习上再用 git 还原,未提交的改动会被吃掉
+#   - 防空转: overlay 后 passed 总数为 0 时直接失败,绝不静默绿灯
+#
+# 用法:  bash d2x/buildtools/mcpp/tests/e2e.sh [zh|en|all]   (默认 all)
+# 依赖:  PATH 里的 mcpp 需支持 mcpp test 逐测试隔离/过滤/--message-format json
 set -uo pipefail
 
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
-cd "$REPO_ROOT"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
+cd "$ROOT"
 
-PROVIDER=(mcpp run -q -p d2x/buildtools/mcpp --)
+MODE="${1:-all}"
 
-# 任何退出路径都还原被改动的练习文件，绝不把仓库留在脏状态。
-#
-# 只还原练习源文件，绝不整目录还原 dslings/ —— 脚手架库 dslings/harness/
-# 也在这个目录下，整目录还原会把开发中的改动一起抹掉（踩过一次）。
-EXERCISE_DIRS=(dslings/cpp* dslings/en dslings/hello-mcpp.cpp)
-restore() {
-    for d in "${EXERCISE_DIRS[@]}"; do
-        [ -e "$d" ] && git checkout -- "$d" 2>/dev/null || true
+run_lang() {
+    local prefix="$1"    # "" (zh) 或 "en/"
+    local label="$2"
+    local members=("${prefix}intro" "${prefix}cpp11" "${prefix}cpp14")
+    local test_dirs=()
+    for m in "${members[@]}"; do test_dirs+=("$m/tests"); done
+
+    # —— 防线 1: 脏树检查 ——
+    local dirty
+    dirty=$(git status --porcelain -- "${test_dirs[@]}" solutions/ | head -20)
+    if [[ -n "$dirty" ]]; then
+        echo "E2E($label) 拒绝运行: 练习/答案目录有未提交改动(脚本的覆盖-还原会吃掉它们):"
+        echo "$dirty"
+        return 1
+    fi
+
+    restore() { git checkout -q -- "${test_dirs[@]}"; }
+
+    # —— 断言 1: pristine 全量必须 0 passed ——
+    local m out passed
+    for m in "${members[@]}"; do
+        out=$(mcpp test -p "$m" 2>&1)
+        passed=$(echo "$out" | grep -oE '[0-9]+ passed' | grep -oE '^[0-9]+' | tail -1)
+        if [[ "${passed:-0}" != "0" ]]; then
+            echo "E2E($label) FAIL: $m 在未完成状态下有 $passed 个练习通过了 —— 练习失去了「默认不通过」性质"
+            echo "$out" | grep " ... ok" | head -5
+            return 1
+        fi
     done
+    echo "E2E($label) pristine: 全部练习保持未通过 ✓"
+
+    # —— 覆盖参考答案 (zh/en 共用同一份 solutions) ——
+    local n_overlaid=0 sol rel std rest dst
+    while IFS= read -r sol; do
+        rel="${sol#solutions/}"                      # intro/hello-mcpp.cpp | cpp11/00-x/0.cpp
+        std="${rel%%/*}"; rest="${rel#*/}"
+        dst="${prefix}${std}/tests/${rest}"
+        if [[ ! -f "$dst" ]]; then
+            echo "E2E($label) FAIL: 答案 $sol 没有对应的练习文件 $dst"
+            restore
+            return 1
+        fi
+        cp "$sol" "$dst"
+        n_overlaid=$((n_overlaid + 1))
+    done < <(find solutions -name '*.cpp' | sort)
+
+    # —— 断言 2 + 防线 2: overlay 后全绿,且 passed 总数与答案数一致 ——
+    local total_passed=0 ok=1
+    for m in "${members[@]}"; do
+        out=$(mcpp test -p "$m" 2>&1)
+        if ! echo "$out" | grep -q "test result ok"; then
+            echo "E2E($label) FAIL: $m 覆盖答案后仍有失败:"
+            echo "$out" | grep -E "FAIL|failures" -A10 | head -15
+            ok=0
+        fi
+        passed=$(echo "$out" | grep -oE '[0-9]+ passed' | grep -oE '^[0-9]+' | tail -1)
+        total_passed=$((total_passed + ${passed:-0}))
+    done
+    restore
+
+    if [[ "$ok" != 1 ]]; then return 1; fi
+    if [[ "$total_passed" -eq 0 ]]; then
+        echo "E2E($label) FAIL: 防空转 —— passed 总数为 0,脚本没有真正跑到任何练习"
+        return 1
+    fi
+    if [[ "$total_passed" -ne "$n_overlaid" ]]; then
+        echo "E2E($label) FAIL: 覆盖了 $n_overlaid 份答案但只有 $total_passed 个练习通过"
+        return 1
+    fi
+    echo "E2E($label) solutions: $total_passed/$n_overlaid 参考答案全部通过 ✓"
 }
 
-# 本脚本会把参考答案覆盖到练习上再还原，所以运行前练习必须是干净的 ——
-# 否则未提交的改动会被 restore 悄悄丢掉（作者踩过两次：一次丢了脚手架，
-# 一次丢了刚修好的练习）。宁可拒绝运行，也不能吃掉别人的工作。
-if ! git diff --quiet -- "${EXERCISE_DIRS[@]}" 2>/dev/null; then
-    echo "拒绝运行：练习目录有未提交的改动，本测试会在结束时还原它们。"
-    echo "请先提交或 stash："
-    git diff --stat -- "${EXERCISE_DIRS[@]}" | sed 's/^/  /'
-    exit 2
-fi
-
-trap restore EXIT
-
-outcome_of() {   # $1 = exercise id
-    "${PROVIDER[@]}" check "$1" 2>&1 \
-        | grep -o '"outcome":"[a-z]*"' | head -1 | cut -d'"' -f4
+provider_smoke() {
+    # Provider 协议冒烟:枚举数量、check 的关键事件
+    local n
+    n=$(mcpp run -q -p d2x/buildtools/mcpp -- exercises | grep -c '"event":"exercise"')
+    if [[ "$n" -lt 52 ]]; then
+        echo "E2E(provider) FAIL: 枚举到 $n 个练习(预期 >= 52)"
+        return 1
+    fi
+    local out
+    out=$(mcpp run -q -p d2x/buildtools/mcpp -- check hello-mcpp)
+    echo "$out" | grep -q '"event":"stage","name":"compile"' \
+        && echo "$out" | grep -q '"event":"verdict"' \
+        && echo "$out" | grep -q '"outcome":"fail"' \
+        || { echo "E2E(provider) FAIL: check hello-mcpp 的事件流不完整:"; echo "$out" | head -3; return 1; }
+    echo "E2E(provider) 协议冒烟: $n 个练习,check 事件流完整 ✓"
 }
 
-echo "==> 枚举练习"
-mapfile -t LINES < <("${PROVIDER[@]}" exercises 2>&1 | grep '"event":"exercise"')
-if [ "${#LINES[@]}" -eq 0 ]; then
-    echo "FAIL: Provider 没有枚举出任何练习"; exit 1
-fi
-echo "    共 ${#LINES[@]} 个"
+rc=0
+provider_smoke || rc=1
+if [[ "$MODE" == "zh" || "$MODE" == "all" ]]; then run_lang ""    zh || rc=1; fi
+if [[ "$MODE" == "en" || "$MODE" == "all" ]]; then run_lang "en/" en || rc=1; fi
 
-pass=0; fail=0; skipped=0
-
-for line in "${LINES[@]}"; do
-    id=$(printf '%s' "$line"   | grep -o '"id":"[^"]*"'      | head -1 | cut -d'"' -f4)
-    file=$(printf '%s' "$line" | grep -o '"files":\["[^"]*"' | head -1 | cut -d'"' -f4)
-
-    # en/ 必须先剥，再拼 solutions/ —— 顺序反了的话 sol 已经以 "solutions/"
-    # 开头，`${sol#en/}` 匹配不到任何东西，是个静默 no-op，结果所有英文练习
-    # 都因为找不到 solutions/en/... 而被 SKIP，测试全绿却一个都没验。
-    # 这正是本脚本头部注释里说要防的那种「空转」。
-    rel="${file#"$REPO_ROOT"/}"                 # dslings[/en]/cpp11/xx.cpp
-    rel="${rel#dslings/en/}"                    # en 镜像共用同一份参考答案
-    rel="${rel#dslings/}"                       # cpp11/xx.cpp
-    sol="solutions/${rel}"                      # solutions/cpp11/xx.cpp
-
-    # 1) 未完成态必须不通过
-    got=$(outcome_of "$id")
-    if [ "$got" = "pass" ]; then
-        echo "FAIL [$id] 练习未完成却判定通过"; fail=$((fail+1)); continue
-    fi
-
-    # 2) 参考答案必须通过
-    if [ ! -f "$sol" ]; then
-        echo "SKIP [$id] 无参考答案 ($sol)"; skipped=$((skipped+1)); continue
-    fi
-    cp "$sol" "$file"
-    got=$(outcome_of "$id")
-    git checkout -- "$file"
-
-    if [ "$got" = "pass" ]; then
-        pass=$((pass+1))
-    else
-        echo "FAIL [$id] 参考答案未通过 (outcome=$got)"; fail=$((fail+1))
-    fi
-done
-
-echo
-echo "==> 参考答案通过 $pass · 失败 $fail · 跳过 $skipped"
-
-# 防空转：一个参考答案都没验到时必须红，而不是「0 失败」蒙混过关。
-# 旧 CI 就是这么绿了很久的 —— 它只挑 -ref 目标，而 solutions/ 早被注释掉，
-# 循环一次都没进，job 照样退出 0。
-if [ "$pass" -eq 0 ]; then
-    echo "FAIL: 没有验证到任何参考答案 —— 测试本身失效了，不是「全部通过」"
-    exit 1
-fi
-
-[ "$fail" -eq 0 ]
+if [[ "$rc" == 0 ]]; then echo "E2E: ALL GREEN"; else echo "E2E: FAILED"; fi
+exit "$rc"
