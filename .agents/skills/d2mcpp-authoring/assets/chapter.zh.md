@@ -12,7 +12,7 @@
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/...) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/<std>/NN-topic.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/<std>/NN-topic-0.cpp) |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/...) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/<std>/NN-topic.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/<std>/tests/NN-topic/0.cpp) |  |
 
 
 **为什么引入?**
@@ -59,7 +59,7 @@
 
 <讲解>
 
-<!-- 练习主题列出本章【全部】练习(-0、-1、…,与 dslings 练习文件数一致),作为索引;
+<!-- 练习主题列出本章【全部】练习(-0、-1、…,与 tests 练习文件数一致),作为索引;
      但检测命令只放【入口一条】 d2x checker <name> —— d2x 会自动逐个往下推进,无需逐条列出。
      各练习自己的 checker 名 + 针对本练习的 Tips 放在对应练习文件的头注释里。
      讨论帖取各练习头注释里的「练习交流讨论」链接(全章通常同一帖)。 -->
@@ -67,8 +67,8 @@
 
 ### 练习代码主题
 
-- 0 - [<练习 0 主题>](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/<std>/NN-topic-0.cpp)
-- 1 - [<练习 1 主题>](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/<std>/NN-topic-1.cpp)
+- 0 - [<练习 0 主题>](https://github.com/mcpp-community/d2mcpp/blob/main/<std>/tests/NN-topic/0.cpp)
+- 1 - [<练习 1 主题>](https://github.com/mcpp-community/d2mcpp/blob/main/<std>/tests/NN-topic/1.cpp)
 
 ### 练习代码自动检测命令
 

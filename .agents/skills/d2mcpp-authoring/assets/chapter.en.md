@@ -12,7 +12,7 @@
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/...) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/<std>/NN-topic.md) | [Video Explanation]() | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/<std>/NN-topic-0.cpp) |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/...) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/<std>/NN-topic.md) | [Video Explanation]() | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/<std>/tests/NN-topic/0.cpp) |  |
 
 
 **Why was it introduced?**
@@ -60,7 +60,7 @@
 
 <explanation>
 
-<!-- Practice Topics list ALL exercises (-0, -1, …, matching the dslings file count)
+<!-- Practice Topics list ALL exercises (-0, -1, …, matching the tests file count)
      as an index; but the checker block shows only the SINGLE entry command
      `d2x checker <name>` — d2x auto-advances through the rest, no need to list each.
      Each exercise's own checker name + a Tips line specific to that exercise live in
@@ -70,8 +70,8 @@
 
 ### Practice Topics
 
-- 0 - [<exercise 0 topic>](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/<std>/NN-topic-0.cpp)
-- 1 - [<exercise 1 topic>](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/<std>/NN-topic-1.cpp)
+- 0 - [<exercise 0 topic>](https://github.com/mcpp-community/d2mcpp/blob/main/<std>/tests/NN-topic/0.cpp)
+- 1 - [<exercise 1 topic>](https://github.com/mcpp-community/d2mcpp/blob/main/<std>/tests/NN-topic/1.cpp)
 
 ### Auto-Checker Commands
 
