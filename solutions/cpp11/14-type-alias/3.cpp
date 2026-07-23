@@ -7,7 +7,7 @@
 //
 
 import std;
-import d2x.harness;
+import d2x;
 
 // 别名模板必须定义在命名空间作用域(不能写在函数体内)
 template <typename T>

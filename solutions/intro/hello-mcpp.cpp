@@ -1,9 +1,9 @@
 // d2mcpp: https://github.com/mcpp-community/d2mcpp
 // license: Apache-2.0
-// file: intro/tests/hello-mcpp.cpp (参考答案)
+// file: src/intro/tests/hello-mcpp.cpp (参考答案)
 
 import std;
-import d2x.harness;
+import d2x;
 
 int main() {
 

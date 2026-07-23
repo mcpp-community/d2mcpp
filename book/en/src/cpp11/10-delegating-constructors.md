@@ -12,7 +12,7 @@ Delegating constructors are syntactic sugar introduced in C++11. Through simple 
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/initializer_list.html#Delegating_constructor) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/10-delegating-constructors.md) | [Video Explanation](https://www.bilibili.com/video/BV1zft3zSEER) | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/10-delegating-constructors-0.cpp)  |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/initializer_list.html#Delegating_constructor) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/10-delegating-constructors.md) | [Video Explanation](https://www.bilibili.com/video/BV1zft3zSEER) | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/10-delegating-constructors/0.cpp)  |  |
 
 **Why was it introduced?**
 

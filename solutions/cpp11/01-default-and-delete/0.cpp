@@ -7,7 +7,7 @@
 //
 
 import std;
-import d2x.harness;
+import d2x;
 
 
 // default和delete显式控制 -> 编译器默认构造函数的生成行为

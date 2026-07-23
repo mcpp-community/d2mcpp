@@ -1,13 +1,13 @@
 // d2mcpp: https://github.com/mcpp-community/d2mcpp
 // license: Apache-2.0
-// reference solution for: <std>/tests/NN-topic/K.cpp
+// reference solution for: src/<std>/tests/NN-topic/K.cpp
 //
 // 用途: 仅给 CI 与维护者参考使用，不是教程入口。
-// 教程练习入口: <std>/tests/NN-topic/K.cpp
+// 教程练习入口: src/<std>/tests/NN-topic/K.cpp
 //
 
 import std;
-import d2x.harness;
+import d2x;
 
 int main() {
 

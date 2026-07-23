@@ -7,7 +7,7 @@
 //
 
 import std;
-import d2x.harness;
+import d2x;
 
 
 int add0(double a, int b) {

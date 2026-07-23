@@ -1,0 +1,9 @@
+[package]
+name        = "d2x"
+version     = "0.2.0"
+description = "d2x 练习库：检查点、路障、侧信道上报（纯模块 import d2x，零宏）"
+license     = "Apache-2.0"
+standard    = "c++23"
+
+[targets.d2x]
+kind = "lib"

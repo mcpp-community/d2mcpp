@@ -12,7 +12,7 @@ auto and decltype are powerful **type deduction** tools introduced in C++11. The
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference-auto](https://en.cppreference.com/w/cpp/language/auto) / [cppreference-decltype](https://en.cppreference.com/w/cpp/language/decltype) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/00-auto-and-decltype.md) | [Video Explanation](https://www.bilibili.com/video/BV1EzJs6HEf7) / [Exercise Walkthrough](https://www.bilibili.com/video/BV1xkdYYUEyH) | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-0.cpp) |  |
+| [cppreference-auto](https://en.cppreference.com/w/cpp/language/auto) / [cppreference-decltype](https://en.cppreference.com/w/cpp/language/decltype) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/00-auto-and-decltype.md) | [Video Explanation](https://www.bilibili.com/video/BV1EzJs6HEf7) / [Exercise Walkthrough](https://www.bilibili.com/video/BV1xkdYYUEyH) | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/00-auto-and-decltype/0.cpp) |  |
 
 
 **Why were they introduced?**
@@ -252,12 +252,12 @@ decltype( (b) ) // Deduction result is int &
 
 ### Practice Topics
 
-- 0 - [Declaration & Definition](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-0.cpp)
-- 1 - [Expression Type Deduction](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-1.cpp)
-- 2 - [Complex Type Deduction - Iterator / Function](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-2.cpp)
-- 3 - [Function Return Type Deduction](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-3.cpp)
-- 4 - [Class/Struct Member Type Deduction](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-4.cpp)
-- 5 - [const & Reference Stripping and Preservation](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-5.cpp)
+- 0 - [Declaration & Definition](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/00-auto-and-decltype/0.cpp)
+- 1 - [Expression Type Deduction](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/00-auto-and-decltype/1.cpp)
+- 2 - [Complex Type Deduction - Iterator / Function](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/00-auto-and-decltype/2.cpp)
+- 3 - [Function Return Type Deduction](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/00-auto-and-decltype/3.cpp)
+- 4 - [Class/Struct Member Type Deduction](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/00-auto-and-decltype/4.cpp)
+- 5 - [const & Reference Stripping and Preservation](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/00-auto-and-decltype/5.cpp)
 
 ### Auto-Checker Commands
 

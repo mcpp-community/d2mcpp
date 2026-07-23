@@ -12,7 +12,7 @@
 //   3. 用成员初始化列表直接构造 obj, 避免多余的默认构造 + 移动赋值, 让计数 == 1.
 
 import std;
-import d2x.harness;
+import d2x;
 
 
 struct Object { // 不要修改这个类的代码

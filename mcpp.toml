@@ -1,8 +1,10 @@
-# d2mcpp 根 workspace。练习即测试:每个 C++ 标准一个真实工程,
+# d2mcpp 根 workspace。练习即测试:每个 C++ 标准是 src/ 下的一个真实工程,
 # 练习是它的 tests/,mcpp test 直接就是进度表;d2x checker 驱动同一条链。
+# d2x/ 是练习库(import d2x)与 Provider 的家。
 [workspace]
 members = [
-    "harness", "intro", "cpp11", "cpp14",
-    "en/intro", "en/cpp11", "en/cpp14",
+    "d2x",
+    "src/intro", "src/cpp11", "src/cpp14",
+    "src/en/intro", "src/en/cpp11", "src/en/cpp14",
     "d2x/buildtools/mcpp",
 ]

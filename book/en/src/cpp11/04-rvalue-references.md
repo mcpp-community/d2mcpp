@@ -12,7 +12,7 @@ Rvalue reference `T&&` is a new kind of reference introduced in C++11 that binds
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/reference) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/04-rvalue-references.md) | [Video Explanation]() | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/04-rvalue-references.cpp) |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/reference) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/04-rvalue-references.md) | [Video Explanation]() | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/04-rvalue-references/0.cpp) |  |
 
 
 **Why was it introduced?**
@@ -156,7 +156,7 @@ This chapter focuses on the **value-category + reference-binding** layer. The pa
 
 ### Practice Topics
 
-- 0 - [Use an rvalue reference to extend a temporary's lifetime and mutate it](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/04-rvalue-references.cpp)
+- 0 - [Use an rvalue reference to extend a temporary's lifetime and mutate it](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/04-rvalue-references/0.cpp)
 
 ### Practice Code Auto-detection Command
 

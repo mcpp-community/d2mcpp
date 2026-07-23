@@ -7,7 +7,7 @@
 //
 
 import std;
-import d2x.harness;
+import d2x;
 
 
 class Student { // 不要直接修改 Student 类中的代码

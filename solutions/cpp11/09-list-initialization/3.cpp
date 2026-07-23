@@ -12,7 +12,7 @@
 //      让 `MyVector vec4 { 1, 10 }` 命中 (int, int) 构造函数。
 
 import std;
-import d2x.harness;
+import d2x;
 
 
 class MyVector {

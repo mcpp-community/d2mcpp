@@ -9,7 +9,7 @@
 // 移动操作 -> 移动操作不会被隐式生成, `std::move(p3)` 会回退到拷贝.
 
 import std;
-import d2x.harness;
+import d2x;
 
 
 struct Point {

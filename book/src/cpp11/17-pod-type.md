@@ -13,7 +13,7 @@ C++ 早期标准为了描述这类“行为上接近 C struct 的类型”，引
 
 | 书籍 | 视频 | 代码 | 交流 |
 | --- | --- | --- | --- |
-| [cppreference-PODType](https://cppreference.com/w/cpp/named_req/PODType.html) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/17-pod-type.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/17-pod-type/0.cpp) | [论坛讨论](https://forum.d2learn.org/category/20) |
+| [cppreference-PODType](https://cppreference.com/w/cpp/named_req/PODType.html) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/17-pod-type.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/17-pod-type/0.cpp) | [论坛讨论](https://forum.d2learn.org/category/20) |
 
 > 注意：从 C++20 开始，标准中的 “PODType” 概念已被标记为**弃用**。标准库更倾向于使用更细化的类别，如 `TrivialType`、`StandardLayoutType`、`ScalarType` 等来描述相关需求。
 
@@ -140,9 +140,9 @@ void pod_only_copy(const T& src, T& dst) {
 
 ### 练习代码主题
 
-- 0 - [使用类型特征判断 POD / trivial / standard layout](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/17-pod-type/0.cpp)
-- 1 - [模拟按字节拷贝 POD 结构体，体会其行为](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/17-pod-type/1.cpp)
-- 2 - [为 C 接口传入合适的 POD 类型数据](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/17-pod-type/2.cpp)
+- 0 - [使用类型特征判断 POD / trivial / standard layout](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/17-pod-type/0.cpp)
+- 1 - [模拟按字节拷贝 POD 结构体，体会其行为](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/17-pod-type/1.cpp)
+- 2 - [为 C 接口传入合适的 POD 类型数据](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/17-pod-type/2.cpp)
 
 ### 练习代码自动检测命令
 

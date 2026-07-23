@@ -7,7 +7,7 @@
 //
 
 import std;
-import d2x.harness;
+import d2x;
 
 bool process_int_called = false;
 bool process_ptr_called = false;

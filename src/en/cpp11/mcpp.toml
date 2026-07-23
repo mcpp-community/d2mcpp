@@ -1,0 +1,10 @@
+# cpp11 (en) 练习工程。练习 = tests/<章节>/<序号>.cpp,由 mcpp test 直接驱动:
+#   mcpp test -p src/en/cpp11             全部练习(进度表)
+#   mcpp test -p src/en/cpp11 <子串>      只跑匹配的练习
+[package]
+name     = "en-cpp11"
+version  = "0.1.0"
+standard = "c++23"
+
+[dependencies]
+d2x = { path = "../../../d2x" }

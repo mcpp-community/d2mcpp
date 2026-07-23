@@ -1,6 +1,6 @@
 // d2mcpp: https://github.com/mcpp-community/d2mcpp
 // license: Apache-2.0
-// file: <std>/tests/NN-topic/K.cpp
+// file: src/<std>/tests/NN-topic/K.cpp
 //
 // Exercise/练习: <std> | NN - topic | <中文小标题>
 //
@@ -15,7 +15,7 @@
 //
 
 import std;
-import d2x.harness;
+import d2x;
 
 int main() {
 

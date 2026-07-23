@@ -12,7 +12,7 @@ constexpr 是 C++11 引入的关键字, 用于把"原本要等到运行期才能
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/constexpr) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/07-constexpr.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/07-constexpr/0.cpp) |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/constexpr) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/07-constexpr.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/07-constexpr/0.cpp) |  |
 
 
 **为什么引入?**
@@ -181,8 +181,8 @@ constexpr 把计算搬到编译期, 也意味着错误诊断、调试栈信息�
 
 ### 练习代码主题
 
-- 0 - [编译期计算基础: constexpr 和 const 的区别](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/07-constexpr/0.cpp)
-- 1 - [编译期计算应用示例: factorial / Sum / mysin 自动打表](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/07-constexpr/1.cpp)
+- 0 - [编译期计算基础: constexpr 和 const 的区别](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/07-constexpr/0.cpp)
+- 1 - [编译期计算应用示例: factorial / Sum / mysin 自动打表](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/07-constexpr/1.cpp)
 
 ### 练习代码自动检测命令
 

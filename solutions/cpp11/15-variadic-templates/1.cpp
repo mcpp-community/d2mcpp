@@ -7,7 +7,7 @@
 //
 
 import std;
-import d2x.harness;
+import d2x;
 
 // 递归终止: 只剩一个参数时直接返回
 template<typename T>

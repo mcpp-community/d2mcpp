@@ -81,28 +81,33 @@ After entering the automated code practice environment using `d2x checker`, the 
 ```cpp
 // d2mcpp: https://github.com/mcpp-community/d2mcpp
 // license: Apache-2.0
-// file: dslings/hello-mcpp.cpp
+// file: src/intro/tests/hello-mcpp.cpp
 //
 // Exercise: Automated Code Practice Tutorial
 //
 // Tips:
-//    This project uses the xlings tool to build automated code practice projects. Execute
-//    d2x checker in the project root directory to enter "compiler-driven development mode"
-//    for automatic exercise code detection.
-//    You need to modify errors in the code based on console error messages and hints.
-//    When all compilation errors and runtime checkpoints are fixed, you can delete or comment
-//    out the D2X_WAIT macro in the code to automatically proceed to the next exercise.
+//    This is an "exercises are tests" automated practice project. Two ways to play:
 //
-//      - D2X_WAIT: This macro isolates different exercises. You can delete or comment it out to proceed to the next exercise.
-//      - d2x_assert_eq: This macro is used for runtime checkpoints. You need to fix code errors so that all
-//      - D2X_YOUR_ANSWER: This macro indicates code that needs modification, typically used for code completion (replace this macro with correct code)
+//      d2x checker                  guided mode: auto-detects your edits, passing advances you
+//      mcpp test -p src/en/intro    native mode: plain mcpp — the test report IS your progress
+//
+//    Fix the code based on console error messages. There are only three conventions:
+//
+//      - D2X_YOUR_ANSWER: the fill-in-the-blank placeholder — replace it with correct
+//        code. It is not a macro, just a name nobody defines, so the compiler error
+//        points exactly at the blank
+//      - d2x::check / d2x::check_eq: runtime checkpoints — fix the code so every
+//        check passes (do not delete the checkpoints)
+//      - d2x::wait(): the barrier between exercises — delete it once you have read
+//        the lesson to really finish it
 //
 // Auto-Checker Command:
 //
 //   d2x checker hello-mcpp
 //
 
-#include <d2x/cpp/common.hpp>
+import std;
+import d2x;
 
 // You can observe "real-time" changes in the console when modifying code
 
@@ -112,13 +117,13 @@ int main() {
 
     int a = 1.1; // 1. Fix this runtime error, change int to double to pass the check
 
-    d2x_assert_eq(a, 1.1); // 2. Runtime checkpoint, need to fix code to pass all checkpoints (cannot directly delete checkpoint code)
+    d2x::check_eq(a, 1.1, "a == 1.1"); // 2. Runtime checkpoint, need to fix code to pass all checkpoints (cannot directly delete checkpoint code)
 
     D2X_YOUR_ANSWER b = a; // 3. Fix this compilation error, give b an appropriate type
 
-    d2x_assert_eq(b, 1); // 4. Runtime checkpoint 2
+    d2x::check_eq(b, 1, "b == 1"); // 4. Runtime checkpoint 2
 
-    D2X_WAIT // 5. Delete or comment out this macro to proceed to the next exercise (project formal code practice)
+    d2x::wait(); // 5. Delete or comment out this line to proceed to the next exercise (project formal code practice)
 
     return 0;
 }
@@ -127,23 +132,23 @@ int main() {
 **Console Output and Explanation**
 
 ```bash
-🌏Progress: [>----------] 0/10 -->> Shows current exercise progress
+🌏Progress: [>----------] 0/52 -->> Shows current exercise progress
 
-[Target: 00-0-hello-mcpp] - normal -->> Current exercise name
+[Exercise: hello-mcpp] -->> Current exercise name
 
-❌ Error: Compilation/Running failed for dslings/hello-mcpp.cpp -->> Shows detection status
+❌ Error: Compilation/Running failed for src/en/intro/tests/hello-mcpp.cpp -->> Shows detection status
 
  The code exist some error!
 
----------C-Output--------- - Compiler output information
-[HONLY LOGW]: main: dslings/hello-mcpp.cpp:24 - ❌ | a == 1.1 (1 == 1.100000) -->> Error hint and location (line 24)
-[HONLY LOGW]: main: dslings/hello-mcpp.cpp:26 - 🥳 Delete the D2X_WAIT to continue...
+---------Output--------- - Compile/run output information
+❌ | a == 1.1 (1 == 1.1)  --> src/en/intro/tests/hello-mcpp.cpp:46 -->> Error hint and location (line 46)
+🚧 | Delete the d2x::wait() to continue  --> src/en/intro/tests/hello-mcpp.cpp:52
 
 
 AI-Tips-Config: https://xlings.d2learn.org/en/documents/d2x/intro.html -->> AI hints (requires configuring large model key, optional)
 
 ---------E-Files---------
-dslings/hello-mcpp.cpp -->> Current detected file
+src/intro/tests/hello-mcpp.cpp -->> Current detected file
 -------------------------
 
 Homepage: https://github.com/openxlings/xlings
@@ -168,15 +173,17 @@ Edit the `lang` attribute in the project configuration file `.d2x.json`. `zh` co
 
 If you prefer to use Neovim as your editor with LSP (clangd) support, you can configure it as follows:
 
-**1. Edit the `editor` attribute in the project configuration file `config.xlings` and set it to `nvim` (or `zed`)**
+**1. Edit the `editor` field in the project configuration file `.d2x.json` and set it to `nvim` (or `zed`)**
 
-```bash
-d2x = {
-    checker = {
-        name = "dslings",
-        editor = "nvim", -- option: vscode, nvim, zed
-    },
+```json
+{
+    "buildtools": "mcpp run -q -p d2x/buildtools/mcpp --",
+    "editor": "nvim",
+    ...
+}
 ```
+
+> When unset, d2x falls back to `$VISUAL` → `$EDITOR` → `code`; a `{file}` placeholder is supported; an explicit empty string disables auto-open.
 
 **2. Run the one-click dependency installation and environment configuration command in the project root directory**
 

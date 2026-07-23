@@ -16,8 +16,8 @@ book/en/src/SUMMARY.md                # en TOC  (register here)
 book/src/changelog.md                 # zh changelog (add entry)
 book/en/src/changelog.md              # en changelog (add entry)
 
-<std>/tests/NN-topic/K.cpp            # zh exercise(s)   — no registration needed
-en/<std>/tests/NN-topic/K.cpp         # en exercise(s)   — no registration needed
+src/<std>/tests/NN-topic/K.cpp        # zh exercise(s)   — no registration needed
+src/en/<std>/tests/NN-topic/K.cpp     # en exercise(s)   — no registration needed
 
 solutions/<std>/NN-topic/K.cpp        # reference solution(s), zh/en 共用
 ```
@@ -35,10 +35,10 @@ The `## 二、真实案例` section of every chapter links into `msvc-stl/` for 
 verbatim STL excerpt; you do not add files here per lesson — only refresh the
 snapshot via `msvc-stl/SOURCE.md` when needed.
 
-A new `<std>` section that does not exist yet needs: a `<std>/mcpp.toml` (copy
-`cpp14/mcpp.toml`, change the name), `<std>/tests/` + `en/<std>/tests/` +
+A new `<std>` section that does not exist yet needs: a `src/<std>/mcpp.toml` (copy
+`src/cpp14/mcpp.toml`, change the name), `src/<std>/tests/` + `src/en/<std>/tests/` +
 `solutions/<std>/` directories, the member added to the root `mcpp.toml`
-workspace list (both `<std>` and `en/<std>`), and the section heading in both
+workspace list (both `src/<std>` and `src/en/<std>`), and the section heading in both
 `SUMMARY.md` files (e.g. `# C++14核心语言特性` / `# C++14 Core Language
 Features`).
 
@@ -46,7 +46,7 @@ Features`).
 
 **Exercises are tests.** Each `<std>/` is a real mcpp project and exercises are
 its `tests/`; dropping `<std>/tests/NN-topic/K.cpp` into place is the whole job.
-`mcpp test -p <std>` runs them natively (the report is the progress table), and
+`mcpp test -p src/<std>` runs them natively (the report is the progress table), and
 the d2x Provider (`d2x/buildtools/mcpp/`) derives the exercise id, order and
 chapter from the same path — one chain, no generated manifests, nothing under
 `.d2x/` but learner progress.
@@ -111,7 +111,7 @@ Run from the project root; report real output, do not assert success blind:
 
 ```bash
 # run the exercise natively (fastest loop while authoring)
-mcpp test -p <std> NN-topic
+mcpp test -p src/<std> NN-topic
 
 # check it through the Provider path (exactly what `d2x checker` consumes)
 mcpp run -q -p d2x/buildtools/mcpp -- check cppNN-NN-topic-0

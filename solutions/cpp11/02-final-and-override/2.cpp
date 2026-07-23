@@ -7,7 +7,7 @@
 //
 
 import std;
-import d2x.harness;
+import d2x;
 
 
 struct AudioPlayer { // 不要直接修改AudioPlayer类

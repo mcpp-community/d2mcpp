@@ -12,7 +12,7 @@ The trailing return type is a new function declaration syntax introduced in C++1
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/function) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/03-trailing-return-type.md) | [Video Explanation]() | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/03-trailing-return-type.cpp) |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/function) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/03-trailing-return-type.md) | [Video Explanation]() | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/03-trailing-return-type/0.cpp) |  |
 
 
 **Why was it introduced?**
@@ -166,7 +166,7 @@ auto func() -> int(*)[3];   // ok: returns a pointer to an array
 
 ### Practice Topics
 
-- 0 - [Familiarize with trailing return type - ordinary function / template / lambda](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/03-trailing-return-type.cpp)
+- 0 - [Familiarize with trailing return type - ordinary function / template / lambda](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/03-trailing-return-type/0.cpp)
 
 ### Practice Code Auto-detection Command
 

@@ -21,7 +21,7 @@ cd "$ROOT"
 MODE="${1:-all}"
 
 run_lang() {
-    local prefix="$1"    # "" (zh) 或 "en/"
+    local prefix="$1"    # "src/" (zh) 或 "src/en/"
     local label="$2"
     local members=("${prefix}intro" "${prefix}cpp11" "${prefix}cpp14")
     local test_dirs=()
@@ -111,8 +111,8 @@ provider_smoke() {
 
 rc=0
 provider_smoke || rc=1
-if [[ "$MODE" == "zh" || "$MODE" == "all" ]]; then run_lang ""    zh || rc=1; fi
-if [[ "$MODE" == "en" || "$MODE" == "all" ]]; then run_lang "en/" en || rc=1; fi
+if [[ "$MODE" == "zh" || "$MODE" == "all" ]]; then run_lang "src/"    zh || rc=1; fi
+if [[ "$MODE" == "en" || "$MODE" == "all" ]]; then run_lang "src/en/" en || rc=1; fi
 
 if [[ "$rc" == 0 ]]; then echo "E2E: ALL GREEN"; else echo "E2E: FAILED"; fi
 exit "$rc"

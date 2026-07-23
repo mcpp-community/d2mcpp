@@ -5,9 +5,9 @@
 // 酿成 bug。任何独立声明文件都是第二套真相源。这里的真相只有一处，且
 // 无法漂移：目录结构本身。
 //
-//   intro/tests/hello-mcpp.cpp            → id: hello-mcpp        (chapter: intro)
-//   cpp11/tests/00-auto-and-decltype/0.cpp → id: cpp11-00-auto-and-decltype-0
-//   en/cpp11/tests/...                     lang=en 时启用，与 zh 互斥
+//   src/intro/tests/hello-mcpp.cpp             → id: hello-mcpp   (chapter: intro)
+//   src/cpp11/tests/00-auto-and-decltype/0.cpp → id: cpp11-00-auto-and-decltype-0
+//   src/en/cpp11/tests/...                     lang=en 时启用，与 zh 互斥
 //
 // 每个 <std>/ 是真实 mcpp 工程，练习就是它的 tests/ —— 学员可以绕过 d2x
 // 直接 `mcpp test -p cpp11` 看进度表，Provider 走的是同一条路。
@@ -152,15 +152,15 @@ void scan_member(const fs::path& repo_root, const std::string& member,
     }
 }
 
-// 扫描全部练习。lang=zh 用根下的工程，lang=en 用 en/ 前缀的镜像工程。
+// 扫描全部练习。课程工程住在 src/ 下；lang=en 用 src/en/ 镜像。
 export std::vector<Exercise> scan(const fs::path& repo_root, std::string_view lang) {
-    std::string prefix = (lang == "en") ? "en/" : "";
+    std::string prefix = (lang == "en") ? "src/en/" : "src/";
     std::vector<Exercise> found;
 
     scan_member(repo_root, prefix + "intro", "", found);
 
     std::vector<std::string> std_dirs;
-    auto base = (lang == "en") ? repo_root / "en" : repo_root;
+    auto base = (lang == "en") ? repo_root / "src" / "en" : repo_root / "src";
     if (fs::is_directory(base)) {
         for (const auto& entry : fs::directory_iterator(base)) {
             auto name = entry.path().filename().string();

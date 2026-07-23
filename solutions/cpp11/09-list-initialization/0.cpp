@@ -8,7 +8,7 @@
 // 教学要点: 大括号(列表)初始化对窄化转换不允许, 需要使用显式 static_cast 修复。
 
 import std;
-import d2x.harness;
+import d2x;
 
 
 int main() {

@@ -1,0 +1,55 @@
+// d2mcpp: https://github.com/mcpp-community/d2mcpp
+// license: Apache-2.0
+// file: src/cpp14/tests/00-generic-lambdas/0.cpp
+//
+// Exercise/练习: cpp14 | 00 - generic lambdas | 泛型 lambda
+//
+// Tips/提示:
+// - lambda 参数使用 auto, 编译器为 operator() 生成隐式模板
+// - 同一个泛型 lambda 可以接受不同类型的参数
+//
+// Docs/文档:
+//   - https://en.cppreference.com/w/cpp/language/lambda
+//   - https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp14/00-generic-lambdas.md
+//
+// 练习交流讨论: http://forum.d2learn.org/category/20
+//
+// Auto-Checker/自动检测命令:
+//
+//   d2x checker generic-lambdas
+//
+
+import std;
+import d2x.harness;
+
+int main() {
+
+    // 0. 简单泛型 lambda — identity
+    auto identity = [](D2X_YOUR_ANSWER x) {
+        return x;
+    };
+
+    d2x::check_eq(identity(42), 42, "identity(42) == 42");
+    d2x::check(identity(std::string("hello")) == "hello", "identity(std::string(\"hello\")) == \"hello\"");
+    d2x::check_eq(identity(3.14), D2X_YOUR_ANSWER, "identity(3.14) == D2X_YOUR_ANSWER");
+
+    // 1. 泛型 lambda 做比较
+    auto greater = [](auto a, auto b) {
+        return D2X_YOUR_ANSWER;
+    };
+
+    d2x::check(greater(5, 3), "greater(5, 3)");
+    d2x::check(greater(2.5, 1.2), "greater(2.5, 1.2)");
+    d2x::check(greater(std::string("z"), std::string("a")), "greater(std::string(\"z\"), std::string(\"a\"))");
+
+    // 2. 推导类型确认
+    auto get_type_size = [](auto x) {
+        return sizeof(D2X_YOUR_ANSWER);
+    };
+
+    d2x::check_eq(get_type_size(42), sizeof(int), "get_type_size(42) == sizeof(int)");
+    d2x::check_eq(get_type_size('c'), sizeof(char), "get_type_size('c') == sizeof(char)");
+
+    d2x::wait();
+    return 0;
+}

@@ -9,7 +9,7 @@
 // 保留并展示 "color == Apple" 这种本不该相等却被静默接受的逻辑错误。
 
 import std;
-import d2x.harness;
+import d2x;
 
 
 enum Color {

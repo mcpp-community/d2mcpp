@@ -12,7 +12,7 @@
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/function#Deleted_functions) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/01-default-and-delete.md) | [Video Explanation]() | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/01-default-and-delete-0.cpp) |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/function#Deleted_functions) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/01-default-and-delete.md) | [Video Explanation]() | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/01-default-and-delete/0.cpp) |  |
 
 
 **Why were they introduced?**
@@ -179,9 +179,9 @@ The real design value of `= default` / `= delete` shows up in combination with t
 
 ### Practice Topics
 
-- 0 - [Explicitly control constructor generation behavior](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/01-default-and-delete-0.cpp)
-- 1 - [Implement a non-copyable but movable UniquePtr](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/01-default-and-delete-1.cpp)
-- 2 - [Use = delete to block a specific parameter-type overload](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/01-default-and-delete-2.cpp)
+- 0 - [Explicitly control constructor generation behavior](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/01-default-and-delete/0.cpp)
+- 1 - [Implement a non-copyable but movable UniquePtr](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/01-default-and-delete/1.cpp)
+- 2 - [Use = delete to block a specific parameter-type overload](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/01-default-and-delete/2.cpp)
 
 ### Practice Code Auto-detection Command
 

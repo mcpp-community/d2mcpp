@@ -12,7 +12,7 @@ d2mcpp is an open-source tutorial project focused on **Modern C++ Core Language 
 
 - [Book: Online E-book](https://mcpp-community.github.io/d2mcpp/en)
 - [Video: Instructional Videos](https://youtube.com/playlist?list=PL7uow6t1QjF0ooMLkLSS96swpSuBZvoRE&si=1xHOGVIYpbzZAosI)
-- [Code: Practice Code](https://github.com/mcpp-community/d2mcpp/tree/main/dslings/en)
+- [Code: Practice Code](https://github.com/mcpp-community/d2mcpp/tree/main/src/cpp11/tests/en)
 - [X: mcpp Forum](https://forum.d2learn.org/category/20)
 
 ## Language Support

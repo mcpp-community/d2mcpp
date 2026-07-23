@@ -10,7 +10,7 @@
 // 计数器 1->3->5->6 与断言匹配。
 
 import std;
-import d2x.harness;
+import d2x;
 
 
 static int construction_counter { 0 };

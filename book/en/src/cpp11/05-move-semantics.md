@@ -12,7 +12,7 @@ Move semantics is a **resource ownership transfer** mechanism introduced in C++1
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference-move](https://en.cppreference.com/w/cpp/utility/move) / [cppreference-move-ctor](https://en.cppreference.com/w/cpp/language/move_constructor) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/05-move-semantics.md) | [Video Explanation]() | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/05-move-semantics-0.cpp) |  |
+| [cppreference-move](https://en.cppreference.com/w/cpp/utility/move) / [cppreference-move-ctor](https://en.cppreference.com/w/cpp/language/move_constructor) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/05-move-semantics.md) | [Video Explanation]() | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/05-move-semantics/0.cpp) |  |
 
 
 **Why was it introduced?**
@@ -190,9 +190,9 @@ Similarly, a **by-value parameter** is already a fresh object, so only consider 
 
 ### Practice Topics
 
-- 0 - [Move constructor and trigger conditions - make buffer passing allocate only once](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/05-move-semantics-0.cpp)
-- 1 - [Move assignment and trigger conditions - temporary / intermediate / explicit std::move](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/05-move-semantics-1.cpp)
-- 2 - [Moving resources, not objects - compare object addresses vs. data pointers](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/05-move-semantics-2.cpp)
+- 0 - [Move constructor and trigger conditions - make buffer passing allocate only once](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/05-move-semantics/0.cpp)
+- 1 - [Move assignment and trigger conditions - temporary / intermediate / explicit std::move](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/05-move-semantics/1.cpp)
+- 2 - [Moving resources, not objects - compare object addresses vs. data pointers](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/05-move-semantics/2.cpp)
 
 ### Practice Code Auto-detection Command
 

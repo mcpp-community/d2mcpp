@@ -12,7 +12,7 @@
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/function#Deleted_functions) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/01-default-and-delete.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/01-default-and-delete/0.cpp) |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/function#Deleted_functions) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/01-default-and-delete.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/01-default-and-delete/0.cpp) |  |
 
 
 **为什么引入?**
@@ -217,9 +217,9 @@ only_int(1.0);     // 错误: 调用 deleted function
 
 ### 练习代码主题
 
-- 0 - [显式指定构造函数生成行为](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/01-default-and-delete/0.cpp)
-- 1 - [实现不可拷贝但可移动的 UniquePtr](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/01-default-and-delete/1.cpp)
-- 2 - [用 = delete 屏蔽特定参数类型的重载](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/01-default-and-delete/2.cpp)
+- 0 - [显式指定构造函数生成行为](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/01-default-and-delete/0.cpp)
+- 1 - [实现不可拷贝但可移动的 UniquePtr](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/01-default-and-delete/1.cpp)
+- 2 - [用 = delete 屏蔽特定参数类型的重载](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/01-default-and-delete/2.cpp)
 
 ### 练习代码自动检测命令
 

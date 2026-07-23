@@ -15,10 +15,7 @@ on:
   push:
     branches: ["main"]
     paths:
-      - "harness/**"
-      - "intro/**"
-      - "cpp*/**"
-      - "en/**"
+      - "src/**"
       - "solutions/**"
       - "d2x/**"
       - "mcpp.toml"
@@ -26,10 +23,7 @@ on:
       - ".github/workflows/dslings-ref-ci.yml"
   pull_request:
     paths:
-      - "harness/**"
-      - "intro/**"
-      - "cpp*/**"
-      - "en/**"
+      - "src/**"
       - "solutions/**"
       - "d2x/**"
       - "mcpp.toml"

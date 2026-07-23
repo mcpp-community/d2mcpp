@@ -12,7 +12,7 @@ C++14 allows lambda parameters to use `auto`, turning the lambda's `operator()` 
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference-lambda](https://en.cppreference.com/w/cpp/language/lambda) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp14/00-generic-lambdas.md) | [Video Explanation]() | [Exercise Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp14/00-generic-lambdas-0.cpp) |  |
+| [cppreference-lambda](https://en.cppreference.com/w/cpp/language/lambda) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp14/00-generic-lambdas.md) | [Video Explanation]() | [Exercise Code](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp14/tests/00-generic-lambdas/0.cpp) |  |
 
 
 **Why introduced?**
@@ -191,8 +191,8 @@ C++14 generic lambdas support parameter packs — `[](auto... xs)` accepts any n
 
 ### Exercise Code Topics
 
-- 0 - [Basic Generic Lambda — auto parameters and type deduction](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/en/cpp14/00-generic-lambdas-0.cpp)
-- 1 - [Generic Lambda with STL Algorithms — sort, find, factory function](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/en/cpp14/00-generic-lambdas-1.cpp)
+- 0 - [Basic Generic Lambda — auto parameters and type deduction](https://github.com/mcpp-community/d2mcpp/blob/main/src/en/cpp14/tests/00-generic-lambdas/0.cpp)
+- 1 - [Generic Lambda with STL Algorithms — sort, find, factory function](https://github.com/mcpp-community/d2mcpp/blob/main/src/en/cpp14/tests/00-generic-lambdas/1.cpp)
 
 ### Exercise Auto-Checker Command
 

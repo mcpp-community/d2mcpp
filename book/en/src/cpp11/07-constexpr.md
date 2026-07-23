@@ -12,7 +12,7 @@ constexpr is a keyword introduced in C++11 that lifts "results that would normal
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/constexpr) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/07-constexpr.md) | [Video Explanation]() | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/07-constexpr-0.cpp) |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/constexpr) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/07-constexpr.md) | [Video Explanation]() | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/07-constexpr/0.cpp) |  |
 
 
 **Why was it introduced?**
@@ -181,8 +181,8 @@ But here's a detail that's easy to miss: **constexpr functions are implicitly in
 
 ### Practice Topics
 
-- 0 - [Compile-time computation basics: constexpr vs const](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/07-constexpr-0.cpp)
-- 1 - [Applied compile-time computation: factorial / Sum / mysin auto lookup table](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/07-constexpr-1.cpp)
+- 0 - [Compile-time computation basics: constexpr vs const](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/07-constexpr/0.cpp)
+- 1 - [Applied compile-time computation: factorial / Sum / mysin auto lookup table](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/07-constexpr/1.cpp)
 
 ### Practice Code Auto-detection Command
 

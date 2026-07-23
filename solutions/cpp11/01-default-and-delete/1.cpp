@@ -7,7 +7,7 @@
 //
 
 import std;
-import d2x.harness;
+import d2x;
 
 
 // 实现std::unique_ptr不可以拷贝, 但可以移动的属性

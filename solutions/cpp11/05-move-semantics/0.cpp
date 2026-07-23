@@ -9,7 +9,7 @@
 // 这样每个传递点最终都指向同一块缓冲区, 三个 d2x::check 都通过。
 
 import std;
-import d2x.harness;
+import d2x;
 
 
 struct Buffer {

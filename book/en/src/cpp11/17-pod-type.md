@@ -13,7 +13,7 @@ In C++, there is a corresponding category of **POD types** whose memory layout i
 
 | Book | Video | Code | Forum |
 | --- | --- | --- | --- |
-| [cppreference-PODType](https://cppreference.com/w/cpp/named_req/PODType.html) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/17-pod-type.md) | [Video Explanation]() | [Exercise Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/17-pod-type-0.cpp) | [Discussion Forum](https://forum.d2learn.org/category/20) |
+| [cppreference-PODType](https://cppreference.com/w/cpp/named_req/PODType.html) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/17-pod-type.md) | [Video Explanation]() | [Exercise Code](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/17-pod-type/0.cpp) | [Discussion Forum](https://forum.d2learn.org/category/20) |
 
 > Note: since C++20, the “PODType” notion in the standard has been marked **deprecated**.  
 > The standard library now prefers more fine-grained categories such as `TrivialType`, `StandardLayoutType`, and `ScalarType` to describe related requirements.
@@ -140,9 +140,9 @@ In new code, it is better to express constraints based on actual needs, for exam
 
 ### Exercise topics
 
-- 0 – [Use type traits to check POD / trivial / standard-layout](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/en/cpp11/17-pod-type-0.cpp)
-- 1 – [Simulate byte-wise copying of a POD struct and observe the behavior](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/en/cpp11/17-pod-type-1.cpp)
-- 2 – [Adapt C++ message types to C interface using POD headers](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/en/cpp11/17-pod-type-2.cpp)
+- 0 – [Use type traits to check POD / trivial / standard-layout](https://github.com/mcpp-community/d2mcpp/blob/main/src/en/cpp11/tests/17-pod-type/0.cpp)
+- 1 – [Simulate byte-wise copying of a POD struct and observe the behavior](https://github.com/mcpp-community/d2mcpp/blob/main/src/en/cpp11/tests/17-pod-type/1.cpp)
+- 2 – [Adapt C++ message types to C interface using POD headers](https://github.com/mcpp-community/d2mcpp/blob/main/src/en/cpp11/tests/17-pod-type/2.cpp)
 
 ### Auto-check command
 

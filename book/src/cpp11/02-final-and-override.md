@@ -12,7 +12,7 @@ final 和 override 是 C++11 引入的两个 **上下文相关标识符**, 用�
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference-final](https://en.cppreference.com/w/cpp/language/final) / [cppreference-override](https://en.cppreference.com/w/cpp/language/override) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/02-final-and-override.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/02-final-and-override/0.cpp) |  |
+| [cppreference-final](https://en.cppreference.com/w/cpp/language/final) / [cppreference-override](https://en.cppreference.com/w/cpp/language/override) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/02-final-and-override.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/02-final-and-override/0.cpp) |  |
 
 
 **为什么引入?**
@@ -174,9 +174,9 @@ struct B : A {
 
 ### 练习代码主题
 
-- 0 - [熟悉 override 的使用](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/02-final-and-override/0.cpp)
-- 1 - [熟悉 final 的使用](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/02-final-and-override/1.cpp)
-- 2 - [final + 模板方法 - AudioPlayer / WAV / MP3 / OGG](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/02-final-and-override/2.cpp)
+- 0 - [熟悉 override 的使用](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/02-final-and-override/0.cpp)
+- 1 - [熟悉 final 的使用](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/02-final-and-override/1.cpp)
+- 2 - [final + 模板方法 - AudioPlayer / WAV / MP3 / OGG](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/02-final-and-override/2.cpp)
 
 ### 练习代码自动检测命令
 

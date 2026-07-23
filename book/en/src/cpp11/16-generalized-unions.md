@@ -15,7 +15,7 @@ The size of a union is at least large enough to hold the largest data member.
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference-union](https://cppreference.com/w/cpp/language/union.html) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/16-generalized-unions.md) | [Video Explanation]() | [Exercise Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/16-generalized-unions-0.cpp) |  |
+| [cppreference-union](https://cppreference.com/w/cpp/language/union.html) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/16-generalized-unions.md) | [Video Explanation]() | [Exercise Code](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/16-generalized-unions/0.cpp) |  |
 
 **Why introduced?**
 
@@ -224,9 +224,9 @@ double c = m.b; // Error: undefined behavior.
 
 ### Exercise Code Topics
 
-- 0 - [Union Default Member Initialization](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/en/cpp11/16-generalized-unions-0.cpp)
-- 1 - [Union with Non-Trivial Types and Lifecycle Management](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/en/cpp11/16-generalized-unions-1.cpp)
-- 2 - [Tagged Discriminated Union — A Simplified std::variant with enum + union](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/en/cpp11/16-generalized-unions-2.cpp)
+- 0 - [Union Default Member Initialization](https://github.com/mcpp-community/d2mcpp/blob/main/src/en/cpp11/tests/16-generalized-unions/0.cpp)
+- 1 - [Union with Non-Trivial Types and Lifecycle Management](https://github.com/mcpp-community/d2mcpp/blob/main/src/en/cpp11/tests/16-generalized-unions/1.cpp)
+- 2 - [Tagged Discriminated Union — A Simplified std::variant with enum + union](https://github.com/mcpp-community/d2mcpp/blob/main/src/en/cpp11/tests/16-generalized-unions/2.cpp)
 
 ### Exercise Auto-Checker Command
 

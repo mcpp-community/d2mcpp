@@ -12,7 +12,7 @@ Scoped enums (`enum class` / `enum struct`) are strongly-typed enumerations intr
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/enum) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/06-scoped-enums.md) | [Video Explanation]() | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/06-scoped-enums-0.cpp) |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/enum) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/06-scoped-enums.md) | [Video Explanation]() | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/06-scoped-enums/0.cpp) |  |
 
 
 **Why was it introduced?**
@@ -204,8 +204,8 @@ Existing codebases tend to be full of traditional enums; you don't need to rewri
 
 ### Practice Topics
 
-- 0 - [Pitfalls of traditional enum - name clashes and implicit comparison](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/06-scoped-enums-0.cpp)
-- 1 - [Basic usage of scoped enum - scoping / type safety / underlying type](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/06-scoped-enums-1.cpp)
+- 0 - [Pitfalls of traditional enum - name clashes and implicit comparison](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/06-scoped-enums/0.cpp)
+- 1 - [Basic usage of scoped enum - scoping / type safety / underlying type](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/06-scoped-enums/1.cpp)
 
 ### Practice Code Auto-detection Command
 

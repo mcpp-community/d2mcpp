@@ -81,7 +81,7 @@ d2x update
 ```cpp
 // d2mcpp: https://github.com/mcpp-community/d2mcpp
 // license: Apache-2.0
-// file: intro/tests/hello-mcpp.cpp
+// file: src/intro/tests/hello-mcpp.cpp
 //
 // Exercise/练习: 自动化代码练习使用教学
 //
@@ -89,7 +89,7 @@ d2x update
 //    这是一个「练习即测试」的自动化代码练习项目。两种玩法任选:
 //
 //      d2x checker              闯关模式: 自动检测、通过即进入下一题
-//      mcpp test -p intro       原生模式: 直接用 mcpp 跑, 测试结果就是进度表
+//      mcpp test -p src/intro       原生模式: 直接用 mcpp 跑, 测试结果就是进度表
 //
 //    你需要根据控制台的报错和提示信息修改代码。约定只有三个:
 //
@@ -105,7 +105,7 @@ d2x update
 //
 
 import std;
-import d2x.harness;
+import d2x;
 
 // 修改代码时可以观察到控制台"实时"的变化
 
@@ -134,19 +134,19 @@ int main() {
 
 [Exercise: hello-mcpp] -->> 当前的练习名
 
-❌ Error: Compilation/Running failed for intro/tests/hello-mcpp.cpp -->> 显示检测状态
+❌ Error: Compilation/Running failed for src/intro/tests/hello-mcpp.cpp -->> 显示检测状态
 
  The code exist some error!
 
 ---------Output--------- - 编译/运行输出信息
-[HONLY LOGW]: intro/tests/hello-mcpp.cpp:41 - ❌ | a == 1.1 (1 == 1.1) -->> 错误提示及位置(41行)
-[HONLY LOGW]: intro/tests/hello-mcpp.cpp:47 - 🥳 Delete the d2x::wait() to continue...
+❌ | a == 1.1 (1 == 1.1)  --> src/intro/tests/hello-mcpp.cpp:41 -->> 错误提示及位置(41行)
+🚧 | Delete the d2x::wait() to continue  --> src/intro/tests/hello-mcpp.cpp:47
 
 
 AI-Tips-Config: https://xlings.d2learn.org/documents/d2x/intro.html -->> AI提示(需要配置大模型的key, 可不使用)
 
 ---------E-Files---------
-intro/tests/hello-mcpp.cpp -->> 当前检测的文件
+src/intro/tests/hello-mcpp.cpp -->> 当前检测的文件
 -------------------------
 
 Homepage: https://github.com/openxlings/xlings
@@ -171,16 +171,17 @@ Homepage: https://github.com/openxlings/xlings
 
 如果你希望使用 Neovim 编辑器并获得 LSP（clangd）支持, 可以按如下步骤进行配置
 
-**1.编辑项目配置文件`config.xlings`中的`editor`属性, 设置为`nvim` (或`zed`)**
+**1.编辑项目配置文件`.d2x.json`中的`editor`字段, 设置为`nvim` (或`zed`)**
 
-```bash
+```json
 {
-    "version": "0.1.1",
     "buildtools": "mcpp run -q -p d2x/buildtools/mcpp --",
-    "lang": "en",  < -- 修改这里
+    "editor": "nvim",
     ...
 }
 ```
+
+> 未配置时按 `$VISUAL` → `$EDITOR` → `code` 回退;支持 `{file}` 占位符;显式配空串表示关闭自动打开。
 
 **2.在项目根目录运行一键依赖安装和环境配置命令**
 

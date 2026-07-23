@@ -12,7 +12,7 @@ final and override are two **context-sensitive identifiers** introduced in C++11
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference-final](https://en.cppreference.com/w/cpp/language/final) / [cppreference-override](https://en.cppreference.com/w/cpp/language/override) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/02-final-and-override.md) | [Video Explanation]() | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/02-final-and-override-0.cpp) |  |
+| [cppreference-final](https://en.cppreference.com/w/cpp/language/final) / [cppreference-override](https://en.cppreference.com/w/cpp/language/override) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/02-final-and-override.md) | [Video Explanation]() | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/02-final-and-override/0.cpp) |  |
 
 
 **Why were they introduced?**
@@ -175,9 +175,9 @@ struct B : A {
 
 ### Practice Topics
 
-- 0 - [Familiarize with override](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/02-final-and-override-0.cpp)
-- 1 - [Familiarize with final](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/02-final-and-override-1.cpp)
-- 2 - [final + Template Method - AudioPlayer / WAV / MP3 / OGG](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/02-final-and-override-2.cpp)
+- 0 - [Familiarize with override](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/02-final-and-override/0.cpp)
+- 1 - [Familiarize with final](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/02-final-and-override/1.cpp)
+- 2 - [final + Template Method - AudioPlayer / WAV / MP3 / OGG](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/02-final-and-override/2.cpp)
 
 ### Practice Code Auto-detection Command
 

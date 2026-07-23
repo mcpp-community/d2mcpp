@@ -17,7 +17,7 @@
 
 [📚Book]: https://mcpp-community.github.io/d2mcpp
 [🎥Video]: https://www.bilibili.com/video/BV182MtzPEiX
-[⌨️Code]: https://github.com/mcpp-community/d2mcpp/tree/main/dslings
+[⌨️Code]: https://github.com/mcpp-community/d2mcpp/tree/main/src/cpp11/tests
 [👥X]: https://forum.d2learn.org/category/20
 
 ## Goals

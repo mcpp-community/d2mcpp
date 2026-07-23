@@ -1,9 +1,0 @@
-[package]
-name        = "harness"
-version     = "0.2.0"
-description = "d2mcpp 练习脚手架：断言、路障、侧信道上报（纯模块，无宏）"
-license     = "Apache-2.0"
-standard    = "c++23"
-
-[targets.harness]
-kind = "lib"

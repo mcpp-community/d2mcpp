@@ -7,7 +7,7 @@ description: >-
   solution, or when registering them in SUMMARY/changelog. Trigger it for
   any request like "add a chapter for X", "write an exercise for fold
   expressions", "add the constexpr lesson", "fill the cpp14 section", or
-  anything touching book/src, book/en/src, cpp*/tests/, en/, or solutions/.
+  anything touching book/src, book/en/src, src/ (exercises), or solutions/.
   Even small edits should follow these conventions so the bilingual +
   book/code/checker artifacts stay in sync.
 ---
@@ -50,7 +50,7 @@ Honor that axis:
   feature was *introduced*, not the compile flags. Teach the introduction-era
   shape through content and assertions (an untested teaching point disappears
   silently). If one exercise needs special flags, declare a per-glob entry in
-  the member's `<std>/mcpp.toml` `[build].flags` — never a bare `TODO` hack.
+  the member's `src/<std>/mcpp.toml` `[build].flags` — never a bare `TODO` hack.
 
 Background and the full per-feature evolution analysis live in
 `.agents/docs/2026-06-08-cpp11-feature-evolution-and-cxx20-baseline.md`. Consult
@@ -69,8 +69,8 @@ When adding a feature numbered `NN` with slug `topic` (e.g. `06-scoped-enums`):
 
 1. `book/src/<std>/NN-topic.md` — zh chapter
 2. `book/en/src/<std>/NN-topic.md` — en chapter (translate prose, keep code identical)
-3. `<std>/tests/NN-topic/K.cpp` — one or more exercises (`K` = 0,1,2…), zh comments
-4. `en/<std>/tests/NN-topic/K.cpp` — en exercises (translate comments only)
+3. `src/<std>/tests/NN-topic/K.cpp` — one or more exercises (`K` = 0,1,2…), zh comments
+4. `src/en/<std>/tests/NN-topic/K.cpp` — en exercises (translate comments only)
 5. `solutions/<std>/NN-topic/K.cpp` — reference solution per exercise (zh/en 共用)
 6. (nothing to register — exercises are tests, discovered by directory convention)
 8. Add the chapter line to **both** `book/src/SUMMARY.md` and `book/en/src/SUMMARY.md`
@@ -84,7 +84,7 @@ exact registration snippets and SUMMARY/changelog line formats.
 - Chapter/exercise prefix is a **two-digit** sequence `NN` within the standard
   section; slug is **kebab-case** and matches book + tests + solutions.
 - Exercises split into `0.cpp`, `1.cpp`, … by sub-topic inside the chapter
-  directory `<std>/tests/NN-topic/`; a single-exercise chapter is just `0.cpp`.
+  directory `src/<std>/tests/NN-topic/`; a single-exercise chapter is just `0.cpp`.
 - The **`d2x checker <name>`** name is the slug (and `<slug>-1`, `<slug>-2` for
   later exercises) — it omits the `NN-` prefix. Keep checker names, file names,
   and book references mutually consistent.
@@ -151,12 +151,12 @@ Use `assets/exercise.cpp`. Essentials:
   `Exercise/练习:` line (`<std> | NN - topic | 中文小标题`), `Tips/提示:`,
   `Docs/文档:` (cppreference), and the `Auto-Checker/自动检测命令:` with
   `d2x checker <name>`.
-- `import std;` + `import d2x.harness;` — no `#include` unless the lesson
+- `import std;` + `import d2x;` — no `#include` unless the lesson
   needs a macro from a header (e.g. `NULL` teaching needs `<cstddef>`; put the
   include *before* the imports with a comment saying why).
 - `main()` seeded with **intentional errors** the learner fixes, each flagged by
   a numbered inline comment (`// 1.…`, `// 2.…`) telling them what to do.
-- Conventions (harness is `import d2x.harness;`, no macros):
+- Conventions (the d2x library, `import d2x;`, no macros):
   - `d2x::check(cond, "原文")` / `d2x::check_eq(a, b, "a == b")` — runtime
     checkpoints; the third argument is the expression text shown to learners
     (c++23 has no reflection to capture it automatically — always pass it).

@@ -12,7 +12,7 @@ Type alias and alias template are important features introduced in C++11, used t
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference-type-alias](https://en.cppreference.com/w/cpp/language/type_alias) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/14-type-alias.md) | [Video Explanation]() | [Exercise Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/en/cpp11/14-type-alias-0.cpp) |  |
+| [cppreference-type-alias](https://en.cppreference.com/w/cpp/language/type_alias) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/14-type-alias.md) | [Video Explanation]() | [Exercise Code](https://github.com/mcpp-community/d2mcpp/blob/main/src/en/cpp11/tests/14-type-alias/0.cpp) |  |
 
 > Note: The `using` keyword existed before C++11, but was mainly used for namespace and class member declarations
 > - Declaring namespaces: `using namespace std;`
@@ -192,10 +192,10 @@ struct A {
 
 ### Exercise Code Topics
 
-- 0 - [Basic Type Alias](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/en/cpp11/14-type-alias-0.cpp)
-- 1 - [Complex Types and Function Pointer Aliases](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/en/cpp11/14-type-alias-1.cpp)
-- 2 - [Alias Template Basics](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/en/cpp11/14-type-alias-2.cpp)
-- 3 - [Alias Template Applications in Standard Library](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/en/cpp11/14-type-alias-3.cpp)
+- 0 - [Basic Type Alias](https://github.com/mcpp-community/d2mcpp/blob/main/src/en/cpp11/tests/14-type-alias/0.cpp)
+- 1 - [Complex Types and Function Pointer Aliases](https://github.com/mcpp-community/d2mcpp/blob/main/src/en/cpp11/tests/14-type-alias/1.cpp)
+- 2 - [Alias Template Basics](https://github.com/mcpp-community/d2mcpp/blob/main/src/en/cpp11/tests/14-type-alias/2.cpp)
+- 3 - [Alias Template Applications in Standard Library](https://github.com/mcpp-community/d2mcpp/blob/main/src/en/cpp11/tests/14-type-alias/3.cpp)
 
 ### Exercise Code Auto-Check Command
 

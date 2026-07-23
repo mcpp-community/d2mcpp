@@ -12,7 +12,7 @@ A *literal type* (LiteralType) is the C++11 named requirement for types that are
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference-LiteralType](https://en.cppreference.com/w/cpp/named_req/LiteralType) / [cppreference-user-literal](https://en.cppreference.com/w/cpp/language/user_literal) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/08-literal-type.md) | [Video Explanation]() | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/08-literal-type-0.cpp) |  |
+| [cppreference-LiteralType](https://en.cppreference.com/w/cpp/named_req/LiteralType) / [cppreference-user-literal](https://en.cppreference.com/w/cpp/language/user_literal) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/08-literal-type.md) | [Video Explanation]() | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/08-literal-type/0.cpp) |  |
 
 
 **Why was it introduced?**
@@ -178,8 +178,8 @@ LiteralType requires at least one constexpr constructor that is **not** a copy o
 
 ### Practice Topics
 
-- 0 - [Understand the literal-type concept - what can be constexpr](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/08-literal-type-0.cpp)
-- 1 - [Define your own literal type - add a constexpr constructor to Vector](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/08-literal-type-1.cpp)
+- 0 - [Understand the literal-type concept - what can be constexpr](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/08-literal-type/0.cpp)
+- 1 - [Define your own literal type - add a constexpr constructor to Vector](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/08-literal-type/1.cpp)
 
 ### Practice Code Auto-detection Command
 

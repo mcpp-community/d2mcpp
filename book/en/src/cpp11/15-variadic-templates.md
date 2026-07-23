@@ -12,7 +12,7 @@ Variadic templates are a core template feature introduced in C++11. They allow f
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/parameter_pack) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/15-variadic-templates.md) | [Video Explanation]() | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/15-variadic-templates-0.cpp) |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/parameter_pack) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/en/src/cpp11/15-variadic-templates.md) | [Video Explanation]() | [Practice Code](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/15-variadic-templates/0.cpp) |  |
 
 
 **Why was it introduced?**
@@ -228,8 +228,8 @@ If your project allows C++17, new code should prefer fold expressions + `if cons
 
 ### Practice Topics
 
-- 0 - [Variadic templates basics - recursive print](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/15-variadic-templates-0.cpp)
-- 1 - [Variadic template sum](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/15-variadic-templates-1.cpp)
+- 0 - [Variadic templates basics - recursive print](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/15-variadic-templates/0.cpp)
+- 1 - [Variadic template sum](https://github.com/mcpp-community/d2mcpp/blob/main/src/cpp11/tests/15-variadic-templates/1.cpp)
 
 ### Practice Code Auto-detection Command
 

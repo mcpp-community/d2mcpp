@@ -1,0 +1,43 @@
+// d2mcpp: https://github.com/mcpp-community/d2mcpp
+// license: Apache-2.0
+// file: src/en/cpp11/tests/09-list-initialization/1.cpp
+//
+// Exercise: cpp11 | 09 - list initialization | Default initialization syntax pitfalls
+//
+// Tips: Fix compiler errors based on compiler output, understand default initialization syntax pitfalls
+//
+// Docs:
+//   - https://en.cppreference.com/w/cpp/language/list_initialization.html
+//   - https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/09-list-initialization.md
+//
+// Auto-Checker command:
+//
+//   d2x checker list-initialization
+//
+
+import std;
+import d2x;
+
+
+struct Object {
+    Object() {
+        x = 0;
+        std::cout << "Object()" << std::endl;
+    }
+    Object(int x) : x(x) {
+        std::cout << "Object(int): " << x << std::endl;
+    }
+    int x;
+};
+
+int main() {
+
+    Object obj1();
+    Object obj2(2);
+
+    d2x::check_eq(obj1.x, 0, "obj1.x == 0");
+    d2x::check_eq(obj2.x, 2, "obj2.x == 2");
+
+    d2x::wait();
+    return 0;
+}

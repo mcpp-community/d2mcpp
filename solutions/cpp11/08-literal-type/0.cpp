@@ -10,7 +10,7 @@
 // 仍可参与编译期计算。
 
 import std;
-import d2x.harness;
+import d2x;
 
 
 constexpr char compile_time_compute(char c, int a) {
