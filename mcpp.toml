@@ -1,4 +1,8 @@
 # d2mcpp 根 workspace。练习即测试:每个 C++ 标准一个真实工程,
 # 练习是它的 tests/,mcpp test 直接就是进度表;d2x checker 驱动同一条链。
 [workspace]
-members = ["harness", "cpp14", "d2x/buildtools/mcpp", "dslings/harness"]
+members = [
+    "harness", "intro", "cpp11", "cpp14",
+    "en/intro", "en/cpp11", "en/cpp14",
+    "d2x/buildtools/mcpp",
+]
