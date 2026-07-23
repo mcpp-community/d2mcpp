@@ -163,7 +163,7 @@ Edit the `lang` attribute in the project configuration file `.d2x.json`. `zh` co
 ```bash
 {
     "version": "0.1.1",
-    "buildtools": "mcpp run -q -p d2x/buildtools/mcpp --",
+    "buildtools": "mcpp run -q -p d2x/buildtools --",
     "lang": "en",
     ...
 }
@@ -177,7 +177,7 @@ If you prefer to use Neovim as your editor with LSP (clangd) support, you can co
 
 ```json
 {
-    "buildtools": "mcpp run -q -p d2x/buildtools/mcpp --",
+    "buildtools": "mcpp run -q -p d2x/buildtools --",
     "editor": "nvim",
     ...
 }

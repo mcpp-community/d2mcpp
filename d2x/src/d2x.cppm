@@ -24,8 +24,8 @@ import std;
 //
 // 可见输出的设计（学习者每天面对的三行）：
 //   ✅ | <what> (<actual> == <expected>)                     绿
-//   ❌ | <what> (<actual> == <expected>)  --> <file>:<line>  红
-//   🚧 | Delete the d2x::wait() to continue  --> <file>:<line>  黄
+//   ❌ | <what> (<actual> == <expected>)  -> <file>:<line>  红
+//   🚧 | Delete the d2x::wait() to continue  -> <file>:<line>  黄
 // 标识就是 emoji 本身，不带日志框架前缀；file 尽量以仓库相对路径展示
 // （定位用的绝对路径走侧信道，展示归展示、定位归定位）。
 
@@ -147,7 +147,7 @@ inline bool check(bool ok, std::string_view what = {},
     d2x::detail::report_assert(ok, label, "true", ok ? "true" : "false",
                                loc.file_name(), static_cast<int>(loc.line()));
     if (ok) std::print("{}✅ | {}{}\n", d2x::detail::kGreen, label, d2x::detail::kReset);
-    else    std::print("{}❌ | {}  --> {}:{}{}\n", d2x::detail::kRed, label,
+    else    std::print("{}❌ | {}  -> {}:{}{}\n", d2x::detail::kRed, label,
                        d2x::detail::show_path(loc.file_name()), loc.line(),
                        d2x::detail::kReset);
     std::fflush(stdout);
@@ -170,7 +170,7 @@ inline bool check_eq(const A& a, const B& b, std::string_view what = {},
 
     if (ok) std::print("{}✅ | {} ({} == {}){}\n",
                        d2x::detail::kGreen, label, sa, sb, d2x::detail::kReset);
-    else    std::print("{}❌ | {} ({} == {})  --> {}:{}{}\n",
+    else    std::print("{}❌ | {} ({} == {})  -> {}:{}{}\n",
                        d2x::detail::kRed, label, sa, sb,
                        d2x::detail::show_path(loc.file_name()), loc.line(),
                        d2x::detail::kReset);
@@ -191,7 +191,7 @@ inline void wait(std::source_location loc = std::source_location::current()) {
     d2x::detail::ensure_hook();
     ++d2x::detail::g_waits;
     d2x::detail::report_wait(loc.file_name(), static_cast<int>(loc.line()));
-    std::print("{}🚧 | Delete the d2x::wait() to continue  --> {}:{}{}\n",
+    std::print("{}🚧 | Delete the d2x::wait() to continue  -> {}:{}{}\n",
                d2x::detail::kYellow, d2x::detail::show_path(loc.file_name()),
                loc.line(), d2x::detail::kReset);
     std::fflush(stdout);

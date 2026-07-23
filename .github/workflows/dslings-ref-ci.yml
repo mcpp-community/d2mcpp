@@ -60,10 +60,10 @@ jobs:
           xlings install -y
 
       - name: Build d2x Provider
-        run: mcpp build -p d2x/buildtools/mcpp
+        run: mcpp build -p d2x/buildtools
 
       - name: Validate exercises and solutions (zh + en)
-        run: bash d2x/buildtools/mcpp/tests/e2e.sh all
+        run: bash d2x/buildtools/tests/e2e.sh all
 
       - name: Verify exercises ↔ solutions filename parity
         run: |

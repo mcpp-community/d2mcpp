@@ -11,11 +11,11 @@
 #     练习上再用 git 还原,未提交的改动会被吃掉
 #   - 防空转: overlay 后 passed 总数为 0 时直接失败,绝不静默绿灯
 #
-# 用法:  bash d2x/buildtools/mcpp/tests/e2e.sh [zh|en|all]   (默认 all)
+# 用法:  bash d2x/buildtools/tests/e2e.sh [zh|en|all]   (默认 all)
 # 依赖:  PATH 里的 mcpp 需支持 mcpp test 逐测试隔离/过滤/--message-format json
 set -uo pipefail
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 cd "$ROOT"
 
 MODE="${1:-all}"
@@ -95,13 +95,13 @@ run_lang() {
 provider_smoke() {
     # Provider 协议冒烟:枚举数量、check 的关键事件
     local n
-    n=$(mcpp run -q -p d2x/buildtools/mcpp -- exercises | grep -c '"event":"exercise"')
+    n=$(mcpp run -q -p d2x/buildtools -- exercises | grep -c '"event":"exercise"')
     if [[ "$n" -lt 52 ]]; then
         echo "E2E(provider) FAIL: 枚举到 $n 个练习(预期 >= 52)"
         return 1
     fi
     local out
-    out=$(mcpp run -q -p d2x/buildtools/mcpp -- check hello-mcpp)
+    out=$(mcpp run -q -p d2x/buildtools -- check hello-mcpp)
     echo "$out" | grep -q '"event":"stage","name":"compile"' \
         && echo "$out" | grep -q '"event":"verdict"' \
         && echo "$out" | grep -q '"outcome":"fail"' \

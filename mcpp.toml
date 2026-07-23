@@ -6,5 +6,5 @@ members = [
     "d2x",
     "src/intro", "src/cpp11", "src/cpp14",
     "src/en/intro", "src/en/cpp11", "src/en/cpp14",
-    "d2x/buildtools/mcpp",
+    "d2x/buildtools",
 ]

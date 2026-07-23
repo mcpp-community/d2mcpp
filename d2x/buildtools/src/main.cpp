@@ -13,7 +13,7 @@
 // 走的是完全相同的链路，不存在平行路径。
 //
 // 用法（由 .d2x.json 的 buildtools 字段驱动，从仓库根执行，无需 cd）：
-//   mcpp run -q -p d2x/buildtools/mcpp -- check cpp11-00-auto-and-decltype-0
+//   mcpp run -q -p d2x/buildtools -- check cpp11-00-auto-and-decltype-0
 
 import std;
 

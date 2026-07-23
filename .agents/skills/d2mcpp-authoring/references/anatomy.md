@@ -47,7 +47,7 @@ Features`).
 **Exercises are tests.** Each `<std>/` is a real mcpp project and exercises are
 its `tests/`; dropping `<std>/tests/NN-topic/K.cpp` into place is the whole job.
 `mcpp test -p src/<std>` runs them natively (the report is the progress table), and
-the d2x Provider (`d2x/buildtools/mcpp/`) derives the exercise id, order and
+the d2x Provider (`d2x/buildtools/`) derives the exercise id, order and
 chapter from the same path — one chain, no generated manifests, nothing under
 `.d2x/` but learner progress.
 
@@ -81,7 +81,7 @@ change compile flags.
 
 Drop the file at `solutions/<std>/NN-topic/K.cpp` (zh/en share one solution).
 CI swaps it over the exercise and asserts it passes; see
-`d2x/buildtools/mcpp/tests/e2e.sh`.
+`d2x/buildtools/tests/e2e.sh`.
 
 ## SUMMARY registration
 
@@ -114,10 +114,10 @@ Run from the project root; report real output, do not assert success blind:
 mcpp test -p src/<std> NN-topic
 
 # check it through the Provider path (exactly what `d2x checker` consumes)
-mcpp run -q -p d2x/buildtools/mcpp -- check cppNN-NN-topic-0
+mcpp run -q -p d2x/buildtools -- check cppNN-NN-topic-0
 
 # or validate every exercise + solution at once (zh + en)
-bash d2x/buildtools/mcpp/tests/e2e.sh all
+bash d2x/buildtools/tests/e2e.sh all
 
 # drive the auto-checker against the exercise (expects the unsolved exercise to fail,
 # the solution to pass) — name omits the NN- prefix

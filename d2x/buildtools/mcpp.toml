@@ -1,5 +1,5 @@
 [package]
-name        = "d2x-buildtools-mcpp"
+name        = "d2x-buildtools"
 version     = "0.1.0"
 description = "d2mcpp 的 d2x Provider：枚举练习、生成 mcpp 清单、构建/运行/判定"
 license     = "Apache-2.0"

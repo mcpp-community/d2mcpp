@@ -11,9 +11,9 @@
 ## 1. 布局（第二轮重排后：库入驻 d2x/、课程收进 src/）
 
 ```
-mcpp.toml                 workspace = [d2x, src/*, src/en/*, d2x/buildtools/mcpp]
+mcpp.toml                 workspace = [d2x, src/*, src/en/*, d2x/buildtools]
 d2x/                      d2x 练习库(纯模块 `import d2x;`,零宏)
-d2x/buildtools/mcpp/      Provider(C++26)
+d2x/buildtools/      Provider(C++26)
 src/intro/tests/hello-mcpp.cpp
 src/cpp11/tests/<NN-topic>/<K>.cpp    49 题
 src/cpp14/tests/00-generic-lambdas/{0,1}.cpp
@@ -79,7 +79,7 @@ Provider 只是把 mcpp 的 JSON 记录 × 侧信道合并成协议 verdict。
 
 | 项 | 结果 |
 |---|---|
-| e2e（`d2x/buildtools/mcpp/tests/e2e.sh all`） | zh 52/52、en 52/52 答案全绿；pristine 双向 0-pass；Provider 冒烟 ✓ |
+| e2e（`d2x/buildtools/tests/e2e.sh all`） | zh 52/52、en 52/52 答案全绿；pristine 双向 0-pass；Provider 冒烟 ✓ |
 | d2x 端到端 | checker 显示 0/52 → 改对自动推进 → state.json 兼容旧 id ✓ |
 | d2x 仓库改动 | **零**（协议边界承诺兑现） |
 | hello-mcpp | 答案已补，进入 e2e，不再 SKIP |

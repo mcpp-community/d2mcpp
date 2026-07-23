@@ -161,7 +161,7 @@ Homepage: https://github.com/openxlings/xlings
 ```bash
 {
     "version": "0.1.1",
-    "buildtools": "mcpp run -q -p d2x/buildtools/mcpp --",
+    "buildtools": "mcpp run -q -p d2x/buildtools --",
     "lang": "en",  < -- 修改这里
     ...
 }
@@ -175,7 +175,7 @@ Homepage: https://github.com/openxlings/xlings
 
 ```json
 {
-    "buildtools": "mcpp run -q -p d2x/buildtools/mcpp --",
+    "buildtools": "mcpp run -q -p d2x/buildtools --",
     "editor": "nvim",
     ...
 }
