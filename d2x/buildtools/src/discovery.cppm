@@ -33,7 +33,7 @@ export struct Exercise {
     fs::path    file;       // 绝对路径
 };
 
-// .d2x.json 里我们只关心 "lang"。写一个完整 JSON 解析器是杀鸡用牛刀，
+// .d2x.json 中此处只需读取 "lang"。引入完整 JSON 解析器并无必要，
 // 但也不能假装解析——这里只做一件明确的事：取出 "lang" 的字符串值。
 export std::string read_lang(const fs::path& root) {
     std::ifstream in(root / ".d2x.json");
@@ -85,7 +85,7 @@ std::string humanize(std::string_view topic) {
 // 练习 id 直接来自目录/文件名，而它有两个危险去向：
 //   1. d2x 把它拼进一条 shell 命令（`<provider> check <id>`）
 //   2. 我们把 test 名拼进 `mcpp test <pattern>` 命令行
-// 带反引号、引号或换行的名字能在任一处越界。在源头挡住比在下游转义更可靠。
+// 带反引号、引号或换行的名字在任一处都可能越界。在发现阶段拒绝比在下游各自转义更可靠。
 export bool valid_id(std::string_view id) {
     if (id.empty()) return false;
     return std::ranges::all_of(id, [](unsigned char c) {

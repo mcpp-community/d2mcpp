@@ -5,7 +5,7 @@
 // Exercise: Automated Code Practice Usage Tutorial
 //
 // Tips:
-//    This is an "exercises are tests" automated practice project. Two ways to play:
+//    This is an "exercises are tests" automated practice project. Two modes of use:
 //
 //      d2x checker              guided mode: auto-detects your edits, passing advances you
 //      mcpp test -p src/en/intro    native mode: plain mcpp — the test report IS your progress

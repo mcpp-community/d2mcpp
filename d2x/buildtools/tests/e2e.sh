@@ -6,9 +6,9 @@
 #
 # 这是 rustlings `cargo dev check --require-solutions` 的等价物。
 #
-# 两道防线(各自都咬过人,见 .agents/docs 参考文档):
+# 两道防线(均源自历史缺陷,背景见 .agents/docs 参考文档):
 #   - 脏树检查: 练习/答案目录有未提交改动时拒绝运行 —— 脚本要把答案覆盖到
-#     练习上再用 git 还原,未提交的改动会被吃掉
+#     练习上再用 git 还原,未提交的改动会被覆盖丢失
 #   - 防空转: overlay 后 passed 总数为 0 时直接失败,绝不静默绿灯
 #
 # 用法:  bash d2x/buildtools/tests/e2e.sh [zh|en|all]   (默认 all)
@@ -31,7 +31,7 @@ run_lang() {
     local dirty
     dirty=$(git status --porcelain -- "${test_dirs[@]}" solutions/ | head -20)
     if [[ -n "$dirty" ]]; then
-        echo "E2E($label) 拒绝运行: 练习/答案目录有未提交改动(脚本的覆盖-还原会吃掉它们):"
+        echo "E2E($label) 拒绝运行: 练习/答案目录存在未提交改动(脚本的覆盖-还原流程会将其覆盖丢失):"
         echo "$dirty"
         return 1
     fi

@@ -22,7 +22,7 @@ import std;
 //                   把「为什么失败」变成结构化诊断、把 wait 区分成 blocked。
 //                   未设置时不写文件：学习者直接跑二进制零摩擦。
 //
-// 可见输出的设计（学习者每天面对的三行）：
+// 可见输出的设计（学习者直接看到的三类输出行）：
 //   ✅ | <what> (<actual> == <expected>)                     绿
 //   ❌ | <what> (<actual> == <expected>)  -> <file>:<line>  红
 //   🚧 | Delete the d2x::wait() to continue  -> <file>:<line>  黄
@@ -104,9 +104,9 @@ inline void report_wait(const char* file, int line) {
     emit(out);
 }
 
-// std::formattable 是 SFINAE 安全的探测；直接在 requires 里写
-// std::format("{}", v) 会踩进未特化 std::formatter 的 static_assert
-// 硬错误（scoped enum、自定义类型的练习实测中招）。
+// std::formattable 是 SFINAE 安全的探测；若直接在 requires 表达式里写
+// std::format("{}", v)，会触发未特化 std::formatter 的 static_assert
+// 硬错误（scoped enum、自定义类型的练习中已实际出现）。
 inline std::string show_impl(const auto& v) {
     using T = std::remove_cvref_t<decltype(v)>;
     if constexpr (std::formattable<T, char>) return std::format("{}", v);

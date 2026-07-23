@@ -86,7 +86,7 @@ After entering the automated code practice environment using `d2x checker`, the 
 // Exercise: Automated Code Practice Tutorial
 //
 // Tips:
-//    This is an "exercises are tests" automated practice project. Two ways to play:
+//    This is an "exercises are tests" automated practice project. Two modes of use:
 //
 //      d2x checker                  guided mode: auto-detects your edits, passing advances you
 //      mcpp test -p src/en/intro    native mode: plain mcpp — the test report IS your progress

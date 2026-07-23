@@ -185,8 +185,8 @@ export struct RunReport {
     std::vector<Failure> failures;
 };
 
-// 判定顺序（与代码一致，注意 wait 先于退出码——d2x 库里 wait 会把退出码
-// 顶成 1，若先看退出码，blocked 会全部误判成 fail）：
+// 判定顺序（与代码一致；wait 必须先于退出码判定——d2x 库在存在未拆除的
+// wait 时会将退出码置为 1，若先判退出码，blocked 会被整体误判为 fail）：
 //   有 ok:false            → Fail，每条失败都能转成一个 Diagnostic
 //   无失败、有 wait        → Blocked（答案已对，只差拆路障）
 //   无失败但退出码非 0     → Fail（纯崩溃 / 练习自己 return 非 0）
