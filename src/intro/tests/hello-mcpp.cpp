@@ -34,17 +34,17 @@ import d2x;
 
 int main() {
 
-    std::cout << "hello, mcpp!" << std::endl; // 0.修复这个编译错误
+    std::cout << "hello, mcpp!" << std:endl; // 0.修复这个编译错误
 
-    double a = 1.1; // 1.修复这个运行时错误, 修改int为double, 通过检查
+    int a = 1.1; // 1.修复这个运行时错误, 修改int为double, 通过检查
 
     d2x::check_eq(a, 1.1, "a == 1.1"); // 2.运行时检查点, 需要修复代码通过所有检查点(不能直接删除检查点代码)
 
-    int b = a;
+    D2X_YOUR_ANSWER b = a; // 3.修复这个编译错误, 给b一个合适的类型
 
     d2x::check_eq(b, 1, "b == 1"); // 4.运行时检查点2
 
-    //d2x::wait(); // 5.删除或注释掉这一行, 进入下一个练习(项目正式代码练习)
+    d2x::wait(); // 5.删除或注释掉这一行, 进入下一个练习(项目正式代码练习)
 
     return 0;
 }
