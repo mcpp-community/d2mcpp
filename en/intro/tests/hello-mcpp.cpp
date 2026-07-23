@@ -5,19 +5,20 @@
 // Exercise: Automated Code Practice Usage Tutorial
 //
 // Tips:
-//    This project is an automated code practice project built using the xlings tool. 
-//    By executing `d2x checker` in the project root directory, you enter the
-//    "compiler-driven development mode" for automatic code practice detection.
-//    You need to modify errors in the code based on console error messages and prompts.
-//    After fixing all compilation errors and runtime checkpoints, you can delete or 
-//    comment out the D2X_WAIT macro in the code to automatically proceed to the next exercise.
+//    This is an "exercises are tests" automated practice project. Two ways to play:
 //
-//      - D2X_WAIT: This macro is used to isolate different exercises. You can delete or 
-//        comment out this macro to proceed to the next exercise.
-//      - d2x_assert_eq: This macro is used for runtime checkpoints. You need to fix 
-//        errors in the code so that all checkpoints pass.
-//      - D2X_YOUR_ANSWER: This macro indicates code that needs to be modified, generally 
-//        used for code completion (replace this macro with correct code)
+//      d2x checker              guided mode: auto-detects your edits, passing advances you
+//      mcpp test -p en/intro    native mode: plain mcpp — the test report IS your progress
+//
+//    Fix the code based on console error messages. There are only three conventions:
+//
+//      - D2X_YOUR_ANSWER: the fill-in-the-blank placeholder — replace it with correct
+//        code. It is not a macro, just a name nobody defines, so the compiler error
+//        points exactly at the blank
+//      - d2x::check / d2x::check_eq: runtime checkpoints — fix the code so every
+//        check passes (do not delete the checkpoints)
+//      - d2x::wait(): the barrier between exercises — delete it once you have read
+//        the lesson to really finish it
 //
 // Docs:
 //   - https://github.com/Sunrisepeak/mcpp-standard/blob/main/book/src/chapter_1.md
@@ -45,7 +46,7 @@ int main() {
 
     d2x::check_eq(b, 1, "b == 1"); // 4. Runtime checkpoint 2
 
-    D2X_WAIT // 5. Delete or comment out this macro to proceed to the next exercise (project formal code practice)
+    d2x::wait(); // 5. Delete or comment out this line to proceed to the next exercise (project formal code practice)
 
     return 0;
 }
@@ -60,19 +61,19 @@ int main() {
 
 [Target: 00-0-hello-mcpp] - normal -->> Current exercise name
 
-❌ Error: Compilation/Running failed for dslings/hello-mcpp.cpp -->> Shows detection status
+❌ Error: Compilation/Running failed for en/intro/tests/hello-mcpp.cpp -->> Shows detection status
 
  The code exist some error!
 
 ---------C-Output--------- - Compiler output information
-[HONLY LOGW]: main: dslings/hello-mcpp.cpp:24 - ❌ | a == 1.1 (1 == 1.100000) -->> Error prompt and location (line 24)
-[HONLY LOGW]: main: dslings/hello-mcpp.cpp:26 - 🥳 Delete the D2X_WAIT to continue...
+[HONLY LOGW]: main: en/intro/tests/hello-mcpp.cpp:24 - ❌ | a == 1.1 (1 == 1.100000) -->> Error prompt and location (line 24)
+[HONLY LOGW]: main: en/intro/tests/hello-mcpp.cpp:26 - 🥳 Delete the d2x::wait() to continue...
 
 
 AI-Tips-Config: https://xlings.d2learn.org/en/documents/d2x/intro.html -->> AI tips (requires configuring large model key, optional)
 
 ---------E-Files---------
-dslings/hello-mcpp.cpp -->> Current file being checked
+en/intro/tests/hello-mcpp.cpp -->> Current file being checked
 -------------------------
 
 Homepage: https://github.com/openxlings/xlings

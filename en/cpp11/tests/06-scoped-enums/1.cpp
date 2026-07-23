@@ -57,7 +57,7 @@ int main() {
     };
 
     d2x::check_eq(sizeof(Color), sizeof(int), "sizeof(Color) == sizeof(int)"); // Default type is int
-    d2x::check_eq(sizeof(Color8Bit), sizeof(int8_t), "sizeof(Color8Bit) == sizeof(int8_t)"); // Can customize type int8_t
+    d2x::check_eq(sizeof(Color8Bit), sizeof(std::int8_t), "sizeof(Color8Bit) == sizeof(std::int8_t)"); // Can customize type std::int8_t
 
     // 5. Custom starting value: By default, scoped enum type values start from 0 and increment downward
     enum class ErrorCode : int {

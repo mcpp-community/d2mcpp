@@ -6,7 +6,7 @@
 // 教程练习入口: dslings/cpp11/05-move-semantics-0.cpp
 //
 // 教学要点: 让 Buffer 在拷贝时也"转移"资源, 只做一次资源分配和释放,
-// 这样每个传递点最终都指向同一块缓冲区, 三个 d2x_assert 都通过。
+// 这样每个传递点最终都指向同一块缓冲区, 三个 d2x::check 都通过。
 
 import std;
 import d2x.harness;

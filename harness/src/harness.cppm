@@ -98,8 +98,12 @@ inline void report_wait(const char* file, int line) {
     emit(out);
 }
 
+// std::formattable 是 SFINAE 安全的探测；直接在 requires 里写
+// std::format("{}", v) 会踩进未特化 std::formatter 的 static_assert
+// 硬错误（scoped enum、自定义类型的练习实测中招）。
 inline std::string show_impl(const auto& v) {
-    if constexpr (requires { std::format("{}", v); }) return std::format("{}", v);
+    using T = std::remove_cvref_t<decltype(v)>;
+    if constexpr (std::formattable<T, char>) return std::format("{}", v);
     else return {};
 }
 
@@ -145,6 +149,13 @@ inline bool check_eq(const A& a, const B& b, std::string_view what = {},
                        loc.file_name(), loc.line(), label, sa, sb);
     std::fflush(stdout);
     return ok;
+}
+
+// 恒等透传：标记「这一行是教学观测点，别删」。旧宏 D2X_DONT_DELETE_THIS
+// 的函数化等价物——对表达式原样求值并返回。
+template<typename T>
+constexpr decltype(auto) dont_delete_this(T&& x) {
+    return std::forward<T>(x);
 }
 
 // 显式路障：学员读完说明、删掉这一行才算真正完成这一题。

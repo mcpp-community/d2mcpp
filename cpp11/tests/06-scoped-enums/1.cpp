@@ -57,7 +57,7 @@ int main() {
     };
 
     d2x::check_eq(sizeof(Color), sizeof(int), "sizeof(Color) == sizeof(int)"); // 默认类型是int
-    d2x::check_eq(sizeof(Color8Bit), sizeof(int8_t), "sizeof(Color8Bit) == sizeof(int8_t)"); // 可自定义类型int8_t
+    d2x::check_eq(sizeof(Color8Bit), sizeof(std::int8_t), "sizeof(Color8Bit) == sizeof(std::int8_t)"); // 可自定义类型int8_t
 
     // 5.自定义起始值: 默认情况下, 范围枚举类型的值从0开始, 往下递增
     enum class ErrorCode : int {

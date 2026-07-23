@@ -32,7 +32,7 @@ public:
         name = "momo";
         coin = "0元";
 
-        D2X_DONT_DELETE_THIS(construction_counter++);
+        d2x::dont_delete_this(construction_counter++);
     }
 
     Account(std::string id_, std::string name_) {
@@ -40,7 +40,7 @@ public:
         name = name_;
         coin = "0元";
 
-        D2X_DONT_DELETE_THIS(construction_counter++);
+        d2x::dont_delete_this(construction_counter++);
     }
 
     Account(std::string id_, std::string name_, int coin_) {
@@ -48,7 +48,7 @@ public:
         name = name_;
         coin = std::to_string(coin_) + "元";
 
-        D2X_DONT_DELETE_THIS(construction_counter++);
+        d2x::dont_delete_this(construction_counter++);
     }
 
     std::string to_string() const {

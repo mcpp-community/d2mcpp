@@ -25,28 +25,28 @@ public:
     Account(std::string id_)
         : Account(id_, "momo")
     {
-        D2X_DONT_DELETE_THIS(construction_counter++);
+        d2x::dont_delete_this(construction_counter++);
     }
 
     // 2 参 -> 委托给 3 参版本, 自身体再增加一次计数 (a2: +2)
     Account(std::string id_, std::string name_)
         : Account(id_, name_, 0)
     {
-        D2X_DONT_DELETE_THIS(construction_counter++);
+        d2x::dont_delete_this(construction_counter++);
     }
 
     // 3 参 -> 真正初始化的"基础版本" (a3: +1)
     Account(std::string id_, std::string name_, int coin_) {
         id = id_;
         name = name_;
-        // 满足最后一个 d2x_assert: GImpact 角色 coin 后缀使用 "原石"
+        // 满足最后一个 d2x::check: GImpact 角色 coin 后缀使用 "原石"
         if (name == "GImpact") {
             coin = std::to_string(coin_) + "原石";
         } else {
             coin = std::to_string(coin_) + "元";
         }
 
-        D2X_DONT_DELETE_THIS(construction_counter++);
+        d2x::dont_delete_this(construction_counter++);
     }
 
     std::string to_string() const {

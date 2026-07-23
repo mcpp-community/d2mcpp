@@ -6,6 +6,7 @@
 // 教程练习入口: dslings/cpp11/12-nullptr-0.cpp
 //
 
+#include <cstddef>   // NULL 宏是这一课的教具,import std 不带宏
 import std;
 import d2x.harness;
 
