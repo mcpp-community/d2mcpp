@@ -12,7 +12,7 @@ auto 和 decltype 是C++11引入的强有力的**类型自动推导**工具. 不
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference-auto](https://en.cppreference.com/w/cpp/language/auto) / [cppreference-decltype](https://en.cppreference.com/w/cpp/language/decltype) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/00-auto-and-decltype.md) | [视频解读](https://www.bilibili.com/video/BV1EzJs6HEf7) / [练习讲解](https://www.bilibili.com/video/BV1xkdYYUEyH) | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-0.cpp) |  |
+| [cppreference-auto](https://en.cppreference.com/w/cpp/language/auto) / [cppreference-decltype](https://en.cppreference.com/w/cpp/language/decltype) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/00-auto-and-decltype.md) | [视频解读](https://www.bilibili.com/video/BV1EzJs6HEf7) / [练习讲解](https://www.bilibili.com/video/BV1xkdYYUEyH) | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/00-auto-and-decltype/0.cpp) |  |
 
 
 **为什么引入?**
@@ -252,12 +252,12 @@ decltype( (b) ) // 推导结果是 int &
 
 ### 练习代码主题
 
-- 0 - [声明定义](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-0.cpp)
-- 1 - [表达式类型推导](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-1.cpp)
-- 2 - [复杂类型推导 - 迭代器 / 函数](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-2.cpp)
-- 3 - [函数返回值类型推导](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-3.cpp)
-- 4 - [类/结构体成员类型推导](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-4.cpp)
-- 5 - [const 与引用的剥离和保留](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/00-auto-and-decltype-5.cpp)
+- 0 - [声明定义](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/00-auto-and-decltype/0.cpp)
+- 1 - [表达式类型推导](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/00-auto-and-decltype/1.cpp)
+- 2 - [复杂类型推导 - 迭代器 / 函数](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/00-auto-and-decltype/2.cpp)
+- 3 - [函数返回值类型推导](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/00-auto-and-decltype/3.cpp)
+- 4 - [类/结构体成员类型推导](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/00-auto-and-decltype/4.cpp)
+- 5 - [const 与引用的剥离和保留](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/00-auto-and-decltype/5.cpp)
 
 ### 练习代码自动检测命令
 

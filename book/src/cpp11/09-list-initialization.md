@@ -12,7 +12,7 @@
 
 | Book | Video | Code | X | 
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/list_initialization.html) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/09-list-initialization.md) | [视频解读](https://www.bilibili.com/video/BV1vKuQzkEo2) | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/09-list-initialization-0.cpp) |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/list_initialization.html) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/09-list-initialization.md) | [视频解读](https://www.bilibili.com/video/BV1vKuQzkEo2) | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/09-list-initialization/0.cpp) |  |
 
 **为什么引入?**
 

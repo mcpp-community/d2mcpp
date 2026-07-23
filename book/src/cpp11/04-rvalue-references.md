@@ -12,7 +12,7 @@
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/reference) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/04-rvalue-references.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/04-rvalue-references.cpp) |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/reference) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/04-rvalue-references.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/04-rvalue-references/0.cpp) |  |
 
 
 **为什么引入?**
@@ -156,7 +156,7 @@ template<typename T> void h(T&&); // 万能引用, 左右值都接受
 
 ### 练习代码主题
 
-- 0 - [使用右值引用延长临时对象生命周期并修改其值](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/04-rvalue-references.cpp)
+- 0 - [使用右值引用延长临时对象生命周期并修改其值](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/04-rvalue-references/0.cpp)
 
 ### 练习代码自动检测命令
 

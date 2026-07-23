@@ -12,7 +12,7 @@
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/types) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/13-long-long.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/13-long-long-0.cpp) |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/types) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/13-long-long.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/13-long-long/0.cpp) |  |
 
 **为什么引入?**
 
@@ -109,8 +109,8 @@ if (bigValue > std::numeric_limits<int>::max() || bigValue < std::numeric_limits
 
 ### 练习代码主题
 
-- 0 - [long long基础用法](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/13-long-long-0.cpp)
-- 1 - [long long大数应用和边界值](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/13-long-long-1.cpp)
+- 0 - [long long基础用法](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/13-long-long/0.cpp)
+- 1 - [long long大数应用和边界值](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/13-long-long/1.cpp)
 
 ### 练习代码自动检测命令
 

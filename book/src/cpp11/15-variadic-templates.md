@@ -12,7 +12,7 @@
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/parameter_pack) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/15-variadic-templates.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/15-variadic-templates-0.cpp) |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/parameter_pack) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/15-variadic-templates.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/15-variadic-templates/0.cpp) |  |
 
 
 **为什么引入?**
@@ -228,8 +228,8 @@ auto save(Args&&... args) {
 
 ### 练习代码主题
 
-- 0 - [可变参数模板基础 - 递归展开 print](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/15-variadic-templates-0.cpp)
-- 1 - [可变参数模板求和 - sum](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/15-variadic-templates-1.cpp)
+- 0 - [可变参数模板基础 - 递归展开 print](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/15-variadic-templates/0.cpp)
+- 1 - [可变参数模板求和 - sum](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/15-variadic-templates/1.cpp)
 
 ### 练习代码自动检测命令
 

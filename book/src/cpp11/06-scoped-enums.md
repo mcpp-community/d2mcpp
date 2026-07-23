@@ -12,7 +12,7 @@ scoped enum (`enum class` / `enum struct`) 是 C++11 引入的强类型枚举, �
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/enum) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/06-scoped-enums.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/06-scoped-enums-0.cpp) |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/enum) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/06-scoped-enums.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/06-scoped-enums/0.cpp) |  |
 
 
 **为什么引入?**
@@ -204,8 +204,8 @@ constexpr Perm operator|(Perm a, Perm b) {
 
 ### 练习代码主题
 
-- 0 - [传统 enum 的潜在问题 - 名字冲突与隐式比较](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/06-scoped-enums-0.cpp)
-- 1 - [scoped enum 基本用法 - 作用域 / 类型安全 / 底层类型](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/06-scoped-enums-1.cpp)
+- 0 - [传统 enum 的潜在问题 - 名字冲突与隐式比较](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/06-scoped-enums/0.cpp)
+- 1 - [scoped enum 基本用法 - 作用域 / 类型安全 / 底层类型](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/06-scoped-enums/1.cpp)
 
 ### 练习代码自动检测命令
 

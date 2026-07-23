@@ -1,20 +1,24 @@
-name: Validate dslings exercises and reference solutions
+name: Validate exercises and reference solutions
 
 # 断言两件事，缺一不可：
 #   1. 每个练习「未完成时」不通过   —— 否则学员会被直接跳过，练习形同虚设
 #   2. 每个参考答案「放进去后」通过 —— 否则参考答案本身是错的
 #
-# 走的是 `d2x checker` 内部使用的同一条 Provider 路径（d2x/buildtools/mcpp），
-# 所以 CI 绿灯等价于学员本地能跑通，而不是另一条平行的构建路径。
+# 练习即测试：e2e 走 `mcpp test`，与 `d2x checker` 内部的 Provider 是同一条
+# 链路，所以 CI 绿灯等价于学员本地能跑通，而不是另一条平行的构建路径。
 #
-# 旧版本只挑 `-ref` 结尾的 xmake target，而 solutions/ 在 xmake.lua 里被注释掉，
-# grep 返回空、循环全跳过、job 退出 0 —— 实际校验零个目标。
+# ⚠️ 依赖 mcpp「测试能力批次」(逐测试隔离 / 过滤 / --message-format json /
+# tests 吃 [build].flags，本地分支 feat/test-isolation-json)。在 mcpp 发布
+# 携带这些能力的版本并更新安装 pin 之前，本 workflow 会失败 —— 这是预期的。
 
 on:
   push:
     branches: ["main"]
     paths:
-      - "dslings/**"
+      - "harness/**"
+      - "intro/**"
+      - "cpp*/**"
+      - "en/**"
       - "solutions/**"
       - "d2x/**"
       - "mcpp.toml"
@@ -22,7 +26,10 @@ on:
       - ".github/workflows/dslings-ref-ci.yml"
   pull_request:
     paths:
-      - "dslings/**"
+      - "harness/**"
+      - "intro/**"
+      - "cpp*/**"
+      - "en/**"
       - "solutions/**"
       - "d2x/**"
       - "mcpp.toml"
@@ -51,6 +58,7 @@ jobs:
           echo "$HOME/.xlings/subos/current/bin" >> "$GITHUB_PATH"
 
       # 按 .xlings.json 安装 mcpp。mcpp 自带工具链沙箱，无需另装 gcc。
+      # 需要携带「测试能力批次」的 mcpp 版本（见文件头注释）。
       - name: Install mcpp
         run: |
           set -eu
@@ -60,21 +68,22 @@ jobs:
       - name: Build d2x Provider
         run: mcpp build -p d2x/buildtools/mcpp
 
-      - name: Validate exercises and solutions
-        run: bash d2x/buildtools/mcpp/tests/e2e.sh
+      - name: Validate exercises and solutions (zh + en)
+        run: bash d2x/buildtools/mcpp/tests/e2e.sh all
 
-      - name: Verify dslings ↔ solutions filename parity
+      - name: Verify exercises ↔ solutions filename parity
         run: |
           set -eu
           # en/ 镜像跳过 —— 参考答案与语言无关，两边共用同一份
           missing=0
-          while IFS= read -r f; do
-            rel="${f#dslings/}"
-            if [ ! -f "solutions/$rel" ]; then
-              echo "::warning::missing solutions/$rel (paired with dslings/$rel)"
+          for f in $(find intro/tests cpp*/tests -name '*.cpp'); do
+            std="${f%%/*}"
+            rel="${f#*/tests/}"
+            if [ ! -f "solutions/$std/$rel" ]; then
+              echo "::warning::missing solutions/$std/$rel (paired with $f)"
               missing=$((missing+1))
             fi
-          done < <(find dslings -name '*.cpp' -not -path 'dslings/en/*')
+          done
           if [ "$missing" -gt 0 ]; then
-            echo "::warning::$missing 个练习尚无参考答案。铺开阶段仅作提示；cpp11 覆盖完整后收紧为错误。"
+            echo "::warning::$missing 个练习尚无参考答案。铺开阶段仅作提示；覆盖完整后收紧为错误。"
           fi

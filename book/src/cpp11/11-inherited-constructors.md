@@ -12,7 +12,7 @@
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/using_declaration.html#Inheriting_constructors) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/11-inherited-constructors.md) | [Bili](https://www.bilibili.com/video/BV1bspBzFEEC) / [Youtube](https://youtu.be/p7vbY8XUKnY?si=GZUn9GSW68aU94A6) | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/11-inherited-constructors-0.cpp) |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/using_declaration.html#Inheriting_constructors) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/11-inherited-constructors.md) | [Bili](https://www.bilibili.com/video/BV1bspBzFEEC) / [Youtube](https://youtu.be/p7vbY8XUKnY?si=GZUn9GSW68aU94A6) | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/11-inherited-constructors/0.cpp) |  |
 
 **为什么引入?**
 
@@ -224,9 +224,9 @@ auto p4 = p2; // error (不能拷贝)
 
 ### 练习代码主题
 
-- 0 - [熟悉继承构造函数特性](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/11-inherited-constructors-0.cpp)
-- 1 - [在功能扩展中的应用 - StudentTest](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/11-inherited-constructors-1.cpp)
-- 2 - [在泛型模板中的应用 - NoCopy / NoMove 行为约束](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/11-inherited-constructors-2.cpp)
+- 0 - [熟悉继承构造函数特性](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/11-inherited-constructors/0.cpp)
+- 1 - [在功能扩展中的应用 - StudentTest](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/11-inherited-constructors/1.cpp)
+- 2 - [在泛型模板中的应用 - NoCopy / NoMove 行为约束](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/11-inherited-constructors/2.cpp)
 
 ### 练习代码自动检测命令
 

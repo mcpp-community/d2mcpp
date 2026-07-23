@@ -12,7 +12,7 @@
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference-LiteralType](https://en.cppreference.com/w/cpp/named_req/LiteralType) / [cppreference-user-literal](https://en.cppreference.com/w/cpp/language/user_literal) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/08-literal-type.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/08-literal-type-0.cpp) |  |
+| [cppreference-LiteralType](https://en.cppreference.com/w/cpp/named_req/LiteralType) / [cppreference-user-literal](https://en.cppreference.com/w/cpp/language/user_literal) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/08-literal-type.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/08-literal-type/0.cpp) |  |
 
 
 **为什么引入?**
@@ -178,8 +178,8 @@ LiteralType 要求至少有一个 **不是拷贝 / 移动** 的 constexpr 构造
 
 ### 练习代码主题
 
-- 0 - [理解字面值类型的概念 - 哪些能 constexpr](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/08-literal-type-0.cpp)
-- 1 - [自定义字面值类型 - 给 Vector 加 constexpr 构造](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/08-literal-type-1.cpp)
+- 0 - [理解字面值类型的概念 - 哪些能 constexpr](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/08-literal-type/0.cpp)
+- 1 - [自定义字面值类型 - 给 Vector 加 constexpr 构造](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/08-literal-type/1.cpp)
 
 ### 练习代码自动检测命令
 

@@ -12,7 +12,7 @@
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference-type-alias](https://en.cppreference.com/w/cpp/language/type_alias) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/14-type-alias.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/14-type-alias-0.cpp) |  |
+| [cppreference-type-alias](https://en.cppreference.com/w/cpp/language/type_alias) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/14-type-alias.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/14-type-alias/0.cpp) |  |
 
 > 注: `using`关键字在C++11之前就已经存在, 但当时主要是作为命名空间和类成员声明来使用的
 > - 声明命名空间: `using namespace std;`
@@ -192,10 +192,10 @@ struct A {
 
 ### 练习代码主题
 
-- 0 - [基本类型别名](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/14-type-alias-0.cpp)
-- 1 - [复杂类型和函数指针别名](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/14-type-alias-1.cpp)
-- 2 - [别名模板基础](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/14-type-alias-2.cpp)
-- 3 - [标准库中的别名模板应用](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/14-type-alias-3.cpp)
+- 0 - [基本类型别名](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/14-type-alias/0.cpp)
+- 1 - [复杂类型和函数指针别名](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/14-type-alias/1.cpp)
+- 2 - [别名模板基础](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/14-type-alias/2.cpp)
+- 3 - [标准库中的别名模板应用](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/14-type-alias/3.cpp)
 
 ### 练习代码自动检测命令
 

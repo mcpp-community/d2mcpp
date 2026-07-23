@@ -3,20 +3,20 @@ name: d2mcpp-authoring
 description: >-
   Authoring conventions, design principles, and file formats for the d2mcpp
   (D2X) Modern C++ tutorial project. Use this whenever you add or edit a C++
-  language-feature lesson — a book chapter, a dslings exercise, a reference
+  language-feature lesson — a book chapter, an exercise, a reference
   solution, or when registering them in SUMMARY/changelog. Trigger it for
-  any request like "add a chapter for X", "write a dslings exercise for fold
+  any request like "add a chapter for X", "write an exercise for fold
   expressions", "add the constexpr lesson", "fill the cpp14 section", or
-  anything touching book/src, book/en/src, dslings/, or solutions/. Even small
-  edits should follow these conventions so the bilingual + book/code/checker
-  artifacts stay in sync.
+  anything touching book/src, book/en/src, cpp*/tests/, en/, or solutions/.
+  Even small edits should follow these conventions so the bilingual +
+  book/code/checker artifacts stay in sync.
 ---
 
 # d2mcpp (D2X) Authoring Conventions
 
 d2mcpp teaches **Modern C++ core language features** through a tightly coupled
-quartet: **Book (mdBook) + Code (dslings exercises) + Solution + Auto-checker
-(`d2x checker`)**, all of it **bilingual (zh + en)**. A "lesson" is never one
+quartet: **Book (mdBook) + Code (exercises-as-tests) + Solution + Auto-checker
+(`d2x checker` / native `mcpp test`)**, all of it **bilingual (zh + en)**. A "lesson" is never one
 file — it is a coordinated set across several directories. The cardinal sin here
 is producing a half-set (a chapter with no exercise, a zh file with no en
 counterpart, an exercise missing from solutions/). This skill exists so every
@@ -46,10 +46,11 @@ Honor that axis:
   forward — they are not chapter-worthy on their own. Examples: `auto x{1}`
   deduction change, `std::is_pod` deprecation pointer, guaranteed copy elision
   remark, P0136 inheriting-constructor semantics fix.
-- **Compile each chapter at its introduction standard.** Do not globally pin a
-  newer standard. If one exercise genuinely needs a later standard, make it an
-  **explicit, commented exception** via a `// d2x:cxxflags:` header directive
-  in the exercise file — never a bare `TODO` hack.
+- **All exercises compile as c++23** — the `cppNN/` directory denotes when the
+  feature was *introduced*, not the compile flags. Teach the introduction-era
+  shape through content and assertions (an untested teaching point disappears
+  silently). If one exercise needs special flags, declare a per-glob entry in
+  the member's `<std>/mcpp.toml` `[build].flags` — never a bare `TODO` hack.
 
 Background and the full per-feature evolution analysis live in
 `.agents/docs/2026-06-08-cpp11-feature-evolution-and-cxx20-baseline.md`. Consult
@@ -68,10 +69,10 @@ When adding a feature numbered `NN` with slug `topic` (e.g. `06-scoped-enums`):
 
 1. `book/src/<std>/NN-topic.md` — zh chapter
 2. `book/en/src/<std>/NN-topic.md` — en chapter (translate prose, keep code identical)
-3. `dslings/<std>/NN-topic-K.cpp` — one or more exercises (`K` = 0,1,2…), zh comments
-4. `dslings/en/<std>/NN-topic-K.cpp` — en exercises (translate comments only)
-5. `solutions/<std>/NN-topic-K.cpp` — reference solution per exercise
-6. (nothing to register — exercises are discovered by directory convention)
+3. `<std>/tests/NN-topic/K.cpp` — one or more exercises (`K` = 0,1,2…), zh comments
+4. `en/<std>/tests/NN-topic/K.cpp` — en exercises (translate comments only)
+5. `solutions/<std>/NN-topic/K.cpp` — reference solution per exercise (zh/en 共用)
+6. (nothing to register — exercises are tests, discovered by directory convention)
 8. Add the chapter line to **both** `book/src/SUMMARY.md` and `book/en/src/SUMMARY.md`
 9. Add a changelog entry to **both** `book/src/changelog.md` and `book/en/src/changelog.md`
 
@@ -81,9 +82,9 @@ exact registration snippets and SUMMARY/changelog line formats.
 ## Naming and numbering
 
 - Chapter/exercise prefix is a **two-digit** sequence `NN` within the standard
-  section; slug is **kebab-case** and matches book + dslings + solutions.
-- Exercises split into `-0`, `-1`, … by sub-topic; a single-exercise chapter has
-  no numeric suffix on the dslings target name but the file is still `NN-topic.cpp`.
+  section; slug is **kebab-case** and matches book + tests + solutions.
+- Exercises split into `0.cpp`, `1.cpp`, … by sub-topic inside the chapter
+  directory `<std>/tests/NN-topic/`; a single-exercise chapter is just `0.cpp`.
 - The **`d2x checker <name>`** name is the slug (and `<slug>-1`, `<slug>-2` for
   later exercises) — it omits the `NN-` prefix. Keep checker names, file names,
   and book references mutually consistent.
@@ -142,7 +143,7 @@ the pinned upstream commit and how to refresh it). Rules:
 - Every chapter should carry this section. If a feature genuinely has no
   representative usage in the STL implementation, omit it and state why in the PR.
 
-## dslings exercise format
+## Exercise format (exercises are tests)
 
 Use `assets/exercise.cpp`. Essentials:
 
@@ -150,16 +151,23 @@ Use `assets/exercise.cpp`. Essentials:
   `Exercise/练习:` line (`<std> | NN - topic | 中文小标题`), `Tips/提示:`,
   `Docs/文档:` (cppreference), and the `Auto-Checker/自动检测命令:` with
   `d2x checker <name>`.
-- `#include <d2x/cpp/common.hpp>` then any std headers.
+- `import std;` + `import d2x.harness;` — no `#include` unless the lesson
+  needs a macro from a header (e.g. `NULL` teaching needs `<cstddef>`; put the
+  include *before* the imports with a comment saying why).
 - `main()` seeded with **intentional errors** the learner fixes, each flagged by
   a numbered inline comment (`// 1.…`, `// 2.…`) telling them what to do.
-- Checkpoint macros from `d2x/cpp/common.hpp`:
-  - `d2x_assert(cond)` / `d2x_assert_eq(a, b)` — runtime checkpoints; learners
-    must make them pass by fixing code, **not** by deleting the checkpoint.
-  - `D2X_YOUR_ANSWER` — a fill-in placeholder the learner replaces.
-  - `D2X_WAIT` — separates exercises; learner deletes/comments it to advance.
+- Conventions (harness is `import d2x.harness;`, no macros):
+  - `d2x::check(cond, "原文")` / `d2x::check_eq(a, b, "a == b")` — runtime
+    checkpoints; the third argument is the expression text shown to learners
+    (c++23 has no reflection to capture it automatically — always pass it).
+    Learners must make checks pass by fixing code, **not** by deleting them.
+  - `D2X_YOUR_ANSWER` — the fill-in placeholder. It is **not defined anywhere**;
+    the compiler error pointing at it *is* the feature. Never define it.
+  - `d2x::wait()` — separates exercises; learner deletes it to advance.
     Put exactly one at the end of each exercise's checkpoints.
-  - `D2X_DONT_DELETE_THIS` — guards lines that must not be removed.
+  - `d2x::dont_delete_this(expr)` — guards expressions that must not be removed.
+- A pure observation exercise may be **zero-dependency plain C++** (no imports) —
+  judged by exit code alone, copy-pasteable into Compiler Explorer.
 - The **en exercise translates only the comment prose**; the code stays byte-for-byte
   identical to the zh exercise so checker behavior matches.
 
@@ -170,9 +178,9 @@ Use `assets/solution.cpp`. It is the corrected exercise with:
 - A solution header: `reference solution for: <exercise path>`, plus the note
   that it is **for CI/maintainers only, not a tutorial entry**, and a pointer
   back to the exercise file.
-- `D2X_WAIT` removed; all checkpoints passing; unused locals silenced with
+- `d2x::wait()` removed; all checkpoints passing; unused locals silenced with
   `(void)var;` rather than left to warn.
-- Same `#include`s and structure as the exercise.
+- Same imports and structure as the exercise.
 
 ## Definition of done
 

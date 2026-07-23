@@ -12,7 +12,7 @@
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference-lambda](https://en.cppreference.com/w/cpp/language/lambda) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp14/00-generic-lambdas.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp14/00-generic-lambdas-0.cpp) |  |
+| [cppreference-lambda](https://en.cppreference.com/w/cpp/language/lambda) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp14/00-generic-lambdas.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/cpp14/tests/00-generic-lambdas/0.cpp) |  |
 
 
 **为什么引入?**
@@ -191,8 +191,8 @@ C++14 的泛型 lambda 支持参数包 — `[](auto... xs)` 可以接受任意�
 
 ### 练习代码主题
 
-- 0 - [泛型 lambda 基础 — auto 参数与类型推导](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp14/00-generic-lambdas-0.cpp)
-- 1 - [泛型 lambda 与 STL 算法 — 排序、查找、函数工厂](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp14/00-generic-lambdas-1.cpp)
+- 0 - [泛型 lambda 基础 — auto 参数与类型推导](https://github.com/mcpp-community/d2mcpp/blob/main/cpp14/tests/00-generic-lambdas/0.cpp)
+- 1 - [泛型 lambda 与 STL 算法 — 排序、查找、函数工厂](https://github.com/mcpp-community/d2mcpp/blob/main/cpp14/tests/00-generic-lambdas/1.cpp)
 
 ### 练习代码自动检测命令
 

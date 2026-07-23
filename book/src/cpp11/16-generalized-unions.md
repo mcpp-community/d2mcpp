@@ -14,7 +14,7 @@
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference-union](https://cppreference.com/w/cpp/language/union.html) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/16-generalized-unions.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/16-generalized-unions-0.cpp) |  |
+| [cppreference-union](https://cppreference.com/w/cpp/language/union.html) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/16-generalized-unions.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/16-generalized-unions/0.cpp) |  |
 
 **为什么引入**
 
@@ -222,9 +222,9 @@ double c = m.b; // 错误：未定义行为
 
 ### 练习代码主题
 
-- 0 - [联合体默认成员初始化 - 最多一个变体成员可带默认初始化器](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/16-generalized-unions-0.cpp)
-- 1 - [联合体包含非平凡类型及生命周期管理 - placement new 构造 / 显式析构](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/16-generalized-unions-1.cpp)
-- 2 - [带标签的鉴别联合体 - 用 enum + union 实现简易 variant](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/16-generalized-unions-2.cpp)
+- 0 - [联合体默认成员初始化 - 最多一个变体成员可带默认初始化器](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/16-generalized-unions/0.cpp)
+- 1 - [联合体包含非平凡类型及生命周期管理 - placement new 构造 / 显式析构](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/16-generalized-unions/1.cpp)
+- 2 - [带标签的鉴别联合体 - 用 enum + union 实现简易 variant](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/16-generalized-unions/2.cpp)
 
 ### 练习代码自动检测命令
 

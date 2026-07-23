@@ -12,7 +12,7 @@
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference-move](https://en.cppreference.com/w/cpp/utility/move) / [cppreference-move-ctor](https://en.cppreference.com/w/cpp/language/move_constructor) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/05-move-semantics.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/05-move-semantics-0.cpp) |  |
+| [cppreference-move](https://en.cppreference.com/w/cpp/utility/move) / [cppreference-move-ctor](https://en.cppreference.com/w/cpp/language/move_constructor) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/05-move-semantics.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/05-move-semantics/0.cpp) |  |
 
 
 **为什么引入?**
@@ -187,9 +187,9 @@ Buffer bad() {
 
 ### 练习代码主题
 
-- 0 - [移动构造与触发时机 - 让 buff 传递只做一次资源分配](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/05-move-semantics-0.cpp)
-- 1 - [移动赋值与触发时机 - 临时对象 / 中间对象 / 显式 std::move 三种场景](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/05-move-semantics-1.cpp)
-- 2 - [移动的是资源而不是对象 - 对比对象地址和 data 指针](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/05-move-semantics-2.cpp)
+- 0 - [移动构造与触发时机 - 让 buff 传递只做一次资源分配](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/05-move-semantics/0.cpp)
+- 1 - [移动赋值与触发时机 - 临时对象 / 中间对象 / 显式 std::move 三种场景](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/05-move-semantics/1.cpp)
+- 2 - [移动的是资源而不是对象 - 对比对象地址和 data 指针](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/05-move-semantics/2.cpp)
 
 ### 练习代码自动检测命令
 

@@ -12,7 +12,7 @@
 
 | Book | Video | Code | X |
 | --- | --- | --- | --- |
-| [cppreference](https://en.cppreference.com/w/cpp/language/function) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/03-trailing-return-type.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/03-trailing-return-type.cpp) |  |
+| [cppreference](https://en.cppreference.com/w/cpp/language/function) / [markdown](https://github.com/mcpp-community/d2mcpp/blob/main/book/src/cpp11/03-trailing-return-type.md) | [视频解读]() | [练习代码](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/03-trailing-return-type/0.cpp) |  |
 
 
 **为什么引入?**
@@ -166,7 +166,7 @@ auto func() -> int(*)[3];   // ok: 返回数组指针
 
 ### 练习代码主题
 
-- 0 - [熟悉尾置返回类型 - 普通函数 / 模板 / lambda 三种形态](https://github.com/mcpp-community/d2mcpp/blob/main/dslings/cpp11/03-trailing-return-type.cpp)
+- 0 - [熟悉尾置返回类型 - 普通函数 / 模板 / lambda 三种形态](https://github.com/mcpp-community/d2mcpp/blob/main/cpp11/tests/03-trailing-return-type/0.cpp)
 
 ### 练习代码自动检测命令
 
