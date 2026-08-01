@@ -8,7 +8,11 @@ name: Validate exercises and reference solutions
 # 链路，所以 CI 绿灯等价于学习者本地能跑通，而不是另一条平行的构建路径。
 #
 # 依赖 mcpp >= 0.0.104(测试能力批次:逐测试隔离 / 过滤 / --list / --timeout /
-# --message-format json / tests 吃 [build].flags)。pin 见 .xlings.json。
+# --message-format json / tests 吃 [build].flags)。
+#
+# 但真正的下限已被上游抬高:mcpplibs 依赖索引现在要求 mcpp >= 0.0.109,更低的
+# 版本一律 E0006「index requires mcpp >= 0.0.109」而拒绝解析依赖 —— 原先钉的
+# 0.0.104 自此装不出来。pin 见 .xlings.json,当前为 2026.8.1.1。
 
 on:
   push:
