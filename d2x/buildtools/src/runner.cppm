@@ -33,7 +33,17 @@ export struct Captured {
 // workaround 随之删除。
 export Captured capture_stdout(const std::string& cmd) {
     Captured result;
+    // 丢弃 stderr 的写法必须分平台:_popen 走的是 cmd.exe,那里没有
+    // /dev/null —— `2>/dev/null` 会被当成「重定向到 \dev\null 这个路径」,
+    // 而 \dev 不存在,cmd 直接报 "The system cannot find the path specified."
+    // 并且整条命令根本不执行。于是 mcpp test 一条 JSON 都吐不出来,判定链
+    // 退化成「没有该测试的记录」,Windows 上每道题都卡在这里(d2x 的
+    // Win10/Win11 checker 冒烟实测)。空设备在 cmd 下叫 NUL。
+#ifdef _WIN32
+    std::string full = cmd + " 2>NUL";
+#else
     std::string full = cmd + " 2>/dev/null";
+#endif
 
 #ifdef _WIN32
     FILE* pipe = ::_popen(full.c_str(), "r");
