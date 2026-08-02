@@ -32,6 +32,14 @@ wget https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_
 Invoke-Expression (Invoke-Webrequest 'https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.ps1' -UseBasicParsing).Content
 ```
 
+**装好 xlings 后, 用它装本教程需要的两个工具**
+
+```bash
+xlings install d2x mcpp -y   # d2x: 练习框架 CLI | mcpp: C++ 构建与测试工具
+```
+
+> [d2x](https://github.com/d2learn/d2x) 负责练习的检测与推进, [mcpp](https://github.com/mcpp-community/mcpp) 负责构建与运行 —— 练习本身就是 mcpp 的测试
+
 ## 1.获取项目及自动配置环境
 
 > 下载项目到当前目录并自动配置本地环境
@@ -39,6 +47,17 @@ Invoke-Expression (Invoke-Webrequest 'https://raw.githubusercontent.com/openxlin
 ```bash
 d2x install d2mcpp
 ```
+
+### 验证环境
+
+> 进入项目目录后跑一遍全量测试, 确认工具链是通的
+
+```bash
+cd d2mcpp
+mcpp test
+```
+
+> 练习**就是**测试。刚拿到课程时这里会报告全部未通过 —— 这正是练习的起点, 同时也说明编译运行这条链路已经跑通了。把 `solutions/` 里的参考答案覆盖进去, 同一条命令就会全绿。
 
 ### 本地电子书
 

@@ -32,6 +32,14 @@ wget https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_
 Invoke-Expression (Invoke-Webrequest 'https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.ps1' -UseBasicParsing).Content
 ```
 
+**With xlings in place, install the two tools this course needs**
+
+```bash
+xlings install d2x mcpp -y   # d2x: exercise framework CLI | mcpp: C++ build & test tool
+```
+
+> [d2x](https://github.com/d2learn/d2x) drives exercise checking and progression, [mcpp](https://github.com/mcpp-community/mcpp) builds and runs them — the exercises *are* mcpp tests
+
 ## 1. Get Project and Auto-configure Environment
 
 > Download the project to current directory and automatically configure local environment
@@ -39,6 +47,17 @@ Invoke-Expression (Invoke-Webrequest 'https://raw.githubusercontent.com/openxlin
 ```bash
 d2x install d2mcpp
 ```
+
+### Verify the environment
+
+> Run the full test suite once inside the project to confirm the toolchain works
+
+```bash
+cd d2mcpp
+mcpp test
+```
+
+> The exercises **are** the tests. On a fresh checkout this reports them all as failing — that is the expected starting point, and it already proves the compile-and-run path works. Drop the reference answers from `solutions/` in and the very same command goes all green.
 
 ### Local E-book
 
