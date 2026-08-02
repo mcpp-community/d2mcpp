@@ -31,7 +31,23 @@ export struct Captured {
 // 注：旧实现这里要先 unsetenv("LD_LIBRARY_PATH") 绕嵌套 mcpp 的 glibc
 // 段错误 —— mcpp 已在上游根治（merged_environ 剥离私有 glibc 条目），
 // workaround 随之删除。
-export Captured capture_stdout(const std::string& cmd) {
+//
+// on_heartbeat：构建期的「还活着」信号,参数是已经等了多久;不传则完全不介入。
+//
+// 为什么需要它:`mcpp test --message-format json` 在整个构建期**一个字节都不
+// 产出** —— 实测带不带 `-q` 都一样,stdout 只有末尾那两行 JSON、stderr 全空
+// (机器可读模式下人读输出被整个收编进 JSON 了)。于是从 d2x 的视角看,Provider
+// 从 stage("compile") 之后就彻底沉默,直到构建结束。
+//
+// 冷机第一次跑要在这段沉默里备工具链与 std 模块,一旦超过 d2x 的活性超时
+// (provider_idle_timeout,默认 120s)就会被当成挂死而终止 —— 而且学习者改一次
+// 文件就重试一次、每次都在同一处被杀,表现为「怎么改都过不去」。
+//
+// 心跳同时解决两件事:持续喂活 d2x 的计时器,并让学习者看见首次构建正在进行,
+// 而不是对着黑屏怀疑卡死。
+export Captured capture_stdout(const std::string& cmd,
+                               const std::function<void(std::chrono::seconds)>& on_heartbeat = {},
+                               std::chrono::seconds heartbeat_every = std::chrono::seconds{20}) {
     Captured result;
     // 丢弃 stderr 的写法必须分平台:_popen 走的是 cmd.exe,那里没有
     // /dev/null —— `2>/dev/null` 会被当成「重定向到 \dev\null 这个路径」,
@@ -52,8 +68,30 @@ export Captured capture_stdout(const std::string& cmd) {
 #endif
     if (!pipe) return {127, std::format("failed to spawn: {}", cmd)};
 
-    char buf[4096];
-    while (std::fgets(buf, sizeof(buf), pipe)) result.output += buf;
+    // 读取交给工作线程,主线程才有机会按节奏发心跳。fgets 是阻塞的,单线程下
+    // 沉默期内根本回不到我们手里。
+    std::string collected;
+    std::atomic<bool> finished{false};
+    std::thread reader([&] {
+        char buf[4096];
+        while (std::fgets(buf, sizeof(buf), pipe)) collected += buf;
+        finished.store(true, std::memory_order_release);
+    });
+
+    if (on_heartbeat) {
+        const auto started = std::chrono::steady_clock::now();
+        auto next = started + heartbeat_every;
+        while (!finished.load(std::memory_order_acquire)) {
+            std::this_thread::sleep_for(std::chrono::milliseconds{200});
+            auto now = std::chrono::steady_clock::now();
+            if (now >= next) {
+                on_heartbeat(std::chrono::duration_cast<std::chrono::seconds>(now - started));
+                next = now + heartbeat_every;
+            }
+        }
+    }
+    reader.join();              // pipe 归 reader 用,必须先 join 再 pclose
+    result.output = std::move(collected);
 
 #ifdef _WIN32
     int status = ::_pclose(pipe);
@@ -130,7 +168,8 @@ std::string field(std::string_view line, std::string_view key) {
 // 邻居测试（如 …/1 匹配 …/10），所以逐行解析后按 test 名精确挑。
 export McppTestResult run_mcpp_test(const std::string& member,
                                     const std::string& test_name,
-                                    const fs::path&    result_file) {
+                                    const fs::path&    result_file,
+                                    const std::function<void(std::chrono::seconds)>& on_heartbeat = {}) {
     std::error_code ec;
     fs::remove(result_file, ec);   // harness 是追加写的，清掉上一轮残留
     fs::create_directories(result_file.parent_path(), ec);
@@ -142,7 +181,7 @@ export McppTestResult run_mcpp_test(const std::string& member,
 
     auto cmd = std::format("mcpp test -q -p {} {} --message-format json",
                            member, test_name);
-    auto cap = capture_stdout(cmd);
+    auto cap = capture_stdout(cmd, on_heartbeat);
 
     McppTestResult out;
     std::istringstream lines(cap.output);

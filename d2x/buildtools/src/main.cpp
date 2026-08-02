@@ -87,7 +87,16 @@ int cmd_check(const fs::path& root, std::string_view id) {
     fs::current_path(root, ec);
 
     d2x::emit::stage("compile");
-    auto res = d2x::runner::run_mcpp_test(it->member, it->test_name, result_file);
+    // 构建期心跳:mcpp 在 --message-format json 下全程不产出字节,冷机首次要在
+    // 这段沉默里备工具链与 std 模块。不发心跳的话 d2x 的活性超时(默认 120s)
+    // 会把正常构建当成挂死杀掉,学习者每改一次文件就再被杀一次。
+    auto res = d2x::runner::run_mcpp_test(
+        it->member, it->test_name, result_file,
+        [](std::chrono::seconds elapsed) {
+            d2x::emit::output(std::format(
+                "[mcpp] 仍在构建…… 已用 {}s（首次运行需准备工具链与 std 模块，可能数分钟）\n",
+                elapsed.count()));
+        });
 
     if (!res.package_error.empty()) {
         // 包级构建失败：harness 或工程本身坏了 —— 这是课程基础设施问题，
