@@ -55,7 +55,7 @@ trap restore EXIT
 # —— 覆盖参考答案(zh/en 共用同一份 solutions)——
 n_expected=0
 while IFS= read -r sol; do
-    rel="${sol#solutions/}"          # intro/hello-mcpp.cpp | cpp11/00-x/0.cpp
+    rel="${sol#solutions/tests/}"    # intro/hello-mcpp.cpp | cpp11/00-x/0.cpp
     std="${rel%%/*}"; rest="${rel#*/}"
     dst="${PREFIX}${std}/tests/${rest}"
     if [[ ! -f "$dst" ]]; then
@@ -64,7 +64,7 @@ while IFS= read -r sol; do
     fi
     cp "$sol" "$dst"
     n_expected=$((n_expected + 1))
-done < <(find solutions -name '*.cpp' | sort)
+done < <(find solutions/tests -name '*.cpp' | sort)
 
 if [[ "$n_expected" -eq 0 ]]; then
     echo "CHECKER-E2E($LANG_SEL) FAIL: 一份参考答案都没找到"

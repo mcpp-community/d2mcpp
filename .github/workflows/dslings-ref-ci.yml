@@ -181,7 +181,15 @@ jobs:
           fi
           echo "OK: 无 MSVC STL 时回落到 winlibs MinGW (x86_64-windows-gnu)"
 
+      # 参考答案自检 —— 单独一段,因为它是最便宜也最直白的一条:solutions/ 自己
+      # 就是一个 mcpp 工程,一条命令、零副作用,红了就说明答案本身编不过或跑不过,
+      # 跟练习目录、跟 d2x 都没关系。放在覆盖-还原那套之前,失败定位最短。
+      - name: mcpp test -p solutions (reference answers must be all green)
+        run: mcpp test -p solutions
+
       # 第一层:`mcpp test` —— pristine 全部不通过 + 覆盖答案后全部通过
+      # (e2e.sh 内部还会再跑一遍上面那条自检并核对测试条数,防止布局改动后
+      #  tests/**/*.cpp 一个都没扫到却依然 "test result ok")
       - name: mcpp test (pristine fails, solutions all pass)
         run: bash d2x/buildtools/tests/e2e.sh ${{ matrix.langs }}
 
@@ -209,8 +217,8 @@ jobs:
             rel="${f#src/}"
             std="${rel%%/*}"
             rest="${rel#*/tests/}"
-            if [ ! -f "solutions/$std/$rest" ]; then
-              echo "::warning::missing solutions/$std/$rest (paired with $f)"
+            if [ ! -f "solutions/tests/$std/$rest" ]; then
+              echo "::warning::missing solutions/tests/$std/$rest (paired with $f)"
               missing=$((missing+1))
             fi
           done
