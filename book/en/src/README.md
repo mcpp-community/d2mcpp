@@ -39,6 +39,8 @@
 
 ### Interactive Code Practice (Local)
 
+**Step 1 - Install the [d2x](https://github.com/d2learn/d2x) and [mcpp](https://github.com/mcpp-community/mcpp) tools**
+
 <details>
   <summary>click to view xlings installation command</summary>
 
@@ -63,11 +65,48 @@ irm https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_i
 </details>
 
 ```bash
-xlings install d2x -y
-d2x install d2mcpp
-cd d2mcpp
-d2x checker
+xlings install d2x mcpp -y   # d2x: exercise framework CLI | mcpp: C++ build & test tool
 ```
+
+**Step 2 - Get the course, then configure and verify the environment**
+
+```bash
+d2x install d2mcpp           # download the course, toolchain auto-configured
+cd d2mcpp
+mcpp test                    # verify the environment: every exercise compiles and runs
+```
+
+> The exercises **are** the tests. On a fresh checkout `mcpp test` reports them all as
+> failing — that is the expected starting point, and it already proves your toolchain
+> works. Drop the reference answers from `solutions/` in and the very same command goes
+> all green.
+
+<details>
+  <summary>optional - start from the git source instead</summary>
+
+---
+
+```bash
+git clone https://github.com/mcpp-community/d2mcpp.git   # or your fork
+cd d2mcpp
+xlings install -y            # toolchain pinned by .xlings.json
+mcpp test                    # same environment check
+```
+
+> Tip: fork this repo and clone your fork — `git commit / push` keeps your practice progress in your own repository.
+
+---
+
+</details>
+
+**Step 3 - Start practicing**
+
+```bash
+d2x checker                  # practice loop: edit -> save -> auto-check -> advance
+d2x status                   # progress overview
+```
+
+> Want to run a single chapter without d2x? `mcpp test -p src/cpp11` works too.
 
 **👉 [more details...](https://mcpp-community.github.io/d2mcpp/en/base/chapter_1.html)**
 
