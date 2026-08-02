@@ -32,6 +32,14 @@ wget https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_
 Invoke-Expression (Invoke-Webrequest 'https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.ps1' -UseBasicParsing).Content
 ```
 
+**装好 xlings 后, 用它装本教程需要的两个工具**
+
+```bash
+xlings install d2x mcpp -y   # d2x: 练习框架 CLI | mcpp: C++ 构建与测试工具
+```
+
+> [d2x](https://github.com/d2learn/d2x) 负责练习的检测与推进, [mcpp](https://github.com/mcpp-community/mcpp) 负责构建与运行 —— 练习本身就是 mcpp 的测试
+
 ## 1.获取项目及自动配置环境
 
 > 下载项目到当前目录并自动配置本地环境
@@ -39,6 +47,21 @@ Invoke-Expression (Invoke-Webrequest 'https://raw.githubusercontent.com/openxlin
 ```bash
 d2x install d2mcpp
 ```
+
+### 验证环境
+
+> 进入项目目录后跑一遍参考答案, 确认工具链是通的
+
+```bash
+cd d2mcpp
+mcpp test -p solutions       # 验证环境: 52 份参考答案, 应当全绿
+```
+
+> `solutions/` 本身就是一个 mcpp 工程(`solutions/mcpp.toml` + `solutions/tests/`), 所以这条命令会真的编译并运行全部 52 份参考答案 —— 全绿即工具链就绪。
+>
+> 答案与练习的对应关系就是 `tests/` 下的相对路径:
+> `solutions/tests/cpp11/00-auto-and-decltype/0.cpp` ←→ `src/cpp11/tests/00-auto-and-decltype/0.cpp`。
+> 想只看某一部分: `mcpp test -p solutions cpp11`。
 
 ### 本地电子书
 
@@ -77,6 +100,7 @@ d2x status
 > 每个 C++ 标准目录都是真实的 mcpp 工程,练习就是它的 tests/——不经过 d2x,直接用 mcpp 也能练:
 
 ```bash
+mcpp test                           # 你的完整进度表(动手前全红, 那就是起点)
 mcpp test -p src/cpp11              # 整个 cpp11 的进度表(哪题绿哪题红)
 mcpp test -p src/cpp11 03-trailing  # 只跑名字匹配的练习
 ```

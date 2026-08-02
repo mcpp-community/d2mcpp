@@ -7,12 +7,25 @@ name: Validate exercises and reference solutions
 # 练习即测试：e2e 走 `mcpp test`，与 `d2x checker` 内部的 Provider 是同一条
 # 链路，所以 CI 绿灯等价于学习者本地能跑通，而不是另一条平行的构建路径。
 #
+# 两层都要验，因为它们的失效方式不同：
+#   - `mcpp test`   —— 编译/运行这一层(e2e.sh)
+#   - `d2x checker` —— 在它之上还叠了 Provider 的 NDJSON 协议、进度持久化、
+#                      文件监听三层(checker-e2e.sh)。这三层断掉时 mcpp test
+#                      照样全绿，Windows 上就出过这样的静默回归(d2mcpp#87)。
+#
+# 平台矩阵拆成五档，因为它们各有各的踩法，合成一个 ubuntu job 等于没测：
+#   linux / macos / windows-10 线 / windows-11 线 / windows 且无 MSVC STL
+# 最后一档见下方 mask_msvc 的注释。
+#
 # 依赖 mcpp >= 0.0.104(测试能力批次:逐测试隔离 / 过滤 / --list / --timeout /
 # --message-format json / tests 吃 [build].flags)。
 #
-# 但真正的下限已被上游抬高:mcpplibs 依赖索引现在要求 mcpp >= 0.0.109,更低的
-# 版本一律 E0006「index requires mcpp >= 0.0.109」而拒绝解析依赖 —— 原先钉的
-# 0.0.104 自此装不出来。pin 见 .xlings.json,当前为 2026.8.1.1。
+# 但真正的下限已被上游抬高两次:
+#   - mcpplibs 依赖索引要求 mcpp >= 0.0.109,更低版本一律 E0006 拒绝解析依赖
+#   - 「无 MSVC STL 的 Windows」这一档要求 mcpp >= 2026.8.2.1:自动回落到
+#     winlibs MinGW(x86_64-windows-gnu)是那个版本才有的能力,再早的版本在
+#     裸 Windows 上直接硬失败
+# pin 见 .xlings.json,当前为 2026.8.2.1。
 
 on:
   push:
@@ -23,6 +36,7 @@ on:
       - "d2x/**"
       - "mcpp.toml"
       - ".d2x.json"
+      - ".xlings.json"
       - ".github/workflows/dslings-ref-ci.yml"
   pull_request:
     paths:
@@ -31,52 +45,180 @@ on:
       - "d2x/**"
       - "mcpp.toml"
       - ".d2x.json"
+      - ".xlings.json"
       - ".github/workflows/dslings-ref-ci.yml"
   workflow_dispatch:
 
+env:
+  XLINGS_VERSION: "0.4.51"
+  XLINGS_NON_INTERACTIVE: "1"
+
 jobs:
   validate-exercises:
-    runs-on: ubuntu-latest
+    name: validate (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 120
 
-    env:
-      XLINGS_VERSION: "0.4.51"
-      XLINGS_NON_INTERACTIVE: "1"
+    # GitHub 不提供 Windows 客户端版的 x64 托管 runner,只有 Server 镜像;这里
+    # 用与各自客户端版共享内核基线的 Server 镜像代表两条产品线:
+    #   windows-2022 = Server 2022,与 Windows 10 22H2 同基线(10.0.20348)
+    #   windows-2025 = Server 2025,与 Windows 11 24H2 同基线(10.0.26100)
+    # 这是托管 runner 上能覆盖到的最接近真实 Win10/Win11 的组合。
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux
+            os: ubuntu-latest
+            langs: all          # zh + en 两套课程都验
+          - name: macos
+            os: macos-14
+            langs: zh
+          - name: windows-10 baseline
+            os: windows-2022
+            langs: zh
+          - name: windows-11 baseline
+            os: windows-2025
+            langs: zh
+          # 学习者的机器上装了 Visual Studio 才是少数情况。这一档把 VS 从
+          # runner 上藏掉，验证「一台干净的 Windows」同样能跑完整门课 ——
+          # mcpp 会自动回落到自带的 winlibs MinGW(x86_64-windows-gnu)。
+          - name: windows-11, no MSVC STL
+            os: windows-2025
+            langs: zh
+            mask_msvc: true
+
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - uses: actions/checkout@v4
 
+      # 必须排在装工具链之前:此后的任何一步都不该看见 Visual Studio。
+      - name: Mask Visual Studio (simulate a bare Windows box)
+        if: matrix.mask_msvc
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Continue'
+
+          # mcpp 的三条 MSVC 发现路径(vswhere / 环境变量 / 已知路径扫描)最终
+          # 都落到 <vsRoot>\VC\Tools\MSVC，所以藏的是 VC 目录而不是 VS 根目录：
+          # 根目录在 runner 上被进程占着改不了名，低一层的 VC 可以。
+          $vswhere = "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe"
+          if (Test-Path $vswhere) { Rename-Item $vswhere "vswhere.exe.masked" }
+
+          Resolve-Path "C:\Program Files*\Microsoft Visual Studio\*\*\VC" `
+              -ErrorAction SilentlyContinue | ForEach-Object {
+            $p = $_.Path
+            Write-Host "masking $p"
+            try { Rename-Item -LiteralPath $p -NewName "VC.masked" -ErrorAction Stop }
+            catch { Write-Host "  rename failed: $($_.Exception.Message)" }
+          }
+
+          foreach ($v in @('VSINSTALLDIR','VCINSTALLDIR','VCToolsInstallDir',
+                           'VS170COMNTOOLS','VS160COMNTOOLS','VS150COMNTOOLS')) {
+            "$v=" | Out-File -Append -FilePath $env:GITHUB_ENV -Encoding utf8
+          }
+
+          # 就地检查遮蔽的后置条件。漏遮的后果是这一档静悄悄变成第二个
+          # windows-11 baseline —— 绿灯，但什么都没验到。
+          $left = Get-ChildItem "C:\Program Files*\Microsoft Visual Studio\*\*\VC\Tools\MSVC" `
+              -Directory -ErrorAction SilentlyContinue
+          if ($left) {
+            Write-Host "FAIL: VC tools still present after masking:"
+            $left | ForEach-Object { Write-Host "  $($_.FullName)" }
+            exit 1
+          }
+          Write-Host "Visual Studio masked: no VC\Tools\MSVC remains."
+
       # 官方一键安装脚本自带镜像回退。手动 curl GitHub release 包会被
       # release CDN 的间歇性 504 打断。
-      - name: Install xlings ${{ env.XLINGS_VERSION }}
+      - name: Install xlings ${{ env.XLINGS_VERSION }} (Linux/macOS)
+        if: runner.os != 'Windows'
         run: |
           set -eu
           curl -fsSL https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.sh \
             | bash -s "v${XLINGS_VERSION}"
           echo "$HOME/.xlings/subos/current/bin" >> "$GITHUB_PATH"
 
-      # 按 .xlings.json 安装 mcpp。mcpp 自带工具链沙箱，无需另装 gcc。
-      - name: Install mcpp
+      - name: Install xlings (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          irm https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.ps1 | iex
+          "$env:USERPROFILE\.xlings\subos\current\bin" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
+
+      # 按 .xlings.json 安装 mcpp + d2x。mcpp 自带工具链沙箱,无需另装 gcc。
+      - name: Install pinned toolchain (.xlings.json)
         run: |
           set -eu
           xlings update
           xlings install -y
+          mcpp --version
+          d2x --version
+
+      - name: Report runner OS
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $os = Get-CimInstance Win32_OperatingSystem
+          Write-Host "runner=${{ matrix.os }}  caption=$($os.Caption)  build=$($os.Version)"
 
       - name: Build d2x Provider
         run: mcpp build -p d2x/buildtools
 
-      - name: Validate exercises and solutions (zh + en)
-        run: bash d2x/buildtools/tests/e2e.sh all
+      # mcpp 把产物按 target triple 分目录，所以目录名就是「实际用了哪条
+      # 工具链」最直接的证据。遮蔽生效时它必须是 gnu 而不是 msvc。
+      - name: Assert MinGW fallback took effect (no MSVC STL)
+        if: matrix.mask_msvc
+        run: |
+          set -eu
+          ls d2x/buildtools/target/
+          if [ ! -d d2x/buildtools/target/x86_64-windows-gnu ]; then
+            echo "FAIL: 期望回落到 x86_64-windows-gnu，实际产物 target 目录如上"
+            exit 1
+          fi
+          echo "OK: 无 MSVC STL 时回落到 winlibs MinGW (x86_64-windows-gnu)"
+
+      # 参考答案自检 —— 单独一段,因为它是最便宜也最直白的一条:solutions/ 自己
+      # 就是一个 mcpp 工程,一条命令、零副作用,红了就说明答案本身编不过或跑不过,
+      # 跟练习目录、跟 d2x 都没关系。放在覆盖-还原那套之前,失败定位最短。
+      - name: mcpp test -p solutions (reference answers must be all green)
+        run: mcpp test -p solutions
+
+      # 第一层:`mcpp test` —— pristine 全部不通过 + 覆盖答案后全部通过
+      # (e2e.sh 内部还会再跑一遍上面那条自检并核对测试条数,防止布局改动后
+      #  tests/**/*.cpp 一个都没扫到却依然 "test result ok")
+      - name: mcpp test (pristine fails, solutions all pass)
+        run: bash d2x/buildtools/tests/e2e.sh ${{ matrix.langs }}
+
+      # 第二层:`d2x checker` —— 答案就位后 checker 必须自己走完全程并退 0
+      - name: d2x checker (solutions drive it to completion)
+        run: bash d2x/buildtools/tests/checker-e2e.sh zh
+
+      - name: d2x checker — en course
+        if: matrix.langs == 'all'
+        run: bash d2x/buildtools/tests/checker-e2e.sh en
+
+  # 纯文件名核对，与工具链无关，跑一个平台就够。
+  solutions-parity:
+    name: exercises ↔ solutions filename parity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
       - name: Verify exercises ↔ solutions filename parity
         run: |
           set -eu
           # en/ 镜像跳过 —— 参考答案与语言无关，两边共用同一份
           missing=0
-          for f in $(find intro/tests cpp*/tests -name '*.cpp'); do
-            std="${f%%/*}"
-            rel="${f#*/tests/}"
-            if [ ! -f "solutions/$std/$rel" ]; then
-              echo "::warning::missing solutions/$std/$rel (paired with $f)"
+          for f in $(find src/intro/tests src/cpp*/tests -name '*.cpp'); do
+            rel="${f#src/}"
+            std="${rel%%/*}"
+            rest="${rel#*/tests/}"
+            if [ ! -f "solutions/tests/$std/$rest" ]; then
+              echo "::warning::missing solutions/tests/$std/$rest (paired with $f)"
               missing=$((missing+1))
             fi
           done

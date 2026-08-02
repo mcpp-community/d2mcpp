@@ -1,0 +1,22 @@
+# 参考答案工程。每份答案就是这里的一个测试:
+#   mcpp test -p solutions                   全部参考答案(应当全绿)
+#   mcpp test -p solutions <子串>            只跑匹配的答案
+#
+# 为什么答案自己也是一个 mcpp 工程,而不只是一堆躺着的 .cpp:
+# 答案要能被验证,而验证的唯一可信方式就是真的编译并运行它。做成工程之后
+# `mcpp test -p solutions` 就是一条谁都能跑的命令 —— CI 跑它,贡献者提 PR 前
+# 也跑它,不需要先把文件覆盖到练习目录里再 git 还原那一套。
+#
+# 布局与练习一一对应,tests/ 下的相对路径就是两边的对应关系:
+#   solutions/tests/<std>/<章节>/<序号>.cpp   ←→  src[/en]/<std>/tests/<章节>/<序号>.cpp
+# 所以测试名(intro/hello-mcpp、cpp11/00-auto-and-decltype/0)一眼就能对回练习。
+#
+# 与练习工程共用同一套配置(c++23 + d2x),否则「答案能过」证明不了「答案放进
+# 练习里也能过」—— 两边的编译条件必须是同一个。
+[package]
+name     = "solutions"
+version  = "0.1.0"
+standard = "c++23"
+
+[dependencies]
+d2x = { path = "../d2x" }

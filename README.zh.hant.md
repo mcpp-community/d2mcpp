@@ -43,7 +43,7 @@
 
 ### 建立本地練習環境
 
-**第一步 - 安裝 d2x 工具**
+**第一步 - 安裝 [d2x](https://github.com/d2learn/d2x) 和 [mcpp](https://github.com/mcpp-community/mcpp) 工具**
 
 <details>
   <summary>點選查看xlings安裝指令</summary>
@@ -69,25 +69,37 @@ irm https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_i
 </details>
 
 ```bash
-xlings install d2x -y        # 練習框架 CLI
+xlings install d2x mcpp -y   # d2x: 練習框架 CLI | mcpp: C++ 建置與測試工具
 ```
 
-**第二步 - 獲取課程(二選一)**
+**第二步 - 獲取課程, 並配置和驗證環境**
 
 ```bash
-# 方式 A - 一鍵安裝: 下載課程,環境自動配置
-d2x install d2mcpp
+d2x install d2mcpp           # 下載課程,環境自動配置
 cd d2mcpp
+mcpp test -p solutions       # 驗證環境: 52 份參考答案, 應當全綠
 ```
 
+> `solutions/` 本身就是一個 mcpp 工程, 所以這條指令會真的編譯並執行全部 52 份參考答案 ——
+> 全綠即工具鏈就緒, 這是個不含糊的訊號。
+
+<details>
+  <summary>可選 - 改用 clone 專案原始碼的方式</summary>
+
+---
+
 ```bash
-# 方式 B - git clone 原始碼
 git clone https://github.com/mcpp-community/d2mcpp.git   # 或你 fork 後的倉庫
 cd d2mcpp
 xlings install -y            # 按 .xlings.json 安裝固定版本工具鏈
+mcpp test -p solutions       # 同樣的環境驗證
 ```
 
 > 建議: 先 fork 本倉庫再 clone 自己的 fork —— 通過 `git commit / push` 把練習進度保存到自己的倉庫裡。
+
+---
+
+</details>
 
 **第三步 - 開始練習**
 
@@ -96,7 +108,8 @@ d2x checker                  # 練習循環: 編輯 -> 保存 -> 自動偵測 ->
 d2x status                   # 進度總覽
 ```
 
-> 練習就是真實的 mcpp 測試 —— 不經過 d2x,直接 `mcpp test -p src/cpp11` 同樣可用。
+> 不想經過 d2x? 練習**就是**測試 —— `mcpp test` 印出你的完整進度表(動手前全紅),
+> `mcpp test -p src/cpp11` 只跑某一章。
 
 **👉 [更多細節...](https://mcpp-community.github.io/d2mcpp/base/chapter_1.html)**
 

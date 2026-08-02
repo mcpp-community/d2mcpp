@@ -39,6 +39,8 @@
 
 > 尝试 `Code -> Book -> Video -> X -> Code`
 
+**第一步 - 安装 [d2x](https://github.com/d2learn/d2x) 和 [mcpp](https://github.com/mcpp-community/mcpp) 工具**
+
 <details>
   <summary>点击查看xlings安装命令</summary>
 
@@ -63,11 +65,47 @@ irm https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_i
 </details>
 
 ```bash
-xlings install d2x -y
-d2x install d2mcpp
-cd d2mcpp
-d2x checker
+xlings install d2x mcpp -y   # d2x: 练习框架 CLI | mcpp: C++ 构建与测试工具
 ```
+
+**第二步 - 获取课程, 并配置和验证环境**
+
+```bash
+d2x install d2mcpp           # 下载课程,环境自动配置
+cd d2mcpp
+mcpp test -p solutions       # 验证环境: 52 份参考答案, 应当全绿
+```
+
+> `solutions/` 本身就是一个 mcpp 工程, 所以这条命令会真的编译并运行全部 52 份参考答案 ——
+> 全绿即工具链就绪, 这是个不含糊的信号。
+
+<details>
+  <summary>可选 - 改用 clone 项目源码的方式</summary>
+
+---
+
+```bash
+git clone https://github.com/mcpp-community/d2mcpp.git   # 或你 fork 后的仓库
+cd d2mcpp
+xlings install -y            # 按 .xlings.json 安装固定版本工具链
+mcpp test -p solutions       # 同样的环境验证
+```
+
+> 建议: 先 fork 本仓库再 clone 自己的 fork —— 通过 `git commit / push` 把练习进度保存到自己的仓库里。
+
+---
+
+</details>
+
+**第三步 - 开始练习**
+
+```bash
+d2x checker                  # 练习循环: 编辑 -> 保存 -> 自动检测 -> 推进
+d2x status                   # 进度总览
+```
+
+> 不想经过 d2x? 练习**就是**测试 —— `mcpp test` 打印你的完整进度表(动手前全红),
+> `mcpp test -p src/cpp11` 只跑某一章。
 
 **👉 [更多细节...](https://mcpp-community.github.io/d2mcpp/base/chapter_1.html)**
 

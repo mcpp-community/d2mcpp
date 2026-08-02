@@ -4,6 +4,9 @@
 #   1) 每个练习未完成时不通过 (pristine 全量 mcpp test 必须 0 passed)
 #   2) 每份参考答案放进去后通过 (overlay 后全量 mcpp test 必须全绿)
 #
+# 外加一条独立的答案自检:solutions/ 自己是一个 mcpp 工程,
+# `mcpp test -p solutions` 直接编译运行全部答案,零副作用(见 solutions_selftest)。
+#
 # 这是 rustlings `cargo dev check --require-solutions` 的等价物。
 #
 # 两道防线(均源自历史缺陷,背景见 .agents/docs 参考文档):
@@ -54,7 +57,7 @@ run_lang() {
     # —— 覆盖参考答案 (zh/en 共用同一份 solutions) ——
     local n_overlaid=0 sol rel std rest dst
     while IFS= read -r sol; do
-        rel="${sol#solutions/}"                      # intro/hello-mcpp.cpp | cpp11/00-x/0.cpp
+        rel="${sol#solutions/tests/}"                # intro/hello-mcpp.cpp | cpp11/00-x/0.cpp
         std="${rel%%/*}"; rest="${rel#*/}"
         dst="${prefix}${std}/tests/${rest}"
         if [[ ! -f "$dst" ]]; then
@@ -64,7 +67,7 @@ run_lang() {
         fi
         cp "$sol" "$dst"
         n_overlaid=$((n_overlaid + 1))
-    done < <(find solutions -name '*.cpp' | sort)
+    done < <(find solutions/tests -name '*.cpp' | sort)
 
     # —— 断言 2 + 防线 2: overlay 后全绿,且 passed 总数与答案数一致 ——
     local total_passed=0 ok=1
@@ -92,6 +95,39 @@ run_lang() {
     echo "E2E($label) solutions: $total_passed/$n_overlaid 参考答案全部通过 ✓"
 }
 
+# 参考答案自检:solutions/ 自己就是一个 mcpp 工程,直接编译运行,不碰练习目录。
+#
+# 这是最便宜也最直白的一条 —— 一条命令、零副作用、谁都能在本地复现:
+#   mcpp test -p solutions
+# 底下 run_lang 的覆盖-还原流程验的是另一件事(答案「放进练习的位置」也成立,
+# 且练习在未完成时确实不通过),两者互补:这条挂了说明答案本身就是错的,那条
+# 挂了说明答案与练习对不上。
+solutions_selftest() {
+    local n_files out passed
+    n_files=$(find solutions/tests -name '*.cpp' | wc -l | tr -d ' ')
+    if [[ "$n_files" -eq 0 ]]; then
+        echo "E2E(solutions) FAIL: solutions/tests 下一份答案都没有"
+        return 1
+    fi
+
+    out=$(mcpp test -p solutions 2>&1)
+    if ! echo "$out" | grep -q "test result ok"; then
+        echo "E2E(solutions) FAIL: mcpp test -p solutions 未全绿:"
+        echo "$out" | grep -E "FAIL|failures" -A10 | head -20
+        return 1
+    fi
+
+    passed=$(echo "$out" | grep -oE '[0-9]+ passed' | grep -oE '^[0-9]+' | tail -1)
+    passed="${passed:-0}"
+    # 防空转:测试发现是按 tests/**/*.cpp 自动扫的,布局一改就可能一个都没扫到,
+    # 而「0 个测试」在 mcpp 眼里同样是 "test result ok"。
+    if [[ "$passed" -ne "$n_files" ]]; then
+        echo "E2E(solutions) FAIL: solutions/tests 下有 $n_files 份答案,但只跑了 $passed 个测试"
+        return 1
+    fi
+    echo "E2E(solutions) 自检: mcpp test -p solutions —— $passed/$n_files 全部通过 ✓"
+}
+
 provider_smoke() {
     # Provider 协议冒烟:枚举数量、check 的关键事件
     local n
@@ -110,6 +146,7 @@ provider_smoke() {
 }
 
 rc=0
+solutions_selftest || rc=1
 provider_smoke || rc=1
 if [[ "$MODE" == "zh" || "$MODE" == "all" ]]; then run_lang "src/"    zh || rc=1; fi
 if [[ "$MODE" == "en" || "$MODE" == "all" ]]; then run_lang "src/en/" en || rc=1; fi

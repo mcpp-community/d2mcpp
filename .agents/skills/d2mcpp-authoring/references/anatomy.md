@@ -19,7 +19,7 @@ book/en/src/changelog.md              # en changelog (add entry)
 src/<std>/tests/NN-topic/K.cpp        # zh exercise(s)   — no registration needed
 src/en/<std>/tests/NN-topic/K.cpp     # en exercise(s)   — no registration needed
 
-solutions/<std>/NN-topic/K.cpp        # reference solution(s), zh/en 共用
+solutions/tests/<std>/NN-topic/K.cpp  # reference solution(s), zh/en 共用
 ```
 
 Repo-level shared basis (NOT per-lesson, created once, never edited by hand):
@@ -37,7 +37,7 @@ snapshot via `msvc-stl/SOURCE.md` when needed.
 
 A new `<std>` section that does not exist yet needs: a `src/<std>/mcpp.toml` (copy
 `src/cpp14/mcpp.toml`, change the name), `src/<std>/tests/` + `src/en/<std>/tests/` +
-`solutions/<std>/` directories, the member added to the root `mcpp.toml`
+`solutions/tests/<std>/` directories, the member added to the root `mcpp.toml`
 workspace list (both `src/<std>` and `src/en/<std>`), and the section heading in both
 `SUMMARY.md` files (e.g. `# C++14核心语言特性` / `# C++14 Core Language
 Features`).
@@ -79,9 +79,11 @@ change compile flags.
 
 ## Solution registration — there is none either
 
-Drop the file at `solutions/<std>/NN-topic/K.cpp` (zh/en share one solution).
-CI swaps it over the exercise and asserts it passes; see
-`d2x/buildtools/tests/e2e.sh`.
+Drop the file at `solutions/tests/<std>/NN-topic/K.cpp` (zh/en share one
+solution). `solutions/` is itself an mcpp package, so the file becomes a test by
+directory convention — verify it with `mcpp test -p solutions <slug>`, no copying
+involved. CI additionally swaps it over the exercise and asserts it passes there
+too; see `d2x/buildtools/tests/e2e.sh`.
 
 ## SUMMARY registration
 
