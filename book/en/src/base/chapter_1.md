@@ -54,10 +54,15 @@ d2x install d2mcpp
 
 ```bash
 cd d2mcpp
-mcpp test
+mcpp test -p solutions       # verify the environment: 52 reference answers, all green
+mcpp test                    # your progress table: the exercises, all red for now
 ```
 
-> The exercises **are** the tests, and they ship unfinished — so this is *supposed* to come out all red. What it verifies is everything around them: the toolchain resolved, the `d2x` library built, and the runner reached every exercise. Note that `solutions/` is not a workspace member, so `mcpp test` never runs it; copy it over the exercise files and only then does the same command go all green (that is exactly what CI does).
+> `solutions/` is a real mcpp package (`solutions/mcpp.toml` + `solutions/tests/`), so the first command actually compiles and runs all 52 reference answers — green means your toolchain is fine. The second is your own progress table: the exercises **are** the tests and they ship unfinished, so red is exactly where you start.
+>
+> An answer and its exercise are paired by their `tests/`-relative path:
+> `solutions/tests/cpp11/00-auto-and-decltype/0.cpp` ←→ `src/cpp11/tests/00-auto-and-decltype/0.cpp`.
+> To run just one slice: `mcpp test -p solutions cpp11`.
 
 ### Local E-book
 

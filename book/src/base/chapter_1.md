@@ -54,10 +54,15 @@ d2x install d2mcpp
 
 ```bash
 cd d2mcpp
-mcpp test
+mcpp test -p solutions       # 验证环境: 52 份参考答案, 应当全绿
+mcpp test                    # 你的进度表: 练习还没做, 此刻全红
 ```
 
-> 练习**就是**测试, 而且发下来时是没做完的 —— 所以这里**本来就该全红**。它验的是练习之外的一切: 工具链解析成功、`d2x` 库编译通过、测试运行器逐题都跑到了。注意 `solutions/` 不是工作区成员, `mcpp test` 不会去跑它; 把它覆盖到练习文件上, 同一条命令才会全绿(CI 做的正是这件事)。
+> `solutions/` 本身就是一个 mcpp 工程(`solutions/mcpp.toml` + `solutions/tests/`), 所以第一条命令会真的编译并运行全部 52 份参考答案 —— 全绿即工具链没问题。第二条才是你自己的进度表: 练习**就是**测试, 而且发下来时是没做完的, 全红正是起点。
+>
+> 答案与练习的对应关系就是 `tests/` 下的相对路径:
+> `solutions/tests/cpp11/00-auto-and-decltype/0.cpp` ←→ `src/cpp11/tests/00-auto-and-decltype/0.cpp`。
+> 想只看某一部分: `mcpp test -p solutions cpp11`。
 
 ### 本地电子书
 

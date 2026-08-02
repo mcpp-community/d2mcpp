@@ -71,7 +71,7 @@ When adding a feature numbered `NN` with slug `topic` (e.g. `06-scoped-enums`):
 2. `book/en/src/<std>/NN-topic.md` — en chapter (translate prose, keep code identical)
 3. `src/<std>/tests/NN-topic/K.cpp` — one or more exercises (`K` = 0,1,2…), zh comments
 4. `src/en/<std>/tests/NN-topic/K.cpp` — en exercises (translate comments only)
-5. `solutions/<std>/NN-topic/K.cpp` — reference solution per exercise (zh/en 共用)
+5. `solutions/tests/<std>/NN-topic/K.cpp` — reference solution per exercise (zh/en 共用)
 6. (nothing to register — exercises are tests, discovered by directory convention)
 8. Add the chapter line to **both** `book/src/SUMMARY.md` and `book/en/src/SUMMARY.md`
 9. Add a changelog entry to **both** `book/src/changelog.md` and `book/en/src/changelog.md`
