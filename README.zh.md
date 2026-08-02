@@ -77,11 +77,12 @@ xlings install d2x mcpp -y   # d2x: 练习框架 CLI | mcpp: C++ 构建与测试
 ```bash
 d2x install d2mcpp           # 下载课程,环境自动配置
 cd d2mcpp
-mcpp test                    # 验证环境: 每道练习都能编译并运行
+mcpp test                    # 环境自检 —— 打印你的进度表
 ```
 
-> 练习**就是**测试。刚拿到课程时 `mcpp test` 会报告全部未通过 —— 这正是练习的起点,
-> 同时也说明工具链已经跑通了。把 `solutions/` 里的参考答案覆盖进去,同一条命令就会全绿。
+> 练习**就是**测试, 而且发下来时是没做完的 —— 所以刚拿到课程时 `mcpp test` **本来就该全红**。
+> 它验的是练习之外的一切: 工具链解析成功、`d2x` 库编译通过、测试运行器逐题都跑到了。
+> 把 `solutions/` 覆盖到练习文件上, 同一条命令就会全绿(CI 做的正是这件事)。
 
 <details>
   <summary>可选 - 改用 clone 项目源码的方式</summary>

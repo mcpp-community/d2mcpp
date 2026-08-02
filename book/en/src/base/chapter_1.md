@@ -57,7 +57,7 @@ cd d2mcpp
 mcpp test
 ```
 
-> The exercises **are** the tests. On a fresh checkout this reports them all as failing — that is the expected starting point, and it already proves the compile-and-run path works. Drop the reference answers from `solutions/` in and the very same command goes all green.
+> The exercises **are** the tests, and they ship unfinished — so this is *supposed* to come out all red. What it verifies is everything around them: the toolchain resolved, the `d2x` library built, and the runner reached every exercise. Note that `solutions/` is not a workspace member, so `mcpp test` never runs it; copy it over the exercise files and only then does the same command go all green (that is exactly what CI does).
 
 ### Local E-book
 

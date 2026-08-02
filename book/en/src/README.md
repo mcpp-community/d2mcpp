@@ -73,13 +73,14 @@ xlings install d2x mcpp -y   # d2x: exercise framework CLI | mcpp: C++ build & t
 ```bash
 d2x install d2mcpp           # download the course, toolchain auto-configured
 cd d2mcpp
-mcpp test                    # verify the environment: every exercise compiles and runs
+mcpp test                    # environment self-check — prints your progress table
 ```
 
-> The exercises **are** the tests. On a fresh checkout `mcpp test` reports them all as
-> failing — that is the expected starting point, and it already proves your toolchain
-> works. Drop the reference answers from `solutions/` in and the very same command goes
-> all green.
+> The exercises **are** the tests, and they ship unfinished — so a fresh `mcpp test` is
+> *supposed* to come out all red. What it verifies is everything around them: the
+> toolchain resolved, the `d2x` library built, and the runner reached every exercise.
+> Copy `solutions/` over the exercise files and the very same command goes all green
+> (that is exactly what CI does).
 
 <details>
   <summary>optional - start from the git source instead</summary>
