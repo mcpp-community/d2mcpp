@@ -50,15 +50,14 @@ d2x install d2mcpp
 
 ### 验证环境
 
-> 进入项目目录后跑一遍全量测试, 确认工具链是通的
+> 进入项目目录后跑一遍参考答案, 确认工具链是通的
 
 ```bash
 cd d2mcpp
 mcpp test -p solutions       # 验证环境: 52 份参考答案, 应当全绿
-mcpp test                    # 你的进度表: 练习还没做, 此刻全红
 ```
 
-> `solutions/` 本身就是一个 mcpp 工程(`solutions/mcpp.toml` + `solutions/tests/`), 所以第一条命令会真的编译并运行全部 52 份参考答案 —— 全绿即工具链没问题。第二条才是你自己的进度表: 练习**就是**测试, 而且发下来时是没做完的, 全红正是起点。
+> `solutions/` 本身就是一个 mcpp 工程(`solutions/mcpp.toml` + `solutions/tests/`), 所以这条命令会真的编译并运行全部 52 份参考答案 —— 全绿即工具链就绪。
 >
 > 答案与练习的对应关系就是 `tests/` 下的相对路径:
 > `solutions/tests/cpp11/00-auto-and-decltype/0.cpp` ←→ `src/cpp11/tests/00-auto-and-decltype/0.cpp`。
@@ -101,6 +100,7 @@ d2x status
 > 每个 C++ 标准目录都是真实的 mcpp 工程,练习就是它的 tests/——不经过 d2x,直接用 mcpp 也能练:
 
 ```bash
+mcpp test                           # 你的完整进度表(动手前全红, 那就是起点)
 mcpp test -p src/cpp11              # 整个 cpp11 的进度表(哪题绿哪题红)
 mcpp test -p src/cpp11 03-trailing  # 只跑名字匹配的练习
 ```

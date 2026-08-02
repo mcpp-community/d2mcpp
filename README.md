@@ -78,13 +78,10 @@ xlings install d2x mcpp -y   # d2x: exercise framework CLI | mcpp: C++ build & t
 d2x install d2mcpp           # download the course, toolchain auto-configured
 cd d2mcpp
 mcpp test -p solutions       # verify the environment: 52 reference answers, all green
-mcpp test                    # your progress table: the exercises, all red for now
 ```
 
-> `solutions/` is a real mcpp package, so the first command compiles and runs all 52
-> reference answers — an unambiguous green tick that your toolchain works. The second
-> one is your own progress table: the exercises **are** the tests and they ship
-> unfinished, so red is exactly where you start.
+> `solutions/` is a real mcpp package, so this compiles and runs all 52 reference
+> answers — an unambiguous green tick that your toolchain is ready.
 
 <details>
   <summary>optional - start from the git source instead</summary>
@@ -95,7 +92,7 @@ mcpp test                    # your progress table: the exercises, all red for n
 git clone https://github.com/mcpp-community/d2mcpp.git   # or your fork
 cd d2mcpp
 xlings install -y            # toolchain pinned by .xlings.json
-mcpp test                    # same environment check
+mcpp test -p solutions       # same environment check
 ```
 
 > Tip: fork this repo and clone your fork — `git commit / push` keeps your practice progress in your own repository.
@@ -111,7 +108,9 @@ d2x checker                  # practice loop: edit -> save -> auto-check -> adva
 d2x status                   # progress overview
 ```
 
-> Want to run a single chapter without d2x? `mcpp test -p src/cpp11` works too.
+> Prefer plain mcpp? The exercises **are** the tests — `mcpp test` prints your whole
+> progress table (all red until you start), and `mcpp test -p src/cpp11` runs a single
+> chapter.
 
 **👉 [more details...](https://mcpp-community.github.io/d2mcpp/base/chapter_1.html)**
 

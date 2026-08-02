@@ -50,15 +50,14 @@ d2x install d2mcpp
 
 ### Verify the environment
 
-> Run the full test suite once inside the project to confirm the toolchain works
+> Run the reference answers once inside the project to confirm the toolchain works
 
 ```bash
 cd d2mcpp
 mcpp test -p solutions       # verify the environment: 52 reference answers, all green
-mcpp test                    # your progress table: the exercises, all red for now
 ```
 
-> `solutions/` is a real mcpp package (`solutions/mcpp.toml` + `solutions/tests/`), so the first command actually compiles and runs all 52 reference answers — green means your toolchain is fine. The second is your own progress table: the exercises **are** the tests and they ship unfinished, so red is exactly where you start.
+> `solutions/` is a real mcpp package (`solutions/mcpp.toml` + `solutions/tests/`), so this command actually compiles and runs all 52 reference answers — green means your toolchain is ready.
 >
 > An answer and its exercise are paired by their `tests/`-relative path:
 > `solutions/tests/cpp11/00-auto-and-decltype/0.cpp` ←→ `src/cpp11/tests/00-auto-and-decltype/0.cpp`.
@@ -101,6 +100,7 @@ d2x status
 > Every C++ standard directory is a real mcpp project and the exercises are its tests/ — you can practice with plain mcpp, no d2x involved:
 
 ```bash
+mcpp test                              # your whole progress table (all red before you start)
 mcpp test -p src/en/cpp11              # progress table for the whole cpp11 section
 mcpp test -p src/en/cpp11 03-trailing  # run only exercises matching the name
 ```

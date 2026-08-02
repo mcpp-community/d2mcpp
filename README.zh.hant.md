@@ -78,12 +78,10 @@ xlings install d2x mcpp -y   # d2x: 練習框架 CLI | mcpp: C++ 建置與測試
 d2x install d2mcpp           # 下載課程,環境自動配置
 cd d2mcpp
 mcpp test -p solutions       # 驗證環境: 52 份參考答案, 應當全綠
-mcpp test                    # 你的進度表: 練習還沒做, 此刻全紅
 ```
 
-> `solutions/` 本身就是一個 mcpp 工程, 所以第一條指令會真的編譯並執行全部 52 份參考答案 ——
-> 全綠即工具鏈沒問題, 這是個不含糊的訊號。第二條才是你自己的進度表: 練習**就是**測試,
-> 而且發下來時是沒做完的, 全紅正是起點。
+> `solutions/` 本身就是一個 mcpp 工程, 所以這條指令會真的編譯並執行全部 52 份參考答案 ——
+> 全綠即工具鏈就緒, 這是個不含糊的訊號。
 
 <details>
   <summary>可選 - 改用 clone 專案原始碼的方式</summary>
@@ -94,7 +92,7 @@ mcpp test                    # 你的進度表: 練習還沒做, 此刻全紅
 git clone https://github.com/mcpp-community/d2mcpp.git   # 或你 fork 後的倉庫
 cd d2mcpp
 xlings install -y            # 按 .xlings.json 安裝固定版本工具鏈
-mcpp test                    # 同樣的環境驗證
+mcpp test -p solutions       # 同樣的環境驗證
 ```
 
 > 建議: 先 fork 本倉庫再 clone 自己的 fork —— 通過 `git commit / push` 把練習進度保存到自己的倉庫裡。
@@ -110,7 +108,8 @@ d2x checker                  # 練習循環: 編輯 -> 保存 -> 自動偵測 ->
 d2x status                   # 進度總覽
 ```
 
-> 想單獨跑某一章而不經過 d2x? 直接 `mcpp test -p src/cpp11` 同樣可用。
+> 不想經過 d2x? 練習**就是**測試 —— `mcpp test` 印出你的完整進度表(動手前全紅),
+> `mcpp test -p src/cpp11` 只跑某一章。
 
 **👉 [更多細節...](https://mcpp-community.github.io/d2mcpp/base/chapter_1.html)**
 
