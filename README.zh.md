@@ -133,7 +133,7 @@ d2x status                   # 进度总览
 
 **👥贡献者**
 
-[![Star History Chart](https://api.star-history.com/svg?repos=mcpp-community/d2mcpp&type=date&legend=top-left)](https://www.star-history.com/#mcpp-community/d2mcpp&type=date&legend=top-left)
+[![Star History Chart](https://star-history.dera.page/svg?repos=mcpp-community/d2mcpp&type=date&legend=top-left)](https://star-history.dera.page/#mcpp-community/d2mcpp&type=date&legend=top-left)
 
 <a href="https://github.com/mcpp-community/d2mcpp/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=mcpp-community/d2mcpp" />
