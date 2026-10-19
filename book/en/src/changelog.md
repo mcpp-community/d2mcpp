@@ -8,6 +8,15 @@
 
 # d2mcpp Changelog
 
+## 2026/10
+
+**Environment upgrade and first-use validation**
+
+Pin mcpp 2026.10.17.1, add platform setup scripts and fresh/legacy environment checks, and update the Codespaces entry point.
+
+- `Book`: [zh](https://mcpp-community.github.io/d2mcpp/base/chapter_1.html) / [en](https://mcpp-community.github.io/d2mcpp/en/base/chapter_1.html) - 2026/10/19
+- `Code`: [setup](https://github.com/mcpp-community/d2mcpp/tree/main/scripts) / [environment recovery](https://github.com/mcpp-community/d2mcpp/blob/main/docs/environment.md) - 2026/10/19
+
 ## 2025/11
 
 ---

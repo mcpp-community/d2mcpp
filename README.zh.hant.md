@@ -18,7 +18,7 @@
 
 [📚Book]: https://mcpp-community.github.io/d2mcpp
 [🎥Video]: https://youtube.com/playlist?list=PL7uow6t1QjF0ooMLkLSS96swpSuBZvoRE&si=1xHOGVIYpbzZAosI
-[⌨️Code]: https://github.com/mcpp-community/d2mcpp/tree/main/dslings
+[⌨️Code]: https://github.com/mcpp-community/d2mcpp/tree/main/src
 [👥X]: https://forum.d2learn.org/category/20
 
 ## 目標
@@ -37,81 +37,80 @@
 
 ### 線上程式碼練習
 
-> [**點擊下方按鈕**](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=mcpp-community/d2mcpp) —— 雲端自動完成環境設定(首次啟動需幾分鐘), 隨後自動進入練習偵測模式
-
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=mcpp-community/d2mcpp)
+
+等待環境準備完成（首次啟動會下載工具鏈並驗證參考答案），然後在終端執行 `d2x checker`，或使用 **Tasks: Run Task → d2mcpp: practice**。重新連線不會重複啟動 checker。準備失敗時查看[環境疑難排解](docs/environment.md)。
 
 ### 建立本地練習環境
 
-**第一步 - 安裝 [d2x](https://github.com/d2learn/d2x) 和 [mcpp](https://github.com/mcpp-community/mcpp) 工具**
+支援的發行平台：Linux x86_64、macOS 14+ Apple Silicon、Windows x86_64（Windows PowerShell 5.1+）。mcpp 管理 C++ 工具鏈，Visual Studio 為選用項目。目前課程使用的 d2x Release 尚未涵蓋 Linux ARM64。可自行選擇編輯器，課程不會強制安裝。
+
+**第一步：取得課程**（建議先 fork，用 git 儲存自己的練習進度）：
+
+```bash
+git clone https://github.com/mcpp-community/d2mcpp.git
+cd d2mcpp
+```
+
+**第二步：準備環境。** 指令碼安裝 xlings **2026.10.18.1** 及 `.xlings.json` 宣告的版本（mcpp **2026.10.17.1**、d2x **2026.08.02.2**、mdBook **0.4.43**），建置並檢查 Provider。首次建置可能需要幾分鐘。
+
+Linux / macOS：
+
+```bash
+bash scripts/setup.sh
+export PATH="$HOME/.xlings/subos/current/bin:$PATH"
+```
+
+Windows PowerShell：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\setup.ps1
+$env:Path = "$env:USERPROFILE\.xlings\subos\current\bin;$env:Path"
+```
+
+PATH 指令讓目前終端立即找到工具；安裝後重新開啟終端即可供後續工作階段使用。準備指令碼可重複執行，不會更動練習檔案或學習進度。
 
 <details>
-  <summary>點選查看xlings安裝指令</summary>
+<summary>選用：透過 d2x install 下載課程</summary>
 
----
-
-#### Linux/MacOS
+先安裝 [xlings](https://github.com/openxlings/xlings)：
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/openxlings/xlings/v2026.10.18.1/tools/other/quick_install.sh | bash -s v2026.10.18.1
+export PATH="$HOME/.xlings/subos/current/bin:$PATH"
 ```
 
-#### Windows - PowerShell
+Windows PowerShell 使用：
 
-```bash
-irm https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.ps1 | iex
+```powershell
+irm https://raw.githubusercontent.com/mcpp-community/d2mcpp/main/scripts/install-xlings.ps1 | iex
+$env:Path = "$env:USERPROFILE\.xlings\subos\current\bin;$env:Path"
 ```
 
-> 註: xlings工具 -> [詳情](https://xlings.d2learn.org)
+然後在任一系統執行：
 
----
+```text
+xlings install d2x@2026.08.02.2 -y
+d2x install d2mcpp
+cd d2mcpp
+```
+
+繼續執行第二步中對應系統的準備指令碼；兩種下載方式共用下方驗證步驟。
 
 </details>
 
-```bash
-xlings install d2x mcpp -y   # d2x: 練習框架 CLI | mcpp: C++ 建置與測試工具
-```
-
-**第二步 - 獲取課程, 並配置和驗證環境**
+**第三步：驗證環境並開始練習：**
 
 ```bash
-d2x install d2mcpp           # 下載課程,環境自動配置
-cd d2mcpp
-mcpp test -p solutions       # 驗證環境: 52 份參考答案, 應當全綠
-```
-
-> `solutions/` 本身就是一個 mcpp 工程, 所以這條指令會真的編譯並執行全部 52 份參考答案 ——
-> 全綠即工具鏈就緒, 這是個不含糊的訊號。
-
-<details>
-  <summary>可選 - 改用 clone 專案原始碼的方式</summary>
-
----
-
-```bash
-git clone https://github.com/mcpp-community/d2mcpp.git   # 或你 fork 後的倉庫
-cd d2mcpp
-xlings install -y            # 按 .xlings.json 安裝固定版本工具鏈
-mcpp test -p solutions       # 同樣的環境驗證
-```
-
-> 建議: 先 fork 本倉庫再 clone 自己的 fork —— 通過 `git commit / push` 把練習進度保存到自己的倉庫裡。
-
----
-
-</details>
-
-**第三步 - 開始練習**
-
-```bash
-d2x checker                  # 練習循環: 編輯 -> 保存 -> 自動偵測 -> 推進
+mcpp test -p solutions       # 參考答案應全部通過（目前 52 份）
+d2x checker                  # 編輯 -> 儲存 -> 自動偵測 -> 推進
 d2x status                   # 進度總覽
 ```
 
-> 不想經過 d2x? 練習**就是**測試 —— `mcpp test` 印出你的完整進度表(動手前全紅),
-> `mcpp test -p src/cpp11` 只跑某一章。
+未完成的練習報錯是預期行為，參考答案必須全綠。`Provider` 錯誤或連結路徑含 `/nonexistent/` 屬於環境問題，請查看[診斷與恢復步驟](docs/environment.md)。`git pull` 後重新執行準備指令碼，讓更新後的版本設定生效。
 
-**👉 [更多細節...](https://mcpp-community.github.io/d2mcpp/base/chapter_1.html)**
+也可使用 `mcpp test -p src/cpp11` 直接練習某一章。更多操作見[使用說明](https://mcpp-community.github.io/d2mcpp/base/chapter_1.html)。
+
 
 ## 社區
 

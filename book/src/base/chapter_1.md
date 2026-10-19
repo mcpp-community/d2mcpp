@@ -10,58 +10,76 @@
 
 **d2mcpp**是一个强调动手实践的现代C++核心语言特性教程项目。基于[xlings(d2x)工具](https://github.com/openxlings/xlings)搭建了一套**编译器驱动开发模式**的代码练习, 可以自动化的检测练习代码的状态和跳转到下一个练习...
 
-## 0.xlings工具安装
+## 0. 获取并准备环境
 
-> xlings包含教程项目所需的工具 - [更多工具细节](https://github.com/openxlings/xlings)
+支持的发布平台：Linux x86_64、macOS 14+ Apple Silicon、Windows x86_64（Windows PowerShell 5.1+）。mcpp 管理 C++ 工具链，Visual Studio 为可选项。当前课程所用 d2x Release 尚未覆盖 Linux ARM64。编辑器可自行选择，课程不会强制安装。
 
-**Linux**
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.sh | bash
-```
-
-or
+**第一步：获取课程**（建议先 fork，用 git 保存自己的练习进度）：
 
 ```bash
-wget https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.sh -O - | bash
-```
-
-**Windows - PowerShell**
-
-```bash
-Invoke-Expression (Invoke-Webrequest 'https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.ps1' -UseBasicParsing).Content
-```
-
-**装好 xlings 后, 用它装本教程需要的两个工具**
-
-```bash
-xlings install d2x mcpp -y   # d2x: 练习框架 CLI | mcpp: C++ 构建与测试工具
-```
-
-> [d2x](https://github.com/d2learn/d2x) 负责练习的检测与推进, [mcpp](https://github.com/mcpp-community/mcpp) 负责构建与运行 —— 练习本身就是 mcpp 的测试
-
-## 1.获取项目及自动配置环境
-
-> 下载项目到当前目录并自动配置本地环境
-
-```bash
-d2x install d2mcpp
-```
-
-### 验证环境
-
-> 进入项目目录后跑一遍参考答案, 确认工具链是通的
-
-```bash
+git clone https://github.com/mcpp-community/d2mcpp.git
 cd d2mcpp
-mcpp test -p solutions       # 验证环境: 52 份参考答案, 应当全绿
 ```
 
-> `solutions/` 本身就是一个 mcpp 工程(`solutions/mcpp.toml` + `solutions/tests/`), 所以这条命令会真的编译并运行全部 52 份参考答案 —— 全绿即工具链就绪。
->
-> 答案与练习的对应关系就是 `tests/` 下的相对路径:
-> `solutions/tests/cpp11/00-auto-and-decltype/0.cpp` ←→ `src/cpp11/tests/00-auto-and-decltype/0.cpp`。
-> 想只看某一部分: `mcpp test -p solutions cpp11`。
+**第二步：准备环境。** 脚本安装 xlings **2026.10.18.1** 及 `.xlings.json` 声明的版本（mcpp **2026.10.17.1**、d2x **2026.08.02.2**、mdBook **0.4.43**），构建并检查 Provider。首次构建可能需要几分钟。
+
+Linux / macOS：
+
+```bash
+bash scripts/setup.sh
+export PATH="$HOME/.xlings/subos/current/bin:$PATH"
+```
+
+Windows PowerShell：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\setup.ps1
+$env:Path = "$env:USERPROFILE\.xlings\subos\current\bin;$env:Path"
+```
+
+PATH 命令让当前终端立即找到工具；安装后重新打开终端即可供后续会话使用。准备脚本可重复执行，不会改动练习文件或学习进度。
+
+<details>
+<summary>可选：通过 d2x install 下载课程</summary>
+
+先安装 [xlings](https://github.com/openxlings/xlings)：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/openxlings/xlings/v2026.10.18.1/tools/other/quick_install.sh | bash -s v2026.10.18.1
+export PATH="$HOME/.xlings/subos/current/bin:$PATH"
+```
+
+Windows PowerShell 使用：
+
+```powershell
+irm https://raw.githubusercontent.com/mcpp-community/d2mcpp/main/scripts/install-xlings.ps1 | iex
+$env:Path = "$env:USERPROFILE\.xlings\subos\current\bin;$env:Path"
+```
+
+然后在任一系统执行：
+
+```text
+xlings install d2x@2026.08.02.2 -y
+d2x install d2mcpp
+cd d2mcpp
+```
+
+继续执行第二步中对应系统的准备脚本；两种下载方式共用下面的验证步骤。
+
+</details>
+
+**第三步：验证环境并开始练习：**
+
+```bash
+mcpp test -p solutions       # 参考答案应全部通过（当前 52 份）
+d2x checker                  # 编辑 -> 保存 -> 自动检测 -> 推进
+d2x status                   # 进度总览
+```
+
+未完成的练习报错是预期行为，参考答案必须全绿。`Provider` 错误或链接路径含 `/nonexistent/` 属于环境问题，请查看[诊断与恢复步骤](https://github.com/mcpp-community/d2mcpp/blob/main/docs/environment.md)。`git pull` 后重新运行准备脚本，让更新后的版本配置生效。
+
+也可使用 `mcpp test -p src/cpp11` 直接练习某一章。更多操作见[使用说明](https://mcpp-community.github.io/d2mcpp/base/chapter_1.html)。
+
 
 ### 本地电子书
 

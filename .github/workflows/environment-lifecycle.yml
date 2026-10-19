@@ -1,0 +1,113 @@
+name: Dev Container and legacy upgrade
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "solutions/**"
+      - "d2x/**"
+      - "mcpp.toml"
+      - ".d2x.json"
+      - ".xlings.json"
+      - ".github/workflows/**"
+      - ".github/actions/**"
+      - ".devcontainer/**"
+      - ".vscode/tasks.json"
+      - "scripts/**"
+      - "README*.md"
+      - "docs/**"
+      - "book/src/base/chapter_1.md"
+      - "book/en/src/base/chapter_1.md"
+      - "book/src/changelog.md"
+      - "book/en/src/changelog.md"
+  pull_request:
+    paths:
+      - "src/**"
+      - "solutions/**"
+      - "d2x/**"
+      - "mcpp.toml"
+      - ".d2x.json"
+      - ".xlings.json"
+      - ".github/workflows/**"
+      - ".github/actions/**"
+      - ".devcontainer/**"
+      - ".vscode/tasks.json"
+      - "scripts/**"
+      - "README*.md"
+      - "docs/**"
+      - "book/src/base/chapter_1.md"
+      - "book/en/src/base/chapter_1.md"
+      - "book/src/changelog.md"
+      - "book/en/src/changelog.md"
+  workflow_dispatch:
+  schedule:
+    - cron: '23 4 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  upgrade:
+    name: upgrade (${{ matrix.os }}, ${{ matrix.variant }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-14, windows-2025]
+        variant: [existing]
+        include:
+          - {os: ubuntu-24.04, variant: broken-glibc}
+          - {os: ubuntu-24.04, variant: stale-index}
+          - {os: ubuntu-24.04, variant: dangling-record}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select the legacy toolchain home
+        shell: bash
+        run: echo "MCPP_HOME=$RUNNER_TEMP/d2mcpp-legacy" >> "$GITHUB_ENV"
+      - name: Install the shared xlings baseline (Unix)
+        if: runner.os != 'Windows'
+        run: bash scripts/install-xlings.sh
+      - name: Install the shared xlings baseline (PowerShell)
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: ./scripts/install-xlings.ps1
+      - name: Upgrade August toolchain and exercise the course
+        shell: bash
+        env:
+          VARIANT: ${{ matrix.variant }}
+        run: |
+          python scripts/ci/upgrade.py --variant "$VARIANT"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: upgrade-${{ matrix.os }}-${{ matrix.variant }}
+          path: .d2x/ci-logs/
+          if-no-files-found: ignore
+          include-hidden-files: true
+
+  devcontainer:
+    name: Dev Container creation and reconnect
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Dev Container CLI
+        run: npm install -g @devcontainers/cli@0.89.0
+      - name: Create the actual course container
+        run: devcontainer up --workspace-folder . --remove-existing-container
+      - name: Verify fresh shell, reconnect and first practice
+        run: |
+          devcontainer exec --workspace-folder . bash -c 'bash .devcontainer/readiness.sh && sha256sum .d2x/environment-ready > /tmp/ready-before'
+          devcontainer exec --workspace-folder . bash -c 'bash .devcontainer/readiness.sh && sha256sum --check /tmp/ready-before'
+          devcontainer exec --workspace-folder . bash -c 'command -v d2x && command -v mcpp && python3 scripts/ci/first-run.py --allow-source-edit'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: devcontainer-first-use
+          path: .d2x/ci-logs/
+          if-no-files-found: ignore
+          include-hidden-files: true

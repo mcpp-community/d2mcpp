@@ -42,10 +42,17 @@ run_lang() {
     restore() { git checkout -q -- "${test_dirs[@]}"; }
 
     # —— 断言 1: pristine 全量必须 0 passed ——
-    local m out passed
+    local m out passed failed expected
     for m in "${members[@]}"; do
         out=$(mcpp test -p "$m" 2>&1)
         passed=$(echo "$out" | grep -oE '[0-9]+ passed' | grep -oE '^[0-9]+' | tail -1)
+        failed=$(echo "$out" | grep -oE '[0-9]+ failed' | grep -oE '^[0-9]+' | tail -1)
+        expected=$(find "$m/tests" -name '*.cpp' | wc -l | tr -d ' ')
+        if [[ "$expected" -eq 0 || "${failed:-0}" -ne "$expected" ]]; then
+            echo "E2E($label) FAIL: $m expected $expected failing exercises, got ${failed:-no summary}"
+            echo "$out" | tail -30
+            return 1
+        fi
         if [[ "${passed:-0}" != "0" ]]; then
             echo "E2E($label) FAIL: $m 在未完成状态下有 $passed 个练习通过了 —— 练习失去了「默认不通过」性质"
             echo "$out" | grep " ... ok" | head -5

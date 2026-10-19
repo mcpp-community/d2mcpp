@@ -1,0 +1,206 @@
+name: Fresh install and first use
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "solutions/**"
+      - "d2x/**"
+      - "mcpp.toml"
+      - ".d2x.json"
+      - ".xlings.json"
+      - ".github/workflows/**"
+      - ".github/actions/**"
+      - ".devcontainer/**"
+      - ".vscode/tasks.json"
+      - "scripts/**"
+      - "README*.md"
+      - "docs/**"
+      - "book/src/base/chapter_1.md"
+      - "book/en/src/base/chapter_1.md"
+      - "book/src/changelog.md"
+      - "book/en/src/changelog.md"
+  pull_request:
+    paths:
+      - "src/**"
+      - "solutions/**"
+      - "d2x/**"
+      - "mcpp.toml"
+      - ".d2x.json"
+      - ".xlings.json"
+      - ".github/workflows/**"
+      - ".github/actions/**"
+      - ".devcontainer/**"
+      - ".vscode/tasks.json"
+      - "scripts/**"
+      - "README*.md"
+      - "docs/**"
+      - "book/src/base/chapter_1.md"
+      - "book/en/src/base/chapter_1.md"
+      - "book/src/changelog.md"
+      - "book/en/src/changelog.md"
+  workflow_dispatch:
+  schedule:
+    - cron: '23 4 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  native:
+    name: fresh (${{ matrix.os }}, ${{ matrix.route }}, MSVC=${{ !matrix.mask_msvc }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-14, windows-2022, windows-2025]
+        route: [readme, cold]
+        mask_msvc: [false]
+        include:
+          - {os: windows-2025, route: readme, mask_msvc: true}
+          - {os: windows-2025, route: cold, mask_msvc: true}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select an empty toolchain home
+        shell: bash
+        run: echo "MCPP_HOME=$RUNNER_TEMP/d2mcpp-fresh" >> "$GITHUB_ENV"
+      - name: Assert host architecture
+        shell: bash
+        run: |
+          uname -a
+          if [[ "$RUNNER_OS" == macOS ]]; then test "$(uname -m)" = arm64; fi
+          test ! -e target
+          test ! -e .d2x/state.json
+      - name: Mask MSVC
+        if: matrix.mask_msvc
+        shell: powershell
+        run: ./scripts/ci/mask-msvc.ps1
+      - name: README preparation (Unix)
+        if: runner.os != 'Windows' && matrix.route == 'readme'
+        run: bash scripts/setup.sh
+      - name: README preparation (PowerShell 5.1)
+        if: runner.os == 'Windows' && matrix.route == 'readme'
+        shell: powershell
+        run: ./scripts/setup.ps1
+      - name: Cold install only (Unix)
+        if: runner.os != 'Windows' && matrix.route == 'cold'
+        run: bash scripts/setup.sh --install-only
+      - name: Cold install only (PowerShell 5.1)
+        if: runner.os == 'Windows' && matrix.route == 'cold'
+        shell: powershell
+        run: ./scripts/setup.ps1 -InstallOnly
+      - name: README environment verification
+        if: matrix.route == 'readme'
+        run: python scripts/ci/solutions.py
+      - name: First check, save, advance and resume
+        shell: bash
+        env:
+          ROUTE: ${{ matrix.route }}
+        run: |
+          args=()
+          if [[ "$ROUTE" == cold ]]; then args+=(--cold); fi
+          python scripts/ci/first-run.py --allow-source-edit "${args[@]}"
+      - name: Cold route also verifies all reference answers
+        if: matrix.route == 'cold'
+        run: python scripts/ci/solutions.py
+      - name: Assert GNU target without MSVC
+        if: matrix.mask_msvc
+        shell: bash
+        run: |
+          # doctor returns nonzero for warnings too (missing MSVC is expected).
+          mcpp self doctor > .d2x/ci-logs/doctor.txt 2>&1 || true
+          cat .d2x/ci-logs/doctor.txt
+          grep -q 'gcc.*what a build here uses' .d2x/ci-logs/doctor.txt
+          grep -q 'payload mingw-gcc' .d2x/ci-logs/doctor.txt
+          grep -q 'x86_64.*windows-gnu' .d2x/ci-logs/doctor.txt
+          ls -d target/*windows-gnu
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: first-run-${{ matrix.os }}-${{ matrix.route }}-${{ matrix.mask_msvc || false }}
+          path: .d2x/ci-logs/
+          if-no-files-found: ignore
+          include-hidden-files: true
+
+  linux-minimal:
+    name: fresh (Linux without a compiler, ${{ matrix.route }})
+    runs-on: ubuntu-24.04
+    container: ubuntu:24.04
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        route: [readme, cold]
+    steps:
+      - name: Install transport and CI tools, no C++ compiler
+        run: |
+          apt-get update -qq
+          DEBIAN_FRONTEND=noninteractive apt-get install -y curl ca-certificates git xz-utils unzip python3
+          useradd -m -s /bin/bash learner
+          ! command -v g++
+          ! command -v clang++
+      - uses: actions/checkout@v4
+      - name: Give the ordinary user a fresh checkout
+        shell: bash
+        env:
+          ROUTE: ${{ matrix.route }}
+        run: |
+          course_dir="$GITHUB_WORKSPACE"
+          if [[ "$ROUTE" == readme ]]; then
+            course_dir="/home/learner/first use with spaces/$(python3 -c 'print("long-project-directory-" * 6)')"
+            mkdir -p "$course_dir"
+            cp -a "$GITHUB_WORKSPACE/." "$course_dir/"
+          fi
+          chown -R learner:learner "$course_dir"
+          echo "COURSE_DIR=$course_dir" >> "$GITHUB_ENV"
+      - name: Follow the README or start checker cold
+        shell: bash
+        env:
+          ROUTE: ${{ matrix.route }}
+        run: |
+          cd "$COURSE_DIR"
+          if [[ "$ROUTE" == cold ]]; then
+            runuser -u learner -- bash scripts/setup.sh --install-only
+            runuser -u learner -- env MCPP_HOME=/home/learner/.mcpp PATH="/home/learner/.xlings/subos/current/bin:$PATH" python3 scripts/ci/first-run.py --allow-source-edit --cold
+            runuser -u learner -- env PATH="/home/learner/.xlings/subos/current/bin:$PATH" python3 scripts/ci/solutions.py
+          else
+            runuser -u learner -- bash scripts/setup.sh
+            runuser -u learner -- env PATH="/home/learner/.xlings/subos/current/bin:$PATH" python3 scripts/ci/solutions.py
+            runuser -u learner -- env PATH="/home/learner/.xlings/subos/current/bin:$PATH" python3 scripts/ci/first-run.py --allow-source-edit
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: first-run-linux-${{ matrix.route }}
+          path: ${{ env.COURSE_DIR }}/.d2x/ci-logs/
+          if-no-files-found: ignore
+          include-hidden-files: true
+
+  released-course:
+    name: Published d2x install route (main only)
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install xlings baseline
+        run: bash scripts/install-xlings.sh
+      - name: Follow the actual d2x download route
+        run: |
+          mkdir -p "$RUNNER_TEMP/course-download"
+          cd "$RUNNER_TEMP/course-download"
+          xlings install d2x@2026.08.02.2 -y
+          d2x install d2mcpp
+          cd d2mcpp
+          python3 -c 'import json; assert json.load(open(".xlings.json"))["workspace"]["mcpp"] == "2026.10.17.1", "Published course snapshot is stale"'
+          bash scripts/setup.sh
+          python3 scripts/ci/solutions.py
+          python3 scripts/ci/first-run.py --allow-source-edit
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: published-course-first-use
+          path: ${{ runner.temp }}/course-download/d2mcpp/.d2x/ci-logs/
+          if-no-files-found: ignore
+          include-hidden-files: true

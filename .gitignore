@@ -39,7 +39,8 @@ __pycache__
 
 # d2x project files
 .xlings
-.vscode
+.vscode/*
+!.vscode/tasks.json
 .zed
 llm.config.xlings
 media
@@ -47,6 +48,10 @@ media
 # d2x 学习进度与判定侧信道
 .d2x/state.json
 .d2x/result.ndjson
+.d2x/environment-ready
+.d2x/ci-logs/
+.d2x/checker.lock
+.d2x/last-output.log
 
 # mcpp 构建产物
 target/

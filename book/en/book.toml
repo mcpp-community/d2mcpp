@@ -9,6 +9,3 @@ build-dir = "../book/en"
 
 [output.html]
 git-repository-url = "https://github.com/mcpp-community/d2mcpp"
-
-[preprocessor.foo]
-# Add any additional configurations

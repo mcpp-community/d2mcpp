@@ -12,6 +12,15 @@ on:
       - "book/src/**"
       - "book/en/src/**"
 
+  pull_request:
+    paths:
+      - "book/**"
+      - "README*.md"
+      - "docs/**"
+      - "scripts/**"
+      - ".xlings.json"
+      - ".github/workflows/online-ebook.yml"
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -37,24 +46,22 @@ jobs:
         working-directory: book
 
     env:
-      XLINGS_VERSION: "0.4.14"
       MDBOOK_VERSION: 0.4.43
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Xlings ${{ env.XLINGS_VERSION }}
-        run: |
-          set -eu
-          curl -fsSL "https://github.com/openxlings/xlings/releases/download/v${XLINGS_VERSION}/xlings-${XLINGS_VERSION}-linux-x86_64.tar.gz" \
-            | tar -xzf - -C /tmp
-          /tmp/xlings-${XLINGS_VERSION}-linux-x86_64/bin/xlings self install
-          echo "$HOME/.xlings/subos/current/bin" >> "$GITHUB_PATH"
+      - name: Validate course and documentation links
+        run: python3 ../scripts/ci/check-project.py
+
+      - name: Install the shared xlings baseline
+        run: bash ../scripts/install-xlings.sh
 
       - name: Install mdBook
         run: xlings install mdbook@${MDBOOK_VERSION} -y
 
       - name: Setup Pages
+        if: github.event_name != 'pull_request'
         id: pages
         uses: actions/configure-pages@v4
 
@@ -68,6 +75,7 @@ jobs:
 
   # Deployment job
   deploy:
+    if: github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
