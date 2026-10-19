@@ -76,8 +76,12 @@ jobs:
         if: matrix.mask_msvc
         shell: powershell
         run: ./scripts/ci/mask-msvc.ps1
-      - name: Follow the README install and practice commands
-        if: matrix.route == 'readme'
+      - name: Follow the README install and practice commands (Unix)
+        if: runner.os != 'Windows' && matrix.route == 'readme'
+        run: python3 scripts/ci/readme.py
+      - name: Follow the README install and practice commands (PowerShell 5.1)
+        if: runner.os == 'Windows' && matrix.route == 'readme'
+        shell: powershell
         run: python scripts/ci/readme.py
       - name: Cold install only (Unix)
         if: runner.os != 'Windows' && matrix.route == 'cold'
@@ -175,23 +179,12 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
-      - name: Install xlings baseline
-        run: bash scripts/install-xlings.sh
-      - name: Follow the actual d2x download route
-        run: |
-          mkdir -p "$RUNNER_TEMP/course-download"
-          cd "$RUNNER_TEMP/course-download"
-          xlings install d2x@2026.08.02.2 -y
-          d2x install d2mcpp
-          cd d2mcpp
-          python3 -c 'import json; assert json.load(open(".xlings.json"))["workspace"]["mcpp"] == "2026.10.17.1", "Published course snapshot is stale"'
-          bash scripts/setup.sh
-          python3 scripts/ci/solutions.py
-          python3 scripts/ci/first-run.py --allow-source-edit
+      - name: Follow the README using the public course download
+        run: python3 scripts/ci/readme.py --published
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: published-course-first-use
-          path: ${{ runner.temp }}/course-download/d2mcpp/.d2x/ci-logs/
+          path: .d2x/ci-logs/
           if-no-files-found: ignore
           include-hidden-files: true
