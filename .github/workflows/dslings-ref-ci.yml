@@ -117,3 +117,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Verify all exercises have exactly one reference answer
         run: python3 scripts/ci/check-project.py
+      - name: Validate workflow syntax and expressions
+        run: |
+          cd "$RUNNER_TEMP"
+          curl --retry 3 -fsSL https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz -o actionlint_1.7.12_linux_amd64.tar.gz
+          curl --retry 3 -fsSL https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_checksums.txt -o actionlint-checksums.txt
+          grep 'actionlint_1.7.12_linux_amd64.tar.gz$' actionlint-checksums.txt | sha256sum --check
+          tar -xzf actionlint_1.7.12_linux_amd64.tar.gz actionlint
+          cd "$GITHUB_WORKSPACE"
+          "$RUNNER_TEMP/actionlint" -shellcheck=
