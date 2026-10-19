@@ -50,6 +50,7 @@ media
 .d2x/result.ndjson
 .d2x/environment-ready
 .d2x/ci-logs/
+.d2x/ci-work/
 .d2x/checker.lock
 .d2x/last-output.log
 
