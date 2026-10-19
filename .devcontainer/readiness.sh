@@ -13,7 +13,10 @@ if [[ ! -f .d2x/environment-ready ]] || [[ "$(cat .d2x/environment-ready)" != "$
 fi
 source scripts/tool-versions.env
 [[ "$(xlings --version)" == "xlings $XLINGS_VERSION" ]]
-expected=$(sed -n 's/.*"mcpp": *"\([^"]*\)".*/\1/p' .xlings.json)
-[[ "$(mcpp --version)" == "mcpp $expected" ]]
+for tool in mcpp d2x; do
+    expected=$(sed -n "s/.*\"$tool\": *\"\([^\"]*\)\".*/\1/p" .xlings.json)
+    actual=$("$tool" --version)
+    [[ "${actual##* }" == "$expected" ]]
+done
 echo 'd2mcpp is ready. Start in the terminal: d2x checker'
 echo 'Or run the VS Code task: d2mcpp: practice'

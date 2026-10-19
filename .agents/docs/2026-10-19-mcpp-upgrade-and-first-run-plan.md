@@ -1,6 +1,6 @@
 # mcpp 2026.10.17.1 升级与首次使用体验优化方案
 
-日期：2026-10-19。状态：调研方案，尚未修改运行配置或宣称跨平台验收通过。
+日期：2026-10-19。状态：已进入实现，[draft PR #91](https://github.com/mcpp-community/d2mcpp/pull/91)。第 8 节保留调研时记录；第 9 节说明实现与验收状态。最终 CI 以 PR 当前提交的检查结果为准。
 
 ## 1. 建议与范围
 
@@ -127,7 +127,7 @@ clone 路线在 PR 验证当前提交；真实 `d2x install d2mcpp` 路线会通
 
 保留 `dslings-ref-ci.yml` 的 pristine / overlay / solutions / checker 全程完成验证；统一安装器版本和 pin 注释。升级后检查测试输出兼容性、JSON 字段及产物布局。尤其不要用旧的 `d2x/buildtools/target/x86_64-windows-gnu` 路径作为唯一回退判据；先依据新版本实际构建元数据/工具链诊断确认选中 GNU target，再对照产物验证。
 
-加强现有计数：overlay passed 必须等于覆盖数量（当前脚本仅拒绝零通过，虽计算数量但未显式比较）；pristine 同时确认每个预期测试确实被发现，不能把包级失败或零测试当作“所有练习未完成”。
+保持 overlay passed 等于覆盖数量的既有断言；调研草稿曾误记此处仅拒绝零通过，实施复核后已更正。加强 pristine 计数，确认每个预期测试确实被发现，不能把包级失败或零测试当作“所有练习未完成”。
 
 ### C. devcontainer 与 upgrade
 
@@ -179,7 +179,7 @@ PR/main 触发范围覆盖 `.xlings.json`、`.d2x.json`、`mcpp.toml`、`d2x/**`
 
 合并前要求：目标平台矩阵通过；全量参考答案数量正确；首次 checker 抵达预期练习状态且保存后推进；已有故障环境可恢复；真实 Codespace 从按钮创建到可见终端练习人工通过。每一步均有日志证据，不能将“安装成功”或“CI 已有类似测试”替代端到端验收。
 
-## 8. 本次验证记录
+## 8. 调研阶段验证记录
 
 - 已读取仓库配置、两份 E2E 脚本、Provider、三种 README 与双语入门流程，并核对 mcpp/xlings/d2x 发布及包索引。
 - 已对照用户的实际链接错误定位占位路径来源，并检查固定版本 d2x 的默认超时、describe 和初始化失败分支。
@@ -188,3 +188,15 @@ PR/main 触发范围覆盖 `.xlings.json`、`.d2x.json`、`mcpp.toml`、`d2x/**`
 - 此环境的首次构建包含私有 registry 初始化、索引下载、patchelf/ninja 和 GCC 安装，说明仅安装 mcpp 包并不代表首次 C++ 构建已就绪。mdBook 单个下载约 116 秒，另提示应把下载时间与编译时间分别记录。
 - 同一隔离副本继续运行现有 `checker-e2e.sh zh`：checker 自主完成 52/52 道练习并正常退出，容器测试进程退出码 0。该项使用预先覆盖的答案，尚不覆盖运行中编辑保存、直接 checker 冷启动、TUI 和旧 home 迁移。完整探测日志保留于执行机器的 `/tmp/d2mcpp-upgrade-research/linux-fresh-ubuntu20.log`，临时容器已自动移除。
 - Windows、macOS 和真实 Codespaces 尚未执行；这些是实施验收项。
+
+## 9. 实现与验收记录
+
+- 已实现统一 mcpp pin、可选编辑器、共享安装器版本、Shell/PowerShell 5.1 准备流程及失败即停止的容器初始化。Codespaces 选择明确的手动启动：准备完成后在可见终端执行 `d2x checker`，或启动单实例 VS Code 任务，重连只验证就绪。
+- 三种 README、双语入门章节、双语环境排错说明与双语更新日志同步。PR 构建两本电子书并检查本地文档链接。
+- 首次使用检查器已在本地实际跑通失败→保存→通过→推进→重启，以及重复 setup 保留进度。额外注入“d2x 空输出并退出 0”的故障，检查器正确拒绝，防止仅凭退出码误报成功。
+- CI 已覆盖最小 Linux 普通用户、macOS ARM64、Windows Server 2022/2025（有/无 MSVC）的 README 与直接 checker 两条路径。升级矩阵保留真实八月版 home，并注入损坏 glibc、八月包索引快照、悬空安装记录三个场景。
+- 已有 CI 证据：Linux/macOS 两条首次使用路线、实际 Dev Container 创建/重连、Linux/macOS 旧 home 升级及 Linux 三个故障状态均曾通过；旧索引路线也在本地独立通过。由于后续修复了 Windows 安装与测试输出兼容问题，仍需以 PR 最新提交的完整矩阵结果验收。
+- Windows PowerShell 5.1 实测发现固定版本上游安装器的受限 Range 请求头，以及 SHA256 下载响应为字节数组的问题。课程引导脚本直接下载固定 Release、从文件读取 sidecar 并校验，再调用 `self install`；README 的 Windows 可选下载入口同步使用该引导脚本。测试输出显式使用 UTF-8，避免 CP1252 使成功构建后的日志打印崩溃。
+- 无 MSVC 档允许 doctor 报预期警告，但必须证明实际选中 gcc、对应 MinGW 载荷和 GNU 产物；不以忽略所有诊断代替回退验证。
+- 真实 `d2x install d2mcpp` 入口放在 main/定时任务，因为 PR 阶段该入口仍下载 main；此项不冒充候选提交的验证。当前没有合并或发布主分支。
+- 真实 Codespaces 创建/可见 TUI 验收尚未完成：当前 GitHub token 缺少 `codespace` scope，API 返回 403。已请求补充凭证，Dev Container CI 通过不能代替该交互验收。

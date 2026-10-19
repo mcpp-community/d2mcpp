@@ -109,6 +109,7 @@ progress = ROOT / '.d2x/state.json'
 sentinel = b'{"version":1,"current":"hello-mcpp","completed":["cpp11-00-auto-and-decltype-0"]}\n'
 progress.write_bytes(sentinel)
 result = command(setup(), 'upgraded-setup', required=False)
+recovered_home = None
 if result.returncode:
     # Preserve the failed home for diagnosis. This is the documented reversible
     # recovery for a payload whose installed files are already damaged.
@@ -116,6 +117,7 @@ if result.returncode:
     fresh_home = old_home.with_name(old_home.name + '-recovered')
     assert not fresh_home.exists()
     os.environ['MCPP_HOME'] = str(fresh_home)
+    recovered_home = str(fresh_home)
     command(setup(), 'recovered-setup')
     assert old_home.exists(), 'Recovery must preserve the old home'
 assert progress.read_bytes() == sentinel, 'Upgrade changed learning progress'
@@ -124,4 +126,8 @@ if args.variant == 'dangling-record':
 progress.unlink()  # first-run.py requires an unused disposable course
 command(['python' if os.name == 'nt' else 'python3', 'scripts/ci/solutions.py'], 'solutions')
 command(['python' if os.name == 'nt' else 'python3', 'scripts/ci/first-run.py', '--allow-source-edit'], 'checker')
+(LOGS / 'upgrade-result.json').write_text(json.dumps({
+    'variant': args.variant, 'old_home_retained': old_home.exists(),
+    'recovered_home': recovered_home, 'status': 'passed'
+}, indent=2), encoding='utf-8')
 print('UPGRADE PASS: legacy home retained; course pin, reference answers, save/advance/resume verified')

@@ -19,6 +19,8 @@ on:
       - "docs/**"
       - "book/src/base/chapter_1.md"
       - "book/en/src/base/chapter_1.md"
+      - "book/src/changelog.md"
+      - "book/en/src/changelog.md"
   pull_request:
     paths:
       - "src/**"
@@ -36,6 +38,8 @@ on:
       - "docs/**"
       - "book/src/base/chapter_1.md"
       - "book/en/src/base/chapter_1.md"
+      - "book/src/changelog.md"
+      - "book/en/src/changelog.md"
   workflow_dispatch:
 
 permissions:
