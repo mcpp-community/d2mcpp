@@ -44,16 +44,18 @@ permissions:
 
 jobs:
   upgrade:
-    name: upgrade (${{ matrix.os }}, damaged=${{ matrix.broken_glibc || false }})
+    name: upgrade (${{ matrix.os }}, ${{ matrix.variant }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 90
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-24.04, macos-14, windows-2025]
-        broken_glibc: [false]
+        variant: [existing]
         include:
-          - {os: ubuntu-24.04, broken_glibc: true}
+          - {os: ubuntu-24.04, variant: broken-glibc}
+          - {os: ubuntu-24.04, variant: stale-index}
+          - {os: ubuntu-24.04, variant: dangling-record}
     steps:
       - uses: actions/checkout@v4
       - name: Select the legacy toolchain home
@@ -69,15 +71,13 @@ jobs:
       - name: Upgrade August toolchain and exercise the course
         shell: bash
         env:
-          BROKEN_GLIBC: ${{ matrix.broken_glibc }}
+          VARIANT: ${{ matrix.variant }}
         run: |
-          args=()
-          if [[ "$BROKEN_GLIBC" == true ]]; then args+=(--broken-glibc); fi
-          python scripts/ci/upgrade.py "${args[@]}"
+          python scripts/ci/upgrade.py --variant "$VARIANT"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: upgrade-${{ matrix.os }}-${{ matrix.broken_glibc }}
+          name: upgrade-${{ matrix.os }}-${{ matrix.variant }}
           path: .d2x/ci-logs/
           if-no-files-found: ignore
           include-hidden-files: true

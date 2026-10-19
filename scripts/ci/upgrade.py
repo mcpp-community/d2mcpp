@@ -5,6 +5,10 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import io
+import shutil
+import tarfile
+import urllib.request
 
 ROOT = Path(__file__).resolve().parents[2]
 LOGS = ROOT / '.d2x/ci-logs'
@@ -29,7 +33,7 @@ def setup(install_only=False):
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--broken-glibc', action='store_true')
+parser.add_argument('--variant', choices=['existing', 'broken-glibc', 'stale-index', 'dangling-record'], default='existing')
 args = parser.parse_args()
 config_path = ROOT / '.xlings.json'
 original = config_path.read_bytes()
@@ -46,16 +50,60 @@ try:
     command(['mcpp', 'run', '-q', '-p', 'd2x/buildtools', '--', 'describe'], 'old-provider', required=False)
     old_home = Path(os.environ['MCPP_HOME'])
     assert old_home.exists(), 'Old toolchain home was not initialized'
-    if args.broken_glibc:
+    if args.variant == 'broken-glibc':
         scripts = list(old_home.glob('registry/data/xpkgs/xim-x-glibc/*/lib/libm.so'))
         assert scripts, 'Need a real glibc linker script to reproduce the incident'
         scripts[-1].write_text('GROUP ( /nonexistent/xlings-use-rpath-not-default-search/lib/libm.so.6 /nonexistent/xlings-use-rpath-not-default-search/lib/libmvec.so.1 )\n')
         (LOGS / 'corrupted-glibc-script.txt').write_text(str(scripts[-1]), encoding='utf-8')
+    if args.variant == 'stale-index':
+        # Historical package recipes, with the old home's payloads kept intact.
+        snapshot = '240c2f78fce8a1bce65a59c0e8e40c9fff2a4eab'
+        index = old_home / 'registry/data/xim-pkgindex'
+        assert index.is_dir()
+        archive = urllib.request.urlopen(f'https://codeload.github.com/openxlings/xim-pkgindex/tar.gz/{snapshot}', timeout=120).read()
+        with tarfile.open(fileobj=io.BytesIO(archive)) as tar:
+            temporary = LOGS / 'index-snapshot'
+            temporary.mkdir()
+            # This fixture is Linux-only and uses the hosted runner's Python 3.12+.
+            tar.extractall(temporary, filter='data')
+        source = next(temporary.iterdir())
+        # Preserve the provider's index version stamp, as the upstream upgrade
+        # lane does, while replacing the recipes a client actually reads.
+        for child in index.iterdir():
+            if child.name == '.xlings-index-version':
+                continue
+            shutil.rmtree(child) if child.is_dir() else child.unlink()
+        shutil.copytree(source, index, dirs_exist_ok=True)
+        shutil.rmtree(temporary)
+        (LOGS / 'stale-index.txt').write_text(snapshot, encoding='utf-8')
+    if args.variant == 'dangling-record':
+        registry = old_home / 'registry'
+        db_paths = [registry / 'data/versions.json', registry / '.xlings.json']
+        db = next(p for p in db_paths if p.exists())
+        records = json.loads(db.read_text())['versions'].get('c++', {}).get('versions', {})
+        key = next(k for k, v in records.items() if 'gcc' in v.get('bindingGroup', {}).get('provider', ''))
+        active = registry / 'subos/default/.xlings.json'
+        doc = json.loads(active.read_text())
+        entry = doc['workspace'].get('c++')
+        if isinstance(entry, dict):
+            entry['active'] = key
+        else:
+            doc['workspace']['c++'] = key
+        active.write_text(json.dumps(doc), encoding='utf-8')
+        for path in db_paths:
+            if path.exists():
+                doc = json.loads(path.read_text())
+                cpp = doc.get('versions', {}).get('c++', {})
+                cpp.get('versions', {}).pop(key, None)
+                for edges in cpp.get('bindings', {}).values():
+                    edges.pop(key, None)
+                path.write_text(json.dumps(doc), encoding='utf-8')
+        (LOGS / 'dangling-record.txt').write_text(key, encoding='utf-8')
 finally:
     config_path.write_bytes(original)
 
 progress = ROOT / '.d2x/state.json'
-sentinel = b'{"version":1,"current":"hello-mcpp","completed":[]}\n'
+sentinel = b'{"version":1,"current":"hello-mcpp","completed":["cpp11-00-auto-and-decltype-0"]}\n'
 progress.write_bytes(sentinel)
 result = command(setup(), 'upgraded-setup', required=False)
 if result.returncode:
@@ -68,6 +116,8 @@ if result.returncode:
     command(setup(), 'recovered-setup')
     assert old_home.exists(), 'Recovery must preserve the old home'
 assert progress.read_bytes() == sentinel, 'Upgrade changed learning progress'
+if args.variant == 'dangling-record':
+    command(['mcpp', 'toolchain', 'install', 'gcc', '16.1.0'], 'provision-after-dangling-record')
 progress.unlink()  # first-run.py requires an unused disposable course
 command(['python' if os.name == 'nt' else 'python3', 'scripts/ci/solutions.py'], 'solutions')
 command(['python' if os.name == 'nt' else 'python3', 'scripts/ci/first-run.py', '--allow-source-edit'], 'checker')

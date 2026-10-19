@@ -31,7 +31,8 @@ if (-not $Existing -or (& xlings --version) -ne "xlings $env:XLINGS_VERSION") {
             try {
                 Write-Host "Downloading $Url"
                 Invoke-WebRequest $Url -UseBasicParsing -OutFile $Zip
-                $Sidecar = (Invoke-WebRequest "$Url.sha256" -UseBasicParsing).Content.Trim()
+                Invoke-WebRequest "$Url.sha256" -UseBasicParsing -OutFile "$Zip.sha256"
+                $Sidecar = (Get-Content "$Zip.sha256" -Raw).Trim()
                 $Hash = [regex]::Match($Sidecar, '^([a-fA-F0-9]{64})(?:\s|$)')
                 if (-not $Hash.Success -or (Get-FileHash $Zip -Algorithm SHA256).Hash -ne $Hash.Groups[1].Value) { throw 'SHA256 mismatch' }
                 $Downloaded = $true

@@ -122,7 +122,7 @@ To undo this session's override, use `unset MCPP_HOME` on Unix or `Remove-Item E
 
 - `fresh-install.yml`：无缓存的首次检查、失败后保存、通过后推进、重启恢复；Windows 使用 PowerShell 5.1，Linux 使用无预装编译器的普通用户容器，macOS 检查 ARM64 架构。
 - `dslings-ref-ci.yml`：中英文练习初始失败、答案覆盖后全部通过，以及 checker 完成全课；无 MSVC 档检查 GNU target。
-- `environment-lifecycle.yml`：真实 Dev Container 配置的创建/重连，以及旧 mcpp home 升级和损坏 glibc 场景的恢复。
+- `environment-lifecycle.yml`：真实 Dev Container 配置的创建/重连，以及旧 mcpp home 升级，以及损坏 glibc、旧索引快照、悬空安装记录的恢复。
 - main/定时任务额外验证真实 `d2x install d2mcpp` 下载入口；PR 的 clone 路线验证候选提交，二者分别报告。
 
 CI logs distinguish dependency installation, initial toolchain preparation, Provider events, reference answers and checker progression. GitHub Server runners do not prove compatibility with every Windows desktop release; a CLI container test also does not replace checking the visible terminal in a real Codespace.
