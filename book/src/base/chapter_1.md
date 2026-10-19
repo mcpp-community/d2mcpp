@@ -76,7 +76,7 @@ d2x checker                  # 编辑 -> 保存 -> 自动检测 -> 推进
 d2x status                   # 进度总览
 ```
 
-未完成的练习报错是预期行为，参考答案必须全绿。`Provider` 错误或链接路径含 `/nonexistent/` 属于环境问题，请查看[诊断与恢复步骤](https://github.com/mcpp-community/d2mcpp/blob/main/docs/environment.md)。`git pull` 后重新运行准备脚本，让更新后的版本配置生效。
+未完成的练习报错是预期行为，参考答案必须全绿。`Provider` 错误或链接路径含 `/nonexistent/` 属于环境问题，请查看[诊断与恢复步骤](https://github.com/mcpp-community/d2mcpp/blob/main/docs/environment.zh.md)。`git pull` 后重新运行准备脚本，让更新后的版本配置生效。
 
 也可使用 `mcpp test -p src/cpp11` 直接练习某一章。更多操作见[使用说明](https://mcpp-community.github.io/d2mcpp/base/chapter_1.html)。
 

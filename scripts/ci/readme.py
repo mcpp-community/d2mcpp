@@ -35,6 +35,9 @@ assert commands == readme_commands('README.zh.md', '### 搭建本地练习环境
 assert commands == readme_commands('README.zh.hant.md', '### 建立本地練習環境', '## 社區')
 assert commands[-2:] == ['mcpp test -p solutions', 'd2x checker']
 guide = (ROOT / 'docs/environment.md').read_text(encoding='utf-8')
+translation = (ROOT / 'docs/environment.zh.md').read_text(encoding='utf-8')
+for language in ['bash', 'powershell']:
+    assert code_blocks(guide, language) == code_blocks(translation, language), 'Environment guide commands differ by language'
 install = re.search(r'<a id="install-xlings"></a>\s*##[^\n]*\n(.*?)(?=\n## |\Z)', guide, re.S)[1]
 bootstrap = code_blocks(install, 'powershell' if os.name == 'nt' else 'bash')[0]
 parser = argparse.ArgumentParser(description=__doc__)

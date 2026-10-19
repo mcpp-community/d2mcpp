@@ -45,7 +45,7 @@
 
 **第一步：安裝工具**
 
-安裝 [xlings](docs/environment.md#install-xlings)，重新開啟終端後執行：
+安裝 [xlings](docs/environment.zh.md#install-xlings)，重新開啟終端後執行：
 
 ```bash
 xlings install d2x mcpp -y
@@ -67,7 +67,7 @@ d2x checker                  # 編輯 -> 儲存 -> 自動偵測 -> 推進
 
 首次執行可能需要幾分鐘。未完成的練習報錯屬於正常現象。
 
-支援平台、Git 安裝與故障恢復見[環境準備與疑難排解](docs/environment.md)，更多操作見[使用說明](https://mcpp-community.github.io/d2mcpp/base/chapter_1.html)。
+[環境準備與疑難排解](docs/environment.zh.md) · [使用說明](https://mcpp-community.github.io/d2mcpp/base/chapter_1.html)
 
 
 ## 社區

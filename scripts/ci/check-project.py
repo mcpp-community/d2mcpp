@@ -18,7 +18,8 @@ for prefix in [ROOT / 'src', ROOT / 'src/en']:
     assert exercises == solutions, (prefix, exercises ^ solutions)
 
 docs = [ROOT / name for name in ['README.md', 'README.zh.md', 'README.zh.hant.md',
-        'book/src/base/chapter_1.md', 'book/en/src/base/chapter_1.md', 'docs/environment.md']]
+        'book/src/base/chapter_1.md', 'book/en/src/base/chapter_1.md',
+        'docs/environment.md', 'docs/environment.zh.md']]
 version = re.search(r'^XLINGS_VERSION=(.+)$', (ROOT / 'scripts/tool-versions.env').read_text(), re.M)[1]
 for doc in docs:
     text = doc.read_text(encoding='utf-8')

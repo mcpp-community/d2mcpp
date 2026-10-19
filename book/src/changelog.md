@@ -15,7 +15,7 @@
 统一使用 mcpp 2026.10.17.1，增加跨平台准备脚本、全新安装与旧环境恢复验证，更新 Codespaces 入口。
 
 - `Book`: [zh](https://mcpp-community.github.io/d2mcpp/base/chapter_1.html) / [en](https://mcpp-community.github.io/d2mcpp/en/base/chapter_1.html) - 2026/10/19
-- `Code`: [setup](https://github.com/mcpp-community/d2mcpp/tree/main/scripts) / [environment recovery](https://github.com/mcpp-community/d2mcpp/blob/main/docs/environment.md) - 2026/10/19
+- `Code`: [setup](https://github.com/mcpp-community/d2mcpp/tree/main/scripts) / [environment recovery](https://github.com/mcpp-community/d2mcpp/blob/main/docs/environment.zh.md) - 2026/10/19
 
 ## 2025/11
 

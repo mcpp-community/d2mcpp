@@ -67,7 +67,7 @@ d2x checker                  # edit -> save -> auto-check -> advance
 
 The first run may take a few minutes. Errors in unfinished exercises are expected.
 
-See [environment setup and troubleshooting](docs/environment.md) for supported platforms, installation with Git and recovery steps, or the [usage guide](https://mcpp-community.github.io/d2mcpp/en/base/chapter_1.html) for more commands.
+[Setup and troubleshooting](docs/environment.md) · [Usage guide](https://mcpp-community.github.io/d2mcpp/en/base/chapter_1.html)
 
 
 ## Community
