@@ -142,12 +142,24 @@ jobs:
           ! command -v clang++
       - uses: actions/checkout@v4
       - name: Give the ordinary user a fresh checkout
-        run: chown -R learner:learner "$GITHUB_WORKSPACE"
+        shell: bash
+        env:
+          ROUTE: ${{ matrix.route }}
+        run: |
+          course_dir="$GITHUB_WORKSPACE"
+          if [[ "$ROUTE" == readme ]]; then
+            course_dir="/home/learner/first use with spaces/$(python3 -c 'print("long-project-directory-" * 6)')"
+            mkdir -p "$course_dir"
+            cp -a "$GITHUB_WORKSPACE/." "$course_dir/"
+          fi
+          chown -R learner:learner "$course_dir"
+          echo "COURSE_DIR=$course_dir" >> "$GITHUB_ENV"
       - name: Follow the README or start checker cold
         shell: bash
         env:
           ROUTE: ${{ matrix.route }}
         run: |
+          cd "$COURSE_DIR"
           if [[ "$ROUTE" == cold ]]; then
             runuser -u learner -- bash scripts/setup.sh --install-only
             runuser -u learner -- env MCPP_HOME=/home/learner/.mcpp PATH="/home/learner/.xlings/subos/current/bin:$PATH" python3 scripts/ci/first-run.py --allow-source-edit --cold
@@ -161,7 +173,7 @@ jobs:
         if: always()
         with:
           name: first-run-linux-${{ matrix.route }}
-          path: .d2x/ci-logs/
+          path: ${{ env.COURSE_DIR }}/.d2x/ci-logs/
           if-no-files-found: ignore
           include-hidden-files: true
 
