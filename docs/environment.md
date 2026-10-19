@@ -4,7 +4,60 @@
 
 The course pins its tools in `.xlings.json`. The scripts support Linux x86_64, macOS 14+ Apple Silicon, and Windows x86_64 with Windows PowerShell 5.1+. Your preferred editor and Visual Studio are optional. The d2x release used by this course does not yet ship Linux ARM64 binaries.
 
-## 准备环境 / Prepare the environment
+<a id="install-xlings"></a>
+
+## 安装 xlings / Install xlings
+
+运行以下命令安装或更新 xlings，再按 README 安装工具和课程。
+
+Install or update xlings with the commands below, then follow the README to install the tools and course.
+
+Linux / macOS:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/openxlings/xlings/v2026.10.18.1/tools/other/quick_install.sh | bash -s v2026.10.18.1
+```
+
+Windows PowerShell:
+
+```powershell
+irm https://raw.githubusercontent.com/mcpp-community/d2mcpp/main/scripts/install-xlings.ps1 | iex
+```
+
+安装完成后重新打开终端，运行 `xlings --version` 确认可以使用。若当前终端仍找不到工具，可执行：
+
+Reopen your terminal and check `xlings --version`. To use the tools immediately in the current terminal:
+
+```bash
+# Linux / macOS
+export PATH="$HOME/.xlings/subos/current/bin:$PATH"
+```
+
+```powershell
+# Windows PowerShell
+$env:Path = "$env:USERPROFILE\.xlings\subos\current\bin;$env:Path"
+```
+
+## 通过 Git 获取课程 / Get the course with Git
+
+也可以先 fork，再克隆自己的仓库以保存练习代码：
+
+You can also fork the project and clone your fork to save your exercise code:
+
+```bash
+git clone https://github.com/mcpp-community/d2mcpp.git
+cd d2mcpp
+```
+
+随后执行下面对应系统的准备脚本，再验证环境并开始练习。
+
+Then run the preparation commands below for your system, verify the environment and start practicing.
+
+## 准备或修复环境 / Prepare or repair the environment
+
+README 的 `d2x install d2mcpp` 会下载课程并调用 xlings 安装课程依赖。通过 Git 获取课程、更新课程后或安装异常时，可以用下面的脚本重新准备环境。
+
+The README's `d2x install d2mcpp` downloads the course and invokes xlings to install its dependencies. Use the scripts below for a Git checkout, after updating the course, or to repair an incomplete setup.
 
 在课程根目录执行对应系统的命令。脚本会安装固定版本、显示首次 Provider 构建过程，并验证 Provider 可以描述自身和枚举练习。失败时立即停止；不要忽略错误继续启动 checker。
 

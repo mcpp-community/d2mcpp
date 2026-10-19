@@ -22,10 +22,11 @@ docs = [ROOT / name for name in ['README.md', 'README.zh.md', 'README.zh.hant.md
 version = re.search(r'^XLINGS_VERSION=(.+)$', (ROOT / 'scripts/tool-versions.env').read_text(), re.M)[1]
 for doc in docs:
     text = doc.read_text(encoding='utf-8')
-    assert 'scripts/setup.' in text, f'Missing preparation command in {doc}'
+    if not doc.name.startswith('README'):
+        assert 'scripts/setup.' in text, f'Missing preparation command in {doc}'
     assert 'd2x checker' in text
     assert 'tree/main/dslings' not in text, f'Obsolete code link in {doc}'
-    if doc.name.startswith('README') or 'chapter_1' in doc.name:
+    if 'chapter_1' in doc.name:
         assert version in text, f'Installer version differs in {doc}'
     # Code fences contain literal examples, not navigable Markdown links.
     prose = re.sub(r'```.*?```', '', text, flags=re.S)
