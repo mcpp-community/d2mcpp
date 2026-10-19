@@ -39,77 +39,35 @@
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=mcpp-community/d2mcpp)
 
-等待環境準備完成（首次啟動會下載工具鏈並驗證參考答案），然後在終端執行 `d2x checker`，或使用 **Tasks: Run Task → d2mcpp: practice**。重新連線不會重複啟動 checker。準備失敗時查看[環境疑難排解](docs/environment.md)。
+等待環境準備完成，然後在終端執行 `d2x checker`。
 
 ### 建立本地練習環境
 
-支援的發行平台：Linux x86_64、macOS 14+ Apple Silicon、Windows x86_64（Windows PowerShell 5.1+）。mcpp 管理 C++ 工具鏈，Visual Studio 為選用項目。目前課程使用的 d2x Release 尚未涵蓋 Linux ARM64。可自行選擇編輯器，課程不會強制安裝。
+**第一步：安裝工具**
 
-**第一步：取得課程**（建議先 fork，用 git 儲存自己的練習進度）：
-
-```bash
-git clone https://github.com/mcpp-community/d2mcpp.git
-cd d2mcpp
-```
-
-**第二步：準備環境。** 指令碼安裝 xlings **2026.10.18.1** 及 `.xlings.json` 宣告的版本（mcpp **2026.10.17.1**、d2x **2026.08.02.2**、mdBook **0.4.43**），建置並檢查 Provider。首次建置可能需要幾分鐘。
-
-Linux / macOS：
+安裝 [xlings](docs/environment.zh.md#install-xlings)，重新開啟終端後執行：
 
 ```bash
-bash scripts/setup.sh
-export PATH="$HOME/.xlings/subos/current/bin:$PATH"
+xlings install d2x mcpp -y
 ```
 
-Windows PowerShell：
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\setup.ps1
-$env:Path = "$env:USERPROFILE\.xlings\subos\current\bin;$env:Path"
-```
-
-PATH 指令讓目前終端立即找到工具；安裝後重新開啟終端即可供後續工作階段使用。準備指令碼可重複執行，不會更動練習檔案或學習進度。
-
-<details>
-<summary>選用：透過 d2x install 下載課程</summary>
-
-先安裝 [xlings](https://github.com/openxlings/xlings)：
+**第二步：取得課程**
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/openxlings/xlings/v2026.10.18.1/tools/other/quick_install.sh | bash -s v2026.10.18.1
-export PATH="$HOME/.xlings/subos/current/bin:$PATH"
-```
-
-Windows PowerShell 使用：
-
-```powershell
-irm https://raw.githubusercontent.com/mcpp-community/d2mcpp/main/scripts/install-xlings.ps1 | iex
-$env:Path = "$env:USERPROFILE\.xlings\subos\current\bin;$env:Path"
-```
-
-然後在任一系統執行：
-
-```text
-xlings install d2x@2026.08.02.2 -y
 d2x install d2mcpp
 cd d2mcpp
 ```
 
-繼續執行第二步中對應系統的準備指令碼；兩種下載方式共用下方驗證步驟。
-
-</details>
-
-**第三步：驗證環境並開始練習：**
+**第三步：驗證並開始練習**
 
 ```bash
-mcpp test -p solutions       # 參考答案應全部通過（目前 52 份）
+mcpp test -p solutions       # 參考答案應全部通過
 d2x checker                  # 編輯 -> 儲存 -> 自動偵測 -> 推進
-d2x status                   # 進度總覽
 ```
 
-未完成的練習報錯是預期行為，參考答案必須全綠。`Provider` 錯誤或連結路徑含 `/nonexistent/` 屬於環境問題，請查看[診斷與恢復步驟](docs/environment.md)。`git pull` 後重新執行準備指令碼，讓更新後的版本設定生效。
+首次執行可能需要幾分鐘。未完成的練習報錯屬於正常現象。
 
-也可使用 `mcpp test -p src/cpp11` 直接練習某一章。更多操作見[使用說明](https://mcpp-community.github.io/d2mcpp/base/chapter_1.html)。
+[環境準備與疑難排解](docs/environment.zh.md) · [使用說明](https://mcpp-community.github.io/d2mcpp/base/chapter_1.html)
 
 
 ## 社區

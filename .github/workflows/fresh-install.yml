@@ -76,13 +76,13 @@ jobs:
         if: matrix.mask_msvc
         shell: powershell
         run: ./scripts/ci/mask-msvc.ps1
-      - name: README preparation (Unix)
+      - name: Follow the README install and practice commands (Unix)
         if: runner.os != 'Windows' && matrix.route == 'readme'
-        run: bash scripts/setup.sh
-      - name: README preparation (PowerShell 5.1)
+        run: python3 scripts/ci/readme.py
+      - name: Follow the README install and practice commands (PowerShell 5.1)
         if: runner.os == 'Windows' && matrix.route == 'readme'
         shell: powershell
-        run: ./scripts/setup.ps1
+        run: python scripts/ci/readme.py
       - name: Cold install only (Unix)
         if: runner.os != 'Windows' && matrix.route == 'cold'
         run: bash scripts/setup.sh --install-only
@@ -90,30 +90,27 @@ jobs:
         if: runner.os == 'Windows' && matrix.route == 'cold'
         shell: powershell
         run: ./scripts/setup.ps1 -InstallOnly
-      - name: README environment verification
-        if: matrix.route == 'readme'
-        run: python scripts/ci/solutions.py
       - name: First check, save, advance and resume
+        if: matrix.route == 'cold'
         shell: bash
-        env:
-          ROUTE: ${{ matrix.route }}
-        run: |
-          args=()
-          if [[ "$ROUTE" == cold ]]; then args+=(--cold); fi
-          python scripts/ci/first-run.py --allow-source-edit "${args[@]}"
+        run: python scripts/ci/first-run.py --allow-source-edit --cold
       - name: Cold route also verifies all reference answers
         if: matrix.route == 'cold'
         run: python scripts/ci/solutions.py
       - name: Assert GNU target without MSVC
         if: matrix.mask_msvc
         shell: bash
+        env:
+          ROUTE: ${{ matrix.route }}
         run: |
+          logs="$(pwd)/.d2x/ci-logs"
+          if [[ "$ROUTE" == readme ]]; then cd .d2x/ci-work/download/d2mcpp; fi
           # doctor returns nonzero for warnings too (missing MSVC is expected).
-          mcpp self doctor > .d2x/ci-logs/doctor.txt 2>&1 || true
-          cat .d2x/ci-logs/doctor.txt
-          grep -q 'gcc.*what a build here uses' .d2x/ci-logs/doctor.txt
-          grep -q 'payload mingw-gcc' .d2x/ci-logs/doctor.txt
-          grep -q 'x86_64.*windows-gnu' .d2x/ci-logs/doctor.txt
+          mcpp self doctor > "$logs/doctor.txt" 2>&1 || true
+          cat "$logs/doctor.txt"
+          grep -q 'gcc.*what a build here uses' "$logs/doctor.txt"
+          grep -q 'payload mingw-gcc' "$logs/doctor.txt"
+          grep -q 'x86_64.*windows-gnu' "$logs/doctor.txt"
           ls -d target/*windows-gnu
       - uses: actions/upload-artifact@v4
         if: always()
@@ -165,9 +162,7 @@ jobs:
             runuser -u learner -- env MCPP_HOME=/home/learner/.mcpp PATH="/home/learner/.xlings/subos/current/bin:$PATH" python3 scripts/ci/first-run.py --allow-source-edit --cold
             runuser -u learner -- env PATH="/home/learner/.xlings/subos/current/bin:$PATH" python3 scripts/ci/solutions.py
           else
-            runuser -u learner -- bash scripts/setup.sh
-            runuser -u learner -- env PATH="/home/learner/.xlings/subos/current/bin:$PATH" python3 scripts/ci/solutions.py
-            runuser -u learner -- env PATH="/home/learner/.xlings/subos/current/bin:$PATH" python3 scripts/ci/first-run.py --allow-source-edit
+            runuser -u learner -- python3 scripts/ci/readme.py
           fi
       - uses: actions/upload-artifact@v4
         if: always()
@@ -184,23 +179,12 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
-      - name: Install xlings baseline
-        run: bash scripts/install-xlings.sh
-      - name: Follow the actual d2x download route
-        run: |
-          mkdir -p "$RUNNER_TEMP/course-download"
-          cd "$RUNNER_TEMP/course-download"
-          xlings install d2x@2026.08.02.2 -y
-          d2x install d2mcpp
-          cd d2mcpp
-          python3 -c 'import json; assert json.load(open(".xlings.json"))["workspace"]["mcpp"] == "2026.10.17.1", "Published course snapshot is stale"'
-          bash scripts/setup.sh
-          python3 scripts/ci/solutions.py
-          python3 scripts/ci/first-run.py --allow-source-edit
+      - name: Follow the README using the public course download
+        run: python3 scripts/ci/readme.py --published
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: published-course-first-use
-          path: ${{ runner.temp }}/course-download/d2mcpp/.d2x/ci-logs/
+          path: .d2x/ci-logs/
           if-no-files-found: ignore
           include-hidden-files: true
