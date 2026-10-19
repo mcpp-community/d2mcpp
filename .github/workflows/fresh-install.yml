@@ -104,7 +104,11 @@ jobs:
         if: matrix.mask_msvc
         shell: bash
         run: |
-          mcpp self doctor | tee .d2x/ci-logs/doctor.txt
+          # doctor returns nonzero for warnings too (missing MSVC is expected).
+          mcpp self doctor > .d2x/ci-logs/doctor.txt 2>&1 || true
+          cat .d2x/ci-logs/doctor.txt
+          grep -q 'gcc.*what a build here uses' .d2x/ci-logs/doctor.txt
+          grep -q 'payload mingw-gcc' .d2x/ci-logs/doctor.txt
           grep -q 'x86_64.*windows-gnu' .d2x/ci-logs/doctor.txt
           ls -d target/*windows-gnu
       - uses: actions/upload-artifact@v4

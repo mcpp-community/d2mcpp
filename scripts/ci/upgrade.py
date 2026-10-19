@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import sys
 import io
 import shutil
 import tarfile
@@ -12,6 +13,8 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[2]
 LOGS = ROOT / '.d2x/ci-logs'
+sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 LOGS.mkdir(parents=True, exist_ok=True)
 os.chdir(ROOT)
 

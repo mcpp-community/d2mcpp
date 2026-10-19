@@ -43,8 +43,11 @@ if (-not $Existing -or (& xlings --version) -ne "xlings $env:XLINGS_VERSION") {
         Expand-Archive $Zip -DestinationPath $Temp
         $Package = Get-ChildItem $Temp -Directory -Filter 'xlings-*' | Select-Object -First 1
         if (-not $Package) { throw 'Invalid xlings archive' }
-        & (Join-Path $Package.FullName 'bin/xlings.exe') self install
-        if ($LASTEXITCODE -ne 0) { throw 'xlings self install failed' }
+        Push-Location $Package.FullName
+        try {
+            & (Join-Path $Package.FullName 'bin/xlings.exe') self install
+            if ($LASTEXITCODE -ne 0) { throw 'xlings self install failed' }
+        } finally { Pop-Location }
     } finally {
         Remove-Item $Temp -Recurse -Force -ErrorAction SilentlyContinue
     }

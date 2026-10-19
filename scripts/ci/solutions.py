@@ -2,10 +2,13 @@
 """Run the documented environment check, and reject an empty/partial green run."""
 import re
 import subprocess
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 LOGS = ROOT / '.d2x/ci-logs'
+sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 
 LOGS.mkdir(parents=True, exist_ok=True)
 result = subprocess.run(['mcpp', 'test', '-p', 'solutions'], cwd=ROOT, text=True,

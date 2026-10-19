@@ -77,7 +77,11 @@ jobs:
         if: matrix.mask_msvc
         run: |
           mkdir -p .d2x/ci-logs
-          mcpp self doctor | tee .d2x/ci-logs/doctor.txt
+          # doctor returns nonzero for warnings too (missing MSVC is expected).
+          mcpp self doctor > .d2x/ci-logs/doctor.txt 2>&1 || true
+          cat .d2x/ci-logs/doctor.txt
+          grep -q 'gcc.*what a build here uses' .d2x/ci-logs/doctor.txt
+          grep -q 'payload mingw-gcc' .d2x/ci-logs/doctor.txt
           grep -q 'x86_64.*windows-gnu' .d2x/ci-logs/doctor.txt
           ls -d target/*windows-gnu
       - name: Exercise and reference answer regression

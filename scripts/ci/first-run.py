@@ -7,11 +7,14 @@ from pathlib import Path
 import queue
 import signal
 import subprocess
+import sys
 import threading
 import time
 
 ROOT = Path(__file__).resolve().parents[2]
 LOGS = ROOT / '.d2x' / 'ci-logs'
+sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 
 
 def run(*args, name, timeout=1800):
