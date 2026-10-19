@@ -101,6 +101,7 @@ jobs:
             .d2x/ci-logs/
             .d2x/checker-e2e.out
           if-no-files-found: ignore
+          include-hidden-files: true
 
   solutions-parity:
     runs-on: ubuntu-24.04

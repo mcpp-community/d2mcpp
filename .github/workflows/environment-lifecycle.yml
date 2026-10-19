@@ -80,6 +80,7 @@ jobs:
           name: upgrade-${{ matrix.os }}-${{ matrix.broken_glibc }}
           path: .d2x/ci-logs/
           if-no-files-found: ignore
+          include-hidden-files: true
 
   devcontainer:
     name: Dev Container creation and reconnect
@@ -105,3 +106,4 @@ jobs:
           name: devcontainer-first-use
           path: .d2x/ci-logs/
           if-no-files-found: ignore
+          include-hidden-files: true

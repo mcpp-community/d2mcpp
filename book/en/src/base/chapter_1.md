@@ -52,8 +52,7 @@ export PATH="$HOME/.xlings/subos/current/bin:$PATH"
 Or on Windows PowerShell:
 
 ```powershell
-$env:XLINGS_VERSION = '2026.10.18.1'
-irm https://raw.githubusercontent.com/openxlings/xlings/v2026.10.18.1/tools/other/quick_install.ps1 | iex
+irm https://raw.githubusercontent.com/mcpp-community/d2mcpp/main/scripts/install-xlings.ps1 | iex
 $env:Path = "$env:USERPROFILE\.xlings\subos\current\bin;$env:Path"
 ```
 
