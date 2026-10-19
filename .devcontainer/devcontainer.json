@@ -1,6 +1,9 @@
 {
   "name": "d2mcpp (Codespaces)",
   "image": "mcr.microsoft.com/devcontainers/cpp:ubuntu-24.04",
+  "features": {
+    "ghcr.io/devcontainers/features/sshd:1": {}
+  },
   "customizations": {
     "vscode": {
       "extensions": [

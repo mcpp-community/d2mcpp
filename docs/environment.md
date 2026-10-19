@@ -38,6 +38,10 @@ Preparation is repeatable and preserves exercises and `.d2x/state.json`. Repeat 
 
 Wait for creation to finish installing tools, building the Provider and testing reference answers. Then run `d2x checker` in a terminal, or use **Tasks: Run Task → d2mcpp: practice**. The task permits one instance. Reconnection only checks readiness; it does not start a background TUI or repeat the full setup.
 
+容器配置包含 SSH Feature，也支持通过 `gh codespace ssh` 连接和 `gh codespace logs` 获取创建日志。已有 Codespace 更新这项配置后需要重建容器才能生效。
+
+The container includes the SSH Feature for `gh codespace ssh` and creation logs via `gh codespace logs`. Rebuild an existing Codespace to apply this configuration change. See [GitHub's CLI connection instructions](https://docs.github.com/en/codespaces/developing-in-a-codespace/using-github-codespaces-with-github-cli).
+
 如果更新配置后提示环境尚未准备好，执行：
 
 If the configuration changed or creation failed, rerun inside the container:

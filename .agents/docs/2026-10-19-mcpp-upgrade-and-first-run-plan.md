@@ -199,4 +199,4 @@ PR/main 触发范围覆盖 `.xlings.json`、`.d2x.json`、`mcpp.toml`、`d2x/**`
 - Windows PowerShell 5.1 实测发现固定版本上游安装器的受限 Range 请求头，以及 SHA256 下载响应为字节数组的问题。课程引导脚本直接下载固定 Release、从文件读取 sidecar 并校验，再调用 `self install`；README 的 Windows 可选下载入口同步使用该引导脚本。测试输出显式使用 UTF-8，避免 CP1252 使成功构建后的日志打印崩溃。
 - 无 MSVC 档允许 doctor 报预期警告，但必须证明实际选中 gcc、对应 MinGW 载荷和 GNU 产物；不以忽略所有诊断代替回退验证。
 - 真实 `d2x install d2mcpp` 入口放在 main/定时任务，因为 PR 阶段该入口仍下载 main；此项不冒充候选提交的验证。当前没有合并或发布主分支。
-- 真实 Codespaces 创建/可见 TUI 验收尚未完成：当前 GitHub token 缺少 `codespace` scope，API 返回 403。已请求补充凭证，Dev Container CI 通过不能代替该交互验收。
+- 用户已补充 Codespaces 授权。首次真实创建发现自定义 C++ 镜像不包含 SSH 服务，CLI 连接和日志获取失败；配置补充官方 SSH Feature，并同步连接/重建文档。真实终端验收与最终 CI 结果记录在 PR，Dev Container CI 不代替该交互验收。
