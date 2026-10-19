@@ -10,58 +10,77 @@
 
 **d2mcpp** is a hands-on tutorial project focused on Modern C++ core language features. Based on the [xlings(d2x) tool](https://xlings.d2learn.org), it implements a **compiler-driven development model** for code practice that can automatically detect exercise code status and navigate to the next exercise.
 
-## 0. xlings Tool Installation
+## 0. Get and prepare the environment
 
-> xlings contains the tools required for the tutorial project - [More tool details](https://xlings.d2learn.org)
+Supported release targets: Linux x86_64, macOS 14+ Apple Silicon, and Windows x86_64 with Windows PowerShell 5.1+. mcpp manages the C++ toolchain; Visual Studio is optional. Linux ARM64 is not yet covered by this course's d2x release. Use your preferred editor; it is not installed as a course dependency.
 
-**Linux**
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.sh | bash
-```
-
-or
+**1. Get the course** (fork first if you want to save progress with git):
 
 ```bash
-wget https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.sh -O - | bash
-```
-
-**Windows - PowerShell**
-
-```bash
-Invoke-Expression (Invoke-Webrequest 'https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.ps1' -UseBasicParsing).Content
-```
-
-**With xlings in place, install the two tools this course needs**
-
-```bash
-xlings install d2x mcpp -y   # d2x: exercise framework CLI | mcpp: C++ build & test tool
-```
-
-> [d2x](https://github.com/d2learn/d2x) drives exercise checking and progression, [mcpp](https://github.com/mcpp-community/mcpp) builds and runs them — the exercises *are* mcpp tests
-
-## 1. Get Project and Auto-configure Environment
-
-> Download the project to current directory and automatically configure local environment
-
-```bash
-d2x install d2mcpp
-```
-
-### Verify the environment
-
-> Run the reference answers once inside the project to confirm the toolchain works
-
-```bash
+git clone https://github.com/mcpp-community/d2mcpp.git
 cd d2mcpp
-mcpp test -p solutions       # verify the environment: 52 reference answers, all green
 ```
 
-> `solutions/` is a real mcpp package (`solutions/mcpp.toml` + `solutions/tests/`), so this command actually compiles and runs all 52 reference answers — green means your toolchain is ready.
->
-> An answer and its exercise are paired by their `tests/`-relative path:
-> `solutions/tests/cpp11/00-auto-and-decltype/0.cpp` ←→ `src/cpp11/tests/00-auto-and-decltype/0.cpp`.
-> To run just one slice: `mcpp test -p solutions cpp11`.
+**2. Prepare the environment.** These scripts install xlings **2026.10.18.1**, the versions in `.xlings.json` (mcpp **2026.10.17.1**, d2x **2026.08.02.2**, mdBook **0.4.43**), and build and check the Provider. The first build may take several minutes.
+
+Linux / macOS:
+
+```bash
+bash scripts/setup.sh
+export PATH="$HOME/.xlings/subos/current/bin:$PATH"
+```
+
+Windows PowerShell:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\setup.ps1
+$env:Path = "$env:USERPROFILE\.xlings\subos\current\bin;$env:Path"
+```
+
+The PATH command makes the installed tools available in this terminal. For future sessions, reopen your terminal after installation. Preparation can be repeated and preserves your exercise files and progress.
+
+<details>
+<summary>Alternative: download with d2x install</summary>
+
+Install [xlings](https://github.com/openxlings/xlings) first:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/openxlings/xlings/v2026.10.18.1/tools/other/quick_install.sh | bash -s v2026.10.18.1
+export PATH="$HOME/.xlings/subos/current/bin:$PATH"
+```
+
+Or on Windows PowerShell:
+
+```powershell
+$env:XLINGS_VERSION = '2026.10.18.1'
+irm https://raw.githubusercontent.com/openxlings/xlings/v2026.10.18.1/tools/other/quick_install.ps1 | iex
+$env:Path = "$env:USERPROFILE\.xlings\subos\current\bin;$env:Path"
+```
+
+Then, on either system:
+
+```text
+xlings install d2x@2026.08.02.2 -y
+d2x install d2mcpp
+cd d2mcpp
+```
+
+Continue with the preparation script for your system in step 2; both download routes use the same verification below.
+
+</details>
+
+**3. Verify, then practice:**
+
+```bash
+mcpp test -p solutions       # all reference answers must pass (currently 52)
+d2x checker                  # edit -> save -> auto-check -> advance
+d2x status                   # progress overview
+```
+
+The unfinished exercises are expected to fail; the reference answers must pass. `Provider` errors and linker paths containing `/nonexistent/` indicate an environment problem: see [diagnosis and recovery](https://github.com/mcpp-community/d2mcpp/blob/main/docs/environment.md). After `git pull`, rerun the preparation script to apply any changed pins.
+
+For native practice, `mcpp test -p src/cpp11` runs one section. See the [English usage guide](https://mcpp-community.github.io/d2mcpp/en/base/chapter_1.html).
+
 
 ### Local E-book
 

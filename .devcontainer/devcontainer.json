@@ -12,6 +12,10 @@
     }
   },
   "remoteUser": "vscode",
+  "remoteEnv": {
+    "PATH": "/home/vscode/.xlings/subos/current/bin:${containerEnv:PATH}"
+  },
+  "waitFor": "postCreateCommand",
   "postCreateCommand": "/bin/bash .devcontainer/postCreate.sh",
-  "postAttachCommand": "/bin/bash -c 'export PATH=\"$HOME/.xlings/subos/current/bin:$PATH\"; d2x checker'"
+  "postAttachCommand": "/bin/bash .devcontainer/readiness.sh"
 }

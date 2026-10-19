@@ -1,0 +1,15 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "d2mcpp: practice",
+      "type": "process",
+      "command": "d2x",
+      "args": ["checker"],
+      "options": {"cwd": "${workspaceFolder}"},
+      "runOptions": {"instanceLimit": 1},
+      "presentation": {"reveal": "always", "panel": "dedicated", "focus": true},
+      "problemMatcher": []
+    }
+  ]
+}

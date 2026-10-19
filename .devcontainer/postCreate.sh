@@ -1,24 +1,14 @@
 #!/usr/bin/env bash
-# Codespaces/devcontainer 初始化:安装 xlings,再按 .xlings.json 配置课程工具链(mcpp + d2x)
+# Fail creation if the environment cannot actually build and run the course.
 set -euo pipefail
-
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+rm -f .d2x/environment-ready
 sudo apt-get update
 sudo apt-get install -y ncurses-bin libtinfo6 libncursesw6 curl ca-certificates git
-
-if ! command -v xlings >/dev/null 2>&1; then
-  # postCreate 无控制终端:安装器探测 /dev/tty 会误判可读,必须显式声明非交互
-  curl -fsSL https://raw.githubusercontent.com/openxlings/xlings/main/tools/other/quick_install.sh \
-    | XLINGS_NON_INTERACTIVE=1 bash -s "v0.4.68"
-fi
-
+export XLINGS_NON_INTERACTIVE=1
 export PATH="$HOME/.xlings/subos/current/bin:$PATH"
-
-xlings update
-xlings install -y
-
-# 预热 Provider:把首次构建(含工具链下载)放在环境准备阶段,
-# 避免首次进入 d2x checker 时长时间无反馈。
-mcpp run -q -p d2x/buildtools -- describe > /dev/null \
-  || echo "warning: provider warm-up failed; d2x checker will build it on first run"
-
-echo "d2mcpp environment ready"
+bash scripts/setup.sh
+mcpp test -p solutions
+mkdir -p .d2x
+bash .devcontainer/readiness.sh fingerprint > .d2x/environment-ready
+echo 'd2mcpp environment ready. In a terminal run: d2x checker'
