@@ -63,7 +63,7 @@ permissions:
 env:
   XLINGS_NON_INTERACTIVE: '1'
   D2X_CANDIDATE_SHA: ${{ inputs.candidate_sha }}
-  D2X_CANDIDATE_DIR: ${{ github.workspace }}/.d2x/candidate
+  D2X_CANDIDATE_DIR: .d2x/candidate
 
 jobs:
   native:
@@ -93,7 +93,7 @@ jobs:
       - name: Verify explicit candidate provenance
         if: inputs.candidate_run != ''
         shell: bash
-        run: python scripts/ci/candidate.py
+        run: ${{ runner.os == 'Windows' && 'python' || 'python3' }} scripts/ci/candidate.py
       - name: Select an empty toolchain home
         shell: bash
         run: echo "MCPP_HOME=$RUNNER_TEMP/d2mcpp-fresh" >> "$GITHUB_ENV"
@@ -182,7 +182,7 @@ jobs:
       - name: Verify explicit candidate provenance
         if: inputs.candidate_run != ''
         shell: bash
-        run: python scripts/ci/candidate.py
+        run: ${{ runner.os == 'Windows' && 'python' || 'python3' }} scripts/ci/candidate.py
       - name: Give the ordinary user a fresh checkout
         shell: bash
         env:
