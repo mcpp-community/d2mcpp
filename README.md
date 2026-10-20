@@ -49,7 +49,7 @@ Install [xlings](docs/environment.md#install-xlings), reopen your terminal, then
 
 ```bash
 xlings update
-xlings install d2x mcpp -y
+xlings install --use d2x@latest mcpp@latest -y
 ```
 
 **2. Get the course**

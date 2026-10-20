@@ -49,7 +49,7 @@
 
 ```bash
 xlings update
-xlings install d2x mcpp -y
+xlings install --use d2x@latest mcpp@latest -y
 ```
 
 **第二步：获取课程**

@@ -99,3 +99,5 @@ $env:MCPP_HOME = "$env:USERPROFILE\.mcpp-d2mcpp-recovered"
 checker 在第一题之前显示准备信息。首次 Provider 启动的总期限为 900 秒，后续调用的空闲期限为 120 秒；
 准备提示不会延长期限。失败时保留 `.d2x/provider.stdout.log`、`.d2x/provider.stderr.log` 与命令输出。
 启动和传输错误会非零退出；未完成练习的 fail 判定属于预期行为。
+
+已有工具环境先执行 `xlings update`，再执行 `xlings install --use d2x@latest mcpp@latest -y`。`@latest` 选择最新稳定条目；`--use` 即使新版已安装也会激活它。仅执行不带版本或激活选项的 install 可能继续保留旧版。

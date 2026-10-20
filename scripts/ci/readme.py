@@ -80,13 +80,13 @@ if os.name == 'nt':
         if command == 'd2x install d2mcpp' and os.environ.get('D2X_CANDIDATE'):
             command = "& '" + os.environ['D2X_CANDIDATE'].replace("'", "''") + "' install d2mcpp"
         body += command + "\nif ($LASTEXITCODE -ne 0) { throw 'README command failed' }\n"
-        if command == 'xlings install d2x mcpp -y':
+        if command == 'xlings install --use d2x@latest mcpp@latest -y':
             body += f"python '{ROOT / 'scripts/ci/versions.py'}' --public '{LOGS / 'public-tool-versions.json'}'\nif ($LASTEXITCODE -ne 0) {{ throw 'Public version snapshot failed' }}\n"
     script.write_text(body, encoding='utf-8')
     shell = ['powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', str(script)]
 else:
     import shlex
-    offset = commands.index('xlings install d2x mcpp -y') + 1
+    offset = commands.index('xlings install --use d2x@latest mcpp@latest -y') + 1
     commands.insert(offset, 'python3 ' + shlex.quote(str(ROOT / 'scripts/ci/versions.py')) + ' --public ' + shlex.quote(str(LOGS / 'public-tool-versions.json')))
     if os.environ.get('D2X_CANDIDATE'):
         import shlex

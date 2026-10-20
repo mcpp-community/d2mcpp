@@ -1,6 +1,6 @@
 # d2x 与 d2mcpp 最新版联动及首次启动优化方案
 
-日期：2026-10-20。状态：待 review，仅提交方案；未修改运行代码、版本 pin 或包索引。
+日期：2026-10-20。状态：已进入实现与发布。原设计和调研快照保留于第 1–8 节，第 9 节记录实际验收；最终状态以链接的 PR、Release 和 CI 为准。
 
 ## 1. 建议与边界
 
@@ -75,7 +75,7 @@ Provider stdout 保留协议解析；子进程 stderr 实时独立读取并呈�
 
 ### 4.1 公开入口使用最新稳定版
 
-README 三种语言维持简洁流程，但显式在工具安装前更新索引：`xlings update` → `xlings install d2x mcpp -y`。实施时使用已安装旧版的场景验证该命令是否会选择最新版本；若实际需要更新/切换命令，以 xlings 当前支持的命令修正流程。
+README 三种语言维持简洁流程，但显式在工具安装前更新索引：`xlings update` → `xlings install --use d2x@latest mcpp@latest -y`。实施时使用已安装旧版的场景验证该命令是否会选择最新版本；若实际需要更新/切换命令，以 xlings 当前支持的命令修正流程。
 
 课程下载后必须安装课程 `.xlings.json` 声明的依赖，并在运行前确认实际版本。优先让 `d2x install` 在现有课程安装机制内完成该步骤；先核实 xlings 课程配方是否已经负责安装，避免重复下载或循环调用。不要仅在 CI 里增加隐藏准备步骤而让用户命令仍运行旧版本。
 
@@ -143,3 +143,21 @@ latest 检查与候选 pin 验收分开：定时/main job 对比稳定 Release�
 - [此前 mcpp 升级方案](2026-10-19-mcpp-upgrade-and-first-run-plan.md)：保留历史记录，本方案更新 d2x 版本与冷启动策略。
 
 本次未执行新的 Windows 复现、跨平台运行或候选产物验收；所有新增字段、事件和行为均为待实现设计，不代表当前 Release 已支持。
+
+
+## 9. 实现与联动验收记录
+
+- d2x [PR #39](https://github.com/d2learn/d2x/pull/39) 已通过自我 review 并 squash 合入，提交 `9066e6a2554ad86fe8e1d6eecf8d359946ca48ec`。发布版本为 `2026.10.20.2`。
+- d2x [原生 CI](https://github.com/d2learn/d2x/actions/runs/39441449900) 六个作业全部通过：Linux 静态分发、macOS 14/15 ARM64、Windows 2022/2025、真实 Linux 课程冒烟。包括独立启动期限、stderr 隔离、大输出、部分结果后失败、进程树清理、依赖安装失败、原有协议 e2e 和 28 个 session 断言。
+- d2mcpp [候选产物联动 CI](https://github.com/mcpp-community/d2mcpp/actions/runs/39443060283) 十个首次使用作业全部通过，README/cold 分开，覆盖无编译器 Linux、macOS ARM64、Windows 2022/2025 和无 MSVC。每个作业检查候选 checkout SHA `3f56f74efe63837f450d7b101ab7588c639a36c3` 与二进制 SHA256；该候选覆盖是显式的，不冒充公开安装已更新。
+- 本地 Ubuntu 20.04 普通用户隔离容器：全新 MCPP_HOME，使用静态候选，首次 session 99.2 秒、首题 103.3 秒；保存、通过、推进、重启恢复及重复 setup 保留进度均通过；solutions 为 52/52。原始日志保留在执行机器 `/tmp/d2mcpp-startup-local/run.log`。本地另验证 print/TUI 准备与错误显示，以及交互配置保留两种期限。
+- [独立 Windows 取证](https://github.com/mcpp-community/d2mcpp/actions/runs/39442502584) 将 build、直接 run、旧版 checker 分成独立空 home：直接 `mcpp run -q ... describe` 约 24.9 秒正常返回；旧 checker 仍触发 120 秒静默超时。此前另一份独立 build 为 34.5 秒。说明不能把旧故障简单归为编译耗时；候选验收必须覆盖真正 checker 链路。
+- README 的公开工具安装现在位于仓库外的空目录，防止祖先项目配置影响版本解析；版本快照在安装器实际运行的 shell 内记录。进入课程后检查实际工具版本；预发布候选单独校验来源和哈希。`d2x install` 安装课程声明的项目依赖，失败不打印就绪。
+- 自我 review 重点：准备提示不刷新总期限；stderr 不能伪造协议；部分事件后失败不推进；Windows 无法建立 Job Object 时拒绝启动；输出洪流不能饿死期限检查；真实发布版还要经过 xlings 安装与课程完整 CI 验证。
+
+- 旧环境补测发现 bare install 保留旧版，`@latest` 单独使用也不会必然激活已安装的新版；公开命令已改为 `xlings install --use d2x@latest mcpp@latest -y`。升级矩阵显式从八月版 d2x/mcpp 开始；三个平台的 latest 检查会先激活八月版，再验证最新版安装与切换。
+
+- [d2x 2026.10.20.2](https://github.com/d2learn/d2x/releases/tag/v2026.10.20.2) 已发布，tag 指向上述 squash 提交；[发布工作流](https://github.com/d2learn/d2x/actions/runs/39443965654) 四个作业通过。上游、[GitHub RES](https://github.com/xlings-res/d2x/releases/tag/2026.10.20.2) 和 GitCode RES 的三平台压缩包、SHA256 sidecar 全部下载并验证逐字节一致；Linux 无 INTERP/NEEDED，实际版本正确。
+- [包索引 PR #1013](https://github.com/openxlings/xim-pkgindex/pull/1013) 的三平台安装、索引注册、生命周期等检查通过后 squash 合入 `88af0a08556d807b4338ac5f3603f26e4537c662`；[公开索引发布](https://github.com/openxlings/xim-pkgindex/actions/runs/39445523430) 成功，滚动指针 source_commit 已核对。
+
+课程改动由 [PR #94](https://github.com/mcpp-community/d2mcpp/pull/94) 承载。课程固定 2026.10.20.2；最终验收继续检查真实 xlings 安装版、旧环境升级和 Dev Container，不以候选产物结果代替。
