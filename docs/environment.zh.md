@@ -100,6 +100,22 @@ checker 在第一题之前显示准备信息。首次 Provider 启动的总期�
 准备提示不会延长期限。失败时保留 `.d2x/provider.stdout.log`、`.d2x/provider.stderr.log` 与命令输出。
 启动和传输错误会非零退出；未完成练习的 fail 判定属于预期行为。
 
-已有工具环境先执行 `xlings update`，再执行 `xlings install --use d2x@latest mcpp@latest -y`。`@latest` 选择最新稳定条目；`--use` 即使新版已安装也会激活它。仅执行不带版本或激活选项的 install 可能继续保留旧版。
+在已有课程目录中，执行以下命令安装或恢复 `.xlings.json` 声明的版本。`xlings update` 刷新包索引；`xlings install -y` 按项目配置安装依赖。不要用 `@latest` 替代课程版本。升级依赖应先修改 `.xlings.json`，通过 CI 后发布。
+
+```bash
+xlings update
+xlings install -y
+```
 
 用户取消返回 130 和 `cancelled` 事件，不报告 Provider 故障，也不生成练习失败判定。
+
+## 通过已有 d2x 下载课程
+
+如果已经安装 d2x，可以使用以下下载方式。安装器会应用下载课程中的依赖配置；进入课程目录后再次运行 `xlings install -y` 可明确核对安装。无需提前安装 mcpp 或切换到 latest。
+
+```bash
+d2x install d2mcpp
+cd d2mcpp
+xlings update
+xlings install -y
+```

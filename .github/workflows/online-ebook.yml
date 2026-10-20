@@ -45,9 +45,6 @@ jobs:
       run:
         working-directory: book
 
-    env:
-      MDBOOK_VERSION: 0.4.43
-
     steps:
       - uses: actions/checkout@v4
 
@@ -57,8 +54,8 @@ jobs:
       - name: Install the shared xlings baseline
         run: bash ../scripts/install-xlings.sh
 
-      - name: Install mdBook
-        run: xlings install mdbook@${MDBOOK_VERSION} -y
+      - name: Install the course dependencies from .xlings.json
+        run: xlings install -y
 
       - name: Setup Pages
         if: github.event_name != 'pull_request'

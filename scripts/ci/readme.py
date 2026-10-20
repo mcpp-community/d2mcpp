@@ -43,8 +43,23 @@ for language in ['bash', 'powershell']:
 install = re.search(r'<a id="install-xlings"></a>\s*##[^\n]*\n(.*?)(?=\n## |\Z)', guide, re.S)[1]
 bootstrap = code_blocks(install, 'powershell' if os.name == 'nt' else 'bash')[0]
 parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--d2x-download', action='store_true', help='verify the optional existing-d2x download route')
 parser.add_argument('--published', action='store_true', help='download the public course instead of the candidate fixture')
 args = parser.parse_args()
+if args.d2x_download:
+    # Only this optional route needs d2x before the course exists. Bootstrap the
+    # reviewed course version in a neutral directory; mcpp comes from its manifest.
+    pins = json.loads((ROOT / '.xlings.json').read_text())['workspace']
+    commands = code_blocks(guide.split('## Download with an existing d2x', 1)[1], 'bash')[0].splitlines()
+    assert commands == code_blocks(translation.split('## 通过已有 d2x 下载课程', 1)[1], 'bash')[0].splitlines()
+    commands += ['mcpp test -p solutions', 'd2x checker']
+    bootstrap += '\nxlings update\nxlings install --use d2x@' + pins['d2x'] + ' -y\n'
+    if os.name == 'nt':
+        bootstrap += "if ($LASTEXITCODE -ne 0) { throw 'd2x bootstrap failed' }\n"
+assert commands[-2:] == ['mcpp test -p solutions', 'd2x checker']
+assert 'xlings install -y' in commands
+assert not any('@latest' in command for command in commands)
+
 
 assert not WORK.exists(), 'Use a fresh disposable checkout'
 assert not (ROOT / '.d2x/state.json').exists(), 'Use a checkout without learning progress'
@@ -80,14 +95,14 @@ if os.name == 'nt':
         if command == 'd2x install d2mcpp' and os.environ.get('D2X_CANDIDATE'):
             command = "& '" + os.environ['D2X_CANDIDATE'].replace("'", "''") + "' install d2mcpp"
         body += command + "\nif ($LASTEXITCODE -ne 0) { throw 'README command failed' }\n"
-        if command == 'xlings install --use d2x@latest mcpp@latest -y':
-            body += f"python '{ROOT / 'scripts/ci/versions.py'}' --public '{LOGS / 'public-tool-versions.json'}'\nif ($LASTEXITCODE -ne 0) {{ throw 'Public version snapshot failed' }}\n"
+        if command == 'xlings install -y':
+            body += f"python '{ROOT / 'scripts/ci/versions.py'}' --public '{LOGS / 'installed-tool-versions.json'}'\nif ($LASTEXITCODE -ne 0) {{ throw 'Installed version snapshot failed' }}\n"
     script.write_text(body, encoding='utf-8')
     shell = ['powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', str(script)]
 else:
     import shlex
-    offset = commands.index('xlings install --use d2x@latest mcpp@latest -y') + 1
-    commands.insert(offset, 'python3 ' + shlex.quote(str(ROOT / 'scripts/ci/versions.py')) + ' --public ' + shlex.quote(str(LOGS / 'public-tool-versions.json')))
+    offset = commands.index('xlings install -y') + 1
+    commands.insert(offset, 'python3 ' + shlex.quote(str(ROOT / 'scripts/ci/versions.py')) + ' --public ' + shlex.quote(str(LOGS / 'installed-tool-versions.json')))
     if os.environ.get('D2X_CANDIDATE'):
         import shlex
         commands = [shlex.quote(os.environ['D2X_CANDIDATE']) + ' install d2mcpp' if c == 'd2x install d2mcpp' else c for c in commands]
@@ -110,11 +125,12 @@ try:
     assert expected > 0 and re.findall(r'(\d+) passed; (\d+) failed', output)[-1] == (str(expected), '0')
     assert f'FIRST-RUN PASS: {expected} exercises' in output
     actual = subprocess.check_output(['git', '-C', str(course), 'rev-parse', 'HEAD'], text=True).strip()
+    subprocess.run(['git', '-C', str(course), 'diff', '--exit-code', '--', '.xlings.json'], check=True)
     if args.published:
         assert json.loads((course / '.xlings.json').read_text()) == json.loads((ROOT / '.xlings.json').read_text()), 'Published course pins are stale'
     else:
         assert actual == head, f'Course download used {actual}, expected candidate {head}'
-    (LOGS / 'readme-result.json').write_text(json.dumps({'candidate': head, 'downloaded': actual, 'published': args.published, 'status': 'passed'}, indent=2), encoding='utf-8')
+    (LOGS / 'readme-result.json').write_text(json.dumps({'candidate': head, 'downloaded': actual, 'published': args.published, 'route': 'd2x' if args.d2x_download else 'git', 'status': 'passed'}, indent=2), encoding='utf-8')
 finally:
     if (course / '.d2x/ci-logs').exists():
         shutil.copytree(course / '.d2x/ci-logs', LOGS / 'readme-events', dirs_exist_ok=True)

@@ -40,32 +40,18 @@ $env:Path = "$env:USERPROFILE\.xlings\subos\current\bin;$env:Path"
 The PATH command makes the installed tools available in this terminal. For future sessions, reopen your terminal after installation. Preparation can be repeated and preserves your exercise files and progress.
 
 <details>
-<summary>Alternative: download with d2x install</summary>
+<summary>Alternative: download with an existing d2x</summary>
 
-Install [xlings](https://github.com/openxlings/xlings) first:
+If d2x is already installed, use the commands below. After downloading, run `xlings install -y` from the course directory to install the `.xlings.json` dependencies. There is no need to preinstall mcpp or select latest.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/openxlings/xlings/v2026.10.18.1/tools/other/quick_install.sh | bash -s v2026.10.18.1
-export PATH="$HOME/.xlings/subos/current/bin:$PATH"
-```
-
-Or on Windows PowerShell:
-
-```powershell
-irm https://raw.githubusercontent.com/mcpp-community/d2mcpp/main/scripts/install-xlings.ps1 | iex
-$env:Path = "$env:USERPROFILE\.xlings\subos\current\bin;$env:Path"
-```
-
-Then, on either system:
-
-```text
-xlings update
-xlings install --use d2x@latest mcpp@latest -y
 d2x install d2mcpp
 cd d2mcpp
+xlings update
+xlings install -y
 ```
 
-Continue with the preparation script for your system in step 2; both download routes use the same verification below.
+Then continue with the preparation script in step 2. Apply project pins again after updating the course.
 
 </details>
 

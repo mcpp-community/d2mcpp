@@ -17,11 +17,11 @@ def checker_binary():
 def verify(root=ROOT, label='versions'):
     pins = json.loads((root / '.xlings.json').read_text())['workspace']
     result = {'pins': pins, 'cwd': str(root), 'tools': {}}
-    for name in ['d2x', 'mcpp']:
+    for name in pins:
         actual = subprocess.check_output([name, '--version'], cwd=root, text=True, encoding='utf-8').strip()
         path = shutil.which(name)
         result['tools'][name] = {'version': actual, 'path': path}
-        assert actual.split()[-1] == pins[name], f'{name}: actual {actual}; expected {pins[name]}; path {path}'
+        assert actual.split()[-1].removeprefix('v') == pins[name], f'{name}: actual {actual}; expected {pins[name]}; path {path}'
     if os.environ.get('D2X_CANDIDATE'):
         binary = Path(os.environ['D2X_CANDIDATE'])
         provenance = json.loads(binary.with_name('provenance.json').read_text())

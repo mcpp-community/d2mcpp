@@ -10,6 +10,13 @@
 
 ## 2026/10
 
+**Install dependencies from the course manifest**
+
+Get the course before running `xlings install -y` to install the versions pinned in `.xlings.json`. Align update instructions and verify both Git and d2x downloads in CI. Check upstream latest independently of course dependency upgrades.
+
+- `Book`: [zh](https://mcpp-community.github.io/d2mcpp/base/chapter_1.html) / [en](https://mcpp-community.github.io/d2mcpp/en/base/chapter_1.html) - 2026/10/21
+- `Code`: [first-use CI](https://github.com/mcpp-community/d2mcpp/blob/main/.github/workflows/fresh-install.yml) - 2026/10/21
+
 **d2x upgrade and cold-start diagnostics**
 
 Upgrade d2x to 2026.10.21.1 and verify the selected executable; bound first Provider startup separately, show preparation and retain raw logs.
