@@ -240,7 +240,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        route: [build, checker]
+        route: [build, run, checker]
     steps:
       - uses: actions/checkout@v4
       - name: Mask MSVC

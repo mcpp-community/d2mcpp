@@ -15,7 +15,9 @@ verify(label='diagnostic-baseline-versions')
 assert not Path('target').exists()
 assert not Path(os.environ['MCPP_HOME']).exists()
 route = os.environ['DIAGNOSTIC_ROUTE']
-command = ['mcpp', 'build', '-p', 'd2x/buildtools'] if route == 'build' else [sys.executable, 'scripts/ci/first-run.py', '--allow-source-edit', '--cold']
+command = {'build': ['mcpp', 'build', '-p', 'd2x/buildtools'],
+           'run': ['mcpp', 'run', '-q', '-p', 'd2x/buildtools', '--', 'describe'],
+           'checker': [sys.executable, 'scripts/ci/first-run.py', '--allow-source-edit', '--cold']}[route]
 started = time.monotonic()
 with (logs / f'{route}.log').open('w', encoding='utf-8') as output:
     # The baseline checker may hit its known 120s error. Keep its actual result.
