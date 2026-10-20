@@ -43,21 +43,23 @@
 
 ### 建立本地練習環境
 
-**第一步：安裝工具**
+**第一步：取得課程**
 
-安裝 [xlings](docs/environment.zh.md#install-xlings)，重新開啟終端後執行：
+安裝 [xlings](docs/environment.zh.md#install-xlings) 和 Git，然後重新開啟終端。
+
+```bash
+git clone https://github.com/mcpp-community/d2mcpp.git
+cd d2mcpp
+```
+
+**第二步：安裝課程版本**
 
 ```bash
 xlings update
-xlings install --use d2x@latest mcpp@latest -y
+xlings install -y
 ```
 
-**第二步：取得課程**
-
-```bash
-d2x install d2mcpp
-cd d2mcpp
-```
+在課程目錄執行上述命令。`xlings install` 安裝 `.xlings.json` 宣告的版本；透過 Git 更新課程後，再次執行這兩條命令。
 
 **第三步：驗證並開始練習**
 

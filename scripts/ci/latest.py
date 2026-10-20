@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""Compare the stable d2x release, course pin and real public latest install."""
+"""Verify public latest independently, then verify the reviewed project pins."""
 import json
 import os
 from pathlib import Path
 import subprocess
 import tempfile
 import urllib.request
+
+from versions import verify
 
 root = Path(__file__).resolve().parents[2]
 logs = root / '.d2x/ci-logs'
@@ -25,8 +27,24 @@ with tempfile.TemporaryDirectory(prefix='d2x-public-latest-') as neutral:
     assert old == '2026.08.02.2', 'Old-version activation fixture failed'
     subprocess.run(['xlings', 'install', '--use', 'd2x@latest', '-y'], cwd=neutral, check=True)
     actual = subprocess.check_output(['d2x', '--version'], cwd=neutral, text=True).strip()
-report = {'previous': old, 'latest': latest, 'course_pin': pin, 'public_install': actual, 'release': release['html_url']}
+    # Deliberately keep a project behind latest to exercise version isolation,
+    # even when the real course pin currently equals the latest release.
+    project = Path(neutral) / 'older-course'
+    project.mkdir()
+    fixture = json.dumps({'workspace': {'d2x': old}}) + '\n'
+    (project / '.xlings.json').write_text(fixture)
+    subprocess.run(['xlings', 'install', '-y'], cwd=project, check=True)
+    selected = subprocess.check_output(['d2x', '--version'], cwd=project, text=True).strip()
+    assert selected == old, f'Project pin ignored: {selected}; expected {old}'
+    assert (project / '.xlings.json').read_text() == fixture, 'Install rewrote the fixture pin'
+    outside = subprocess.check_output(['d2x', '--version'], cwd=neutral, text=True).strip()
+    assert outside == actual, 'Project install changed the global selection'
+report = {'previous': old, 'latest': latest, 'course_pin': pin, 'public_install': actual, 'release': release['html_url'], 'older_project_selection': selected, 'global_after_project_install': outside}
 (logs / 'latest.json').write_text(json.dumps(report, indent=2))
 print(json.dumps(report, indent=2), flush=True)
 assert actual == latest, 'Public index/install is behind the stable release'
-assert pin == latest, 'Bump the course pin and run the full first-use matrix for the new stable release'
+# A new upstream release must not force an unreviewed course dependency bump.
+manifest = (root / '.xlings.json').read_bytes()
+subprocess.run(['xlings', 'install', '-y'], cwd=root, check=True)
+verify(label='pinned-after-latest')
+assert (root / '.xlings.json').read_bytes() == manifest, 'Install changed the reviewed manifest'

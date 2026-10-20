@@ -10,6 +10,13 @@
 
 ## 2026/10
 
+**按课程配置安装依赖**
+
+默认先获取课程，再由 `xlings install -y` 安装 `.xlings.json` 固定的版本；统一更新说明，并在 CI 验证 Git 与 d2x 下载路径。上游 latest 检查独立于课程版本升级。
+
+- `Book`: [zh](https://mcpp-community.github.io/d2mcpp/base/chapter_1.html) / [en](https://mcpp-community.github.io/d2mcpp/en/base/chapter_1.html) - 2026/10/21
+- `Code`: [first-use CI](https://github.com/mcpp-community/d2mcpp/blob/main/.github/workflows/fresh-install.yml) - 2026/10/21
+
 **d2x 最新版联动与冷启动诊断**
 
 升级 d2x 至 2026.10.21.1，核对实际执行版本；首次 Provider 构建单独限时，显示准备进度并保留原始日志。

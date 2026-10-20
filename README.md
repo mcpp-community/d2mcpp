@@ -43,21 +43,23 @@ Wait for the environment to be ready, then run `d2x checker` in the terminal.
 
 ### Practice locally
 
-**1. Install the tools**
+**1. Get the course**
 
-Install [xlings](docs/environment.md#install-xlings), reopen your terminal, then run:
+Install [xlings](docs/environment.md#install-xlings) and Git, then reopen your terminal.
+
+```bash
+git clone https://github.com/mcpp-community/d2mcpp.git
+cd d2mcpp
+```
+
+**2. Install the course versions**
 
 ```bash
 xlings update
-xlings install --use d2x@latest mcpp@latest -y
+xlings install -y
 ```
 
-**2. Get the course**
-
-```bash
-d2x install d2mcpp
-cd d2mcpp
-```
+Run these commands from the course directory. `xlings install` installs the versions declared in `.xlings.json`; after updating the course with Git, run the same two commands again.
 
 **3. Verify and practice**
 

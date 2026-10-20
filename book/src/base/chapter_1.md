@@ -40,32 +40,18 @@ $env:Path = "$env:USERPROFILE\.xlings\subos\current\bin;$env:Path"
 PATH 命令让当前终端立即找到工具；安装后重新打开终端即可供后续会话使用。准备脚本可重复执行，不会改动练习文件或学习进度。
 
 <details>
-<summary>可选：通过 d2x install 下载课程</summary>
+<summary>可选：通过已有 d2x 下载课程</summary>
 
-先安装 [xlings](https://github.com/openxlings/xlings)：
+如果已经安装 d2x，可以使用以下方式。下载后在课程目录执行 `xlings install -y`，按 `.xlings.json` 安装依赖，无需提前安装 mcpp 或选择 latest。
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/openxlings/xlings/v2026.10.18.1/tools/other/quick_install.sh | bash -s v2026.10.18.1
-export PATH="$HOME/.xlings/subos/current/bin:$PATH"
-```
-
-Windows PowerShell 使用：
-
-```powershell
-irm https://raw.githubusercontent.com/mcpp-community/d2mcpp/main/scripts/install-xlings.ps1 | iex
-$env:Path = "$env:USERPROFILE\.xlings\subos\current\bin;$env:Path"
-```
-
-然后在任一系统执行：
-
-```text
-xlings update
-xlings install --use d2x@latest mcpp@latest -y
 d2x install d2mcpp
 cd d2mcpp
+xlings update
+xlings install -y
 ```
 
-继续执行第二步中对应系统的准备脚本；两种下载方式共用下面的验证步骤。
+之后继续第二步的准备脚本。更新课程后同样按项目配置安装依赖。
 
 </details>
 

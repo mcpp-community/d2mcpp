@@ -218,14 +218,14 @@ jobs:
           include-hidden-files: true
 
   released-course:
-    name: Published d2x install route (main only)
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && inputs.candidate_run == ''
+    name: d2x download and pinned install
+    if: ${{ !inputs.diagnose && inputs.candidate_run == '' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
-      - name: Follow the README using the public course download
-        run: python3 scripts/ci/readme.py --published
+      - name: Verify the documented existing-d2x download route
+        run: python3 scripts/ci/readme.py --d2x-download ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && '--published' || '' }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -265,7 +265,7 @@ jobs:
           include-hidden-files: true
 
   latest-stable:
-    if: github.ref == 'refs/heads/main' && inputs.candidate_run == ''
+    if: ${{ !inputs.diagnose && inputs.candidate_run == '' }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -280,7 +280,7 @@ jobs:
         if: runner.os == 'Windows'
         shell: powershell
         run: ./scripts/install-xlings.ps1
-      - name: Check stable release, public latest and course pin
+      - name: Check public latest and independently restore course pins
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}

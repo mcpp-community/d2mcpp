@@ -26,7 +26,7 @@ Continue with the README. If a command is not found, reopen your terminal or app
 
 ## Git installation and updates
 
-After installing xlings, you can also clone the course. Replace the URL with your fork if needed:
+After installing xlings, clone the course as shown in the README. Replace the URL with your fork if needed:
 
 ```bash
 git clone https://github.com/mcpp-community/d2mcpp.git
@@ -104,6 +104,22 @@ limit. Preparation messages do not extend the startup deadline. On failure, keep
 `.d2x/provider.stdout.log`, `.d2x/provider.stderr.log` and the command output.
 Startup/transport errors exit nonzero; an unfinished exercise verdict is expected.
 
-For an existing tool installation, use `xlings install --use d2x@latest mcpp@latest -y` after `xlings update`. `@latest` selects the newest stable index entry; `--use` activates it even when already installed. Bare install commands can retain the previously selected version.
+From an existing course directory, install or restore the versions declared in `.xlings.json` with the commands below. `xlings update` refreshes the package index; `xlings install -y` installs the project dependencies. Use the course pins rather than `@latest`. Dependency upgrades belong in `.xlings.json` and must pass CI before publication.
+
+```bash
+xlings update
+xlings install -y
+```
 
 User cancellation returns 130 and a `cancelled` event without a Provider-failure warning or a failed exercise verdict.
+
+## Download with an existing d2x
+
+If d2x is already available, you can use this download route. The installer applies the downloaded course dependencies; running `xlings install -y` from the course directory explicitly reapplies its pins. There is no need to preinstall mcpp or select latest.
+
+```bash
+d2x install d2mcpp
+cd d2mcpp
+xlings update
+xlings install -y
+```
