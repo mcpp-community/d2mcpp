@@ -1,6 +1,6 @@
 # d2x 与 d2mcpp 最新版联动及首次启动优化方案
 
-日期：2026-10-20。状态：已进入实现与发布。原设计和调研快照保留于第 1–8 节，第 9 节记录实际验收；最终状态以链接的 PR、Release 和 CI 为准。
+日期：2026-10-20。状态：修复版已发布，课程联动验收记录见第 9 节及 PR #94。原设计和调研快照保留于第 1–8 节，第 9 节记录实际验收；最终状态以链接的 PR、Release 和 CI 为准。
 
 ## 1. 建议与边界
 
@@ -161,4 +161,23 @@ latest 检查与候选 pin 验收分开：定时/main job 对比稳定 Release�
 - [d2x 2026.10.20.2](https://github.com/d2learn/d2x/releases/tag/v2026.10.20.2) 已发布，tag 指向上述 squash 提交；[发布工作流](https://github.com/d2learn/d2x/actions/runs/39443965654) 四个作业通过。上游、[GitHub RES](https://github.com/xlings-res/d2x/releases/tag/2026.10.20.2) 和 GitCode RES 的三平台压缩包、SHA256 sidecar 全部下载并验证逐字节一致；Linux 无 INTERP/NEEDED，实际版本正确。
 - [包索引 PR #1013](https://github.com/openxlings/xim-pkgindex/pull/1013) 的三平台安装、索引注册、生命周期等检查通过后 squash 合入 `88af0a08556d807b4338ac5f3603f26e4537c662`；[公开索引发布](https://github.com/openxlings/xim-pkgindex/actions/runs/39445523430) 成功，滚动指针 source_commit 已核对。
 
-课程改动由 [PR #94](https://github.com/mcpp-community/d2mcpp/pull/94) 承载。课程固定 2026.10.20.2；最终验收继续检查真实 xlings 安装版、旧环境升级和 Dev Container，不以候选产物结果代替。
+课程改动由 [PR #94](https://github.com/mcpp-community/d2mcpp/pull/94) 承载。课程目标固定 2026.10.21.1；最终验收继续检查真实 xlings 安装版、旧环境升级和 Dev Container，不以候选产物结果代替。
+
+### 9.1 取消处理补丁与最终目标版本
+
+- 自我 review 发现 2026.10.20.2 虽已返回取消状态 130，但 describe 仍打印 Provider 无响应，check 仍可能生成合成失败 verdict。由 [PR #40](https://github.com/d2learn/d2x/pull/40) 修复，取消优先于故障日志及 verdict 分发；内置 UI 显示 cancelled，NDJSON 保留明确的 cancelled code/phase，不改变协议版本。
+- [原生 CI](https://github.com/d2learn/d2x/actions/runs/39449074812) 六个作业全部通过，Windows 2022/2025 使用实际 Ctrl+Break，POSIX 使用 SIGINT；覆盖 describe 与 check 两阶段，断言 130、无 Provider 故障警告、无失败 verdict、锁释放及后代进程终止。
+- [最终候选联动](https://github.com/mcpp-community/d2mcpp/actions/runs/39450471693) 十个首次使用作业全部通过。候选 checkout `827a63bad95ca2a7614acc2fdd255ec9631697b0` 与 squash 提交 `a5c0cd2d5a265c7a4484fd5ac59822d436608df8` 的 Git tree 完全一致（`d2fa44f22cac45bc84a1e4a7625210abc3ed85cc`）。
+- [最终 Release 2026.10.21.1](https://github.com/d2learn/d2x/releases/tag/v2026.10.21.1) 的 tag 指向该 squash 提交。压缩包直接采用已验收候选二进制，保留 binary/archive SHA256 和 provenance；Linux x86_64 静态、macOS ARM64、Windows x86_64 架构均已核对。上游、GitHub RES 和 GitCode RES 的三个压缩包、三个 SHA256 sidecar 及 provenance 均已公开回下载并确认逐字节一致。
+- 课程在最终 pin 前的完整检查均通过：[首次使用十项](https://github.com/mcpp-community/d2mcpp/actions/runs/39448298881)、[六项旧环境升级及 Dev Container](https://github.com/mcpp-community/d2mcpp/actions/runs/39448298893)、[五平台完整回归及 solutions parity](https://github.com/mcpp-community/d2mcpp/actions/runs/39448298867)、[双语图书构建](https://github.com/mcpp-community/d2mcpp/actions/runs/39448298858)。最终 pin 之后再验证公开发布链路。
+
+- [包索引 PR #1014](https://github.com/openxlings/xim-pkgindex/pull/1014) 三平台安装、索引注册、消费者与生命周期检查全部通过后 squash 合入 `c75484db1707b5043e72e4ba798ebb77eae6a8db`；三个 latest 与架构校验和同步更新，保留旧版本。[最终索引发布任务](https://github.com/openxlings/xim-pkgindex/actions/runs/39451882322) 已成功；GitHub/GitCode 的索引压缩包 SHA256、配方三个 latest 与滚动指针 source_commit 均核对为该提交，raw GitHub CDN 本地读数亦一致。
+
+- d2x 合入后的 [main CI](https://github.com/d2learn/d2x/actions/runs/39451153546) 六个作业也全部通过。
+
+### 9.2 真实发布版本地验收与最终课程检查
+
+- 主机 xlings 2026.10.20.3 通过公开索引更新并执行 `xlings install --use d2x@latest -y`，实际激活 `2026.10.21.1`。
+- Ubuntu 20.04 普通用户容器使用真实 xlings 2026.10.18.1，重新更新公开索引并安装 latest；未设置任何候选覆盖，目录内版本断言为 d2x 2026.10.21.1、mcpp 2026.10.17.1。独立空 MCPP_HOME 首次 session 102.0 秒、首题 106.2 秒；准备事件持续可见，原始诊断被保存。
+- 完整执行首题预期失败、保存答案、通过、推进、重启恢复、重复 setup 保留进度；solutions 为 52/52。原始日志位于执行机器 `/tmp/d2mcpp-startup-local/final21-run.log`，此轮课程为独立临时 checkout，用户练习未被修改。
+- 最终课程固定 `2026.10.21.1`，相关双语入门、环境说明和 changelog 同步。最终 pin 的 [PR 验收](https://github.com/mcpp-community/d2mcpp/pull/94/checks) 与 [main 首次使用验收](https://github.com/mcpp-community/d2mcpp/actions/workflows/fresh-install.yml?query=branch%3Amain) 分别保留候选课程和公开课程下载结果；合入门槛包含全部适用检查通过，合入后再核对三个平台公开 latest。
