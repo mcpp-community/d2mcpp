@@ -48,7 +48,8 @@
 安裝 [xlings](docs/environment.zh.md#install-xlings)，重新開啟終端後執行：
 
 ```bash
-xlings install d2x mcpp -y
+xlings update
+xlings install --use d2x@latest mcpp@latest -y
 ```
 
 **第二步：取得課程**

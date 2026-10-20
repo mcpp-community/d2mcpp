@@ -40,14 +40,34 @@ on:
       - "book/src/changelog.md"
       - "book/en/src/changelog.md"
   workflow_dispatch:
+    inputs:
+      candidate_run:
+        description: 'Optional successful d2learn/d2x CI run ID (explicit prerelease override)'
+        type: string
+        default: ''
+      candidate_sha:
+        description: 'Exact checkout SHA recorded in that candidate provenance'
+        type: string
+        default: ''
+      diagnose:
+        description: 'Also compare standalone build and checker in separate cold Windows environments'
+        type: boolean
+        default: false
   schedule:
     - cron: '23 4 * * 1'
 
 permissions:
   contents: read
+  actions: read
+
+env:
+  XLINGS_NON_INTERACTIVE: '1'
+  D2X_CANDIDATE_SHA: ${{ inputs.candidate_sha }}
+  D2X_CANDIDATE_DIR: .d2x/candidate
 
 jobs:
   native:
+    if: ${{ !inputs.diagnose }}
     name: fresh (${{ matrix.os }}, ${{ matrix.route }}, MSVC=${{ !matrix.mask_msvc }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
@@ -62,6 +82,18 @@ jobs:
           - {os: windows-2025, route: cold, mask_msvc: true}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        if: inputs.candidate_run != ''
+        with:
+          repository: d2learn/d2x
+          run-id: ${{ inputs.candidate_run }}
+          github-token: ${{ github.token }}
+          name: ${{ runner.os == 'Linux' && 'candidate-linux-x86_64' || format('candidate-{0}', matrix.os) }}
+          path: ${{ env.D2X_CANDIDATE_DIR }}
+      - name: Verify explicit candidate provenance
+        if: inputs.candidate_run != ''
+        shell: bash
+        run: ${{ runner.os == 'Windows' && 'python' || 'python3' }} scripts/ci/candidate.py
       - name: Select an empty toolchain home
         shell: bash
         run: echo "MCPP_HOME=$RUNNER_TEMP/d2mcpp-fresh" >> "$GITHUB_ENV"
@@ -85,11 +117,11 @@ jobs:
         run: python scripts/ci/readme.py
       - name: Cold install only (Unix)
         if: runner.os != 'Windows' && matrix.route == 'cold'
-        run: bash scripts/setup.sh --install-only
+        run: python3 scripts/ci/prepare.py --install-only
       - name: Cold install only (PowerShell 5.1)
         if: runner.os == 'Windows' && matrix.route == 'cold'
         shell: powershell
-        run: ./scripts/setup.ps1 -InstallOnly
+        run: python scripts/ci/prepare.py --install-only
       - name: First check, save, advance and resume
         if: matrix.route == 'cold'
         shell: bash
@@ -104,7 +136,7 @@ jobs:
           ROUTE: ${{ matrix.route }}
         run: |
           logs="$(pwd)/.d2x/ci-logs"
-          if [[ "$ROUTE" == readme ]]; then cd .d2x/ci-work/download/d2mcpp; fi
+          if [[ "$ROUTE" == readme ]]; then cd "$(cat "$logs/readme-course-path.txt")"; fi
           # doctor returns nonzero for warnings too (missing MSVC is expected).
           mcpp self doctor > "$logs/doctor.txt" 2>&1 || true
           cat "$logs/doctor.txt"
@@ -121,6 +153,7 @@ jobs:
           include-hidden-files: true
 
   linux-minimal:
+    if: ${{ !inputs.diagnose }}
     name: fresh (Linux without a compiler, ${{ matrix.route }})
     runs-on: ubuntu-24.04
     container: ubuntu:24.04
@@ -138,6 +171,18 @@ jobs:
           ! command -v g++
           ! command -v clang++
       - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        if: inputs.candidate_run != ''
+        with:
+          repository: d2learn/d2x
+          run-id: ${{ inputs.candidate_run }}
+          github-token: ${{ github.token }}
+          name: candidate-linux-x86_64
+          path: ${{ env.D2X_CANDIDATE_DIR }}
+      - name: Verify explicit candidate provenance
+        if: inputs.candidate_run != ''
+        shell: bash
+        run: ${{ runner.os == 'Windows' && 'python' || 'python3' }} scripts/ci/candidate.py
       - name: Give the ordinary user a fresh checkout
         shell: bash
         env:
@@ -158,7 +203,7 @@ jobs:
         run: |
           cd "$COURSE_DIR"
           if [[ "$ROUTE" == cold ]]; then
-            runuser -u learner -- bash scripts/setup.sh --install-only
+            runuser -u learner -- python3 scripts/ci/prepare.py --install-only
             runuser -u learner -- env MCPP_HOME=/home/learner/.mcpp PATH="/home/learner/.xlings/subos/current/bin:$PATH" python3 scripts/ci/first-run.py --allow-source-edit --cold
             runuser -u learner -- env PATH="/home/learner/.xlings/subos/current/bin:$PATH" python3 scripts/ci/solutions.py
           else
@@ -174,7 +219,7 @@ jobs:
 
   released-course:
     name: Published d2x install route (main only)
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && inputs.candidate_run == ''
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
@@ -187,4 +232,62 @@ jobs:
           name: published-course-first-use
           path: .d2x/ci-logs/
           if-no-files-found: ignore
+          include-hidden-files: true
+
+  cold-diagnostics:
+    if: inputs.diagnose
+    runs-on: windows-2025
+    strategy:
+      fail-fast: false
+      matrix:
+        route: [build, run, checker]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Mask MSVC
+        shell: powershell
+        run: ./scripts/ci/mask-msvc.ps1
+      - name: Select independent cold home
+        shell: bash
+        run: echo "MCPP_HOME=$RUNNER_TEMP/diagnostic-${{ matrix.route }}" >> "$GITHUB_ENV"
+      - name: Install tools only
+        shell: powershell
+        run: python scripts/ci/prepare.py --install-only
+      - name: Diagnose baseline cold startup
+        shell: bash
+        env:
+          DIAGNOSTIC_ROUTE: ${{ matrix.route }}
+        run: python scripts/ci/cold-diagnostics.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cold-diagnostic-${{ matrix.route }}
+          path: .d2x/ci-logs/
+          include-hidden-files: true
+
+  latest-stable:
+    if: github.ref == 'refs/heads/main' && inputs.candidate_run == ''
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-14, windows-2025]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install xlings (Unix)
+        if: runner.os != 'Windows'
+        run: bash scripts/install-xlings.sh
+      - name: Install xlings (PowerShell 5.1)
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: ./scripts/install-xlings.ps1
+      - name: Check stable release, public latest and course pin
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: ${{ runner.os == 'Windows' && 'python' || 'python3' }} scripts/ci/latest.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: latest-stable-versions-${{ matrix.os }}
+          path: .d2x/ci-logs/
           include-hidden-files: true

@@ -42,12 +42,15 @@ config_path = ROOT / '.xlings.json'
 original = config_path.read_bytes()
 old = json.loads(original)
 old['workspace']['mcpp'] = '2026.8.2.1'
+old['workspace']['d2x'] = '2026.08.02.2'
 try:
     config_path.write_text(json.dumps(old, indent=2) + '\n', encoding='utf-8')
     command(['xlings', 'update'], 'old-index')
     command(['xlings', 'install', '-y'], 'old-install')
     version = command(['mcpp', '--version'], 'old-version')
     assert '2026.8.2.1' in version.stdout
+    old_checker = command(['d2x', '--version'], 'old-d2x-version')
+    assert old_checker.stdout.strip() == '2026.08.02.2'
     # The old compiler may already fail against today's payloads. Keep that evidence,
     # and still exercise the migration; do not skip it because setup failed.
     command(['mcpp', 'run', '-q', '-p', 'd2x/buildtools', '--', 'describe'], 'old-provider', required=False)

@@ -11,6 +11,8 @@ import sys
 import threading
 import time
 
+from versions import checker_binary, verify
+
 ROOT = Path(__file__).resolve().parents[2]
 LOGS = ROOT / '.d2x' / 'ci-logs'
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
@@ -31,10 +33,11 @@ def run(*args, name, timeout=1800):
 class Checker:
     def __init__(self, name, timeout):
         LOGS.mkdir(parents=True, exist_ok=True)
+        self.name = name
         self.events = queue.Queue()
         self.timeout = timeout
         self.process = subprocess.Popen(
-            ['d2x', 'checker', '--ui', 'print', '--emit-events'], cwd=ROOT,
+            [checker_binary(), 'checker', '--ui', 'print', '--emit-events'], cwd=ROOT,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
             encoding='utf-8', errors='replace', bufsize=1,
             start_new_session=os.name != 'nt',
@@ -63,13 +66,20 @@ class Checker:
                 event = self.events.get(timeout=0.25)
             except queue.Empty:
                 if self.process.poll() is not None:
-                    raise AssertionError(f'checker exited early ({self.process.returncode}); see {LOGS}')
+                    raise AssertionError(f'checker exited early ({self.process.returncode}); {self.diagnostics()}')
                 continue
             if event.get('event') in ('invalid-json', 'error', 'done'):
-                raise AssertionError(f'Unexpected checker event: {event}')
+                raise AssertionError(f'Unexpected checker event: {event}; {self.diagnostics()}')
             if predicate(event):
                 return event
-        raise AssertionError(f'checker did not reach the expected state in {self.timeout}s; see {LOGS}')
+        raise AssertionError(f'checker did not reach the expected state in {self.timeout}s; {self.diagnostics()}')
+
+    def diagnostics(self):
+        parts = [f'Logs: {LOGS}']
+        for path in [LOGS / f'{self.name}.stderr', ROOT / '.d2x/provider.stderr.log', ROOT / '.d2x/provider.stdout.log']:
+            if path.exists():
+                parts.append(f'{path.name}:\n{path.read_text(encoding="utf-8", errors="replace")[-8000:]}')
+        return '\n'.join(parts)
 
     def close(self):
         if self.process.poll() is None:
@@ -78,6 +88,8 @@ class Checker:
             else:
                 os.killpg(self.process.pid, signal.SIGTERM)
         self.process.wait(timeout=30)
+        for path in (ROOT / '.d2x').glob('provider.*.log'):
+            (LOGS / f'{self.name}-{path.name}').write_bytes(path.read_bytes())
         for thread in self.threads:
             thread.join(timeout=5)
 
@@ -87,9 +99,10 @@ def main():
     parser.add_argument('--allow-source-edit', action='store_true', required=True,
                         help='acknowledge this is a disposable checkout; the first exercise is temporarily replaced')
     parser.add_argument('--cold', action='store_true')
-    parser.add_argument('--timeout', type=int, default=900)
+    parser.add_argument('--timeout', type=int, default=1200)
     args = parser.parse_args()
     os.chdir(ROOT)
+    verify(label='first-run-versions')
     state_path = ROOT / '.d2x/state.json'
     assert not state_path.exists(), 'Use a disposable checkout with no learning progress'
     if args.cold:
@@ -108,6 +121,7 @@ def main():
     checker = Checker('first-start', args.timeout)
     try:
         session = checker.until(lambda e: e.get('event') == 'session')
+        print(f'Provider startup reached session in {time.monotonic() - start:.1f}s', flush=True)
         assert session['total'] == expected and session['completed'] == 0, session
         first = checker.until(lambda e: e.get('event') == 'exercise')
         assert first['id'] == 'hello-mcpp', first

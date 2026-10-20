@@ -21,7 +21,7 @@ git clone https://github.com/mcpp-community/d2mcpp.git
 cd d2mcpp
 ```
 
-**第二步：准备环境。** 脚本安装 xlings **2026.10.18.1** 及 `.xlings.json` 声明的版本（mcpp **2026.10.17.1**、d2x **2026.08.02.2**、mdBook **0.4.43**），构建并检查 Provider。首次构建可能需要几分钟。
+**第二步：准备环境。** 脚本安装 xlings **2026.10.18.1** 及 `.xlings.json` 声明的版本（mcpp **2026.10.17.1**、d2x **2026.10.21.1**、mdBook **0.4.43**），构建并检查 Provider。首次构建可能需要几分钟。
 
 Linux / macOS：
 
@@ -59,7 +59,8 @@ $env:Path = "$env:USERPROFILE\.xlings\subos\current\bin;$env:Path"
 然后在任一系统执行：
 
 ```text
-xlings install d2x@2026.08.02.2 -y
+xlings update
+xlings install --use d2x@latest mcpp@latest -y
 d2x install d2mcpp
 cd d2mcpp
 ```
@@ -263,3 +264,12 @@ xlings install
 **教程仓库:** [https://github.com/mcpp-community/d2mcpp](https://github.com/mcpp-community/d2mcpp)
 
 **教程视频合集:** [https://space.bilibili.com/65858958/lists/5208246](https://space.bilibili.com/65858958/lists/5208246)
+
+## 首次启动准备与版本核对
+
+`d2x install` 会安装下载课程所声明的项目依赖。通过 Git 更新后，重新运行准备脚本以应用版本变化。
+在课程目录执行 `d2x --version`，与 `.xlings.json` 对照；仅更新全局工具不能证明项目实际使用的版本。
+
+checker 在第一题之前显示准备信息。首次 Provider 启动的总期限为 900 秒，后续调用的空闲期限为 120 秒；
+准备提示不会延长期限。失败时保留 `.d2x/provider.stdout.log`、`.d2x/provider.stderr.log` 与命令输出。
+启动和传输错误会非零退出；未完成练习的 fail 判定属于预期行为。

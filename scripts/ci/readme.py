@@ -12,6 +12,8 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
+
 
 ROOT = Path(__file__).resolve().parents[2]
 LOGS = ROOT / '.d2x/ci-logs'
@@ -49,8 +51,10 @@ assert not (ROOT / '.d2x/state.json').exists(), 'Use a checkout without learning
 LOGS.mkdir(parents=True, exist_ok=True)
 WORK.mkdir(parents=True)
 source = WORK / 'source.git'
-download = WORK / 'download'
-download.mkdir()
+# Public installation must not inherit an ancestor course manifest.
+# Keep this external directory for the post-flow doctor/target assertions.
+download = Path(tempfile.mkdtemp(prefix='d2mcpp first use ' + ('long-project-directory-' * 4 if os.name != 'nt' else '')))
+assert not any((parent / '.xlings.json').exists() for parent in [download, *download.parents]), 'README download must be outside project scope'
 head = subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', 'HEAD'], text=True).strip()
 env = os.environ.copy()
 env['XLINGS_NON_INTERACTIVE'] = '1'
@@ -73,14 +77,25 @@ script = WORK / ('readme.ps1' if os.name == 'nt' else 'readme.sh')
 if os.name == 'nt':
     body = "$ErrorActionPreference = 'Stop'\n" + bootstrap + '\n'
     for command in commands[:-1] + [checker]:
+        if command == 'd2x install d2mcpp' and os.environ.get('D2X_CANDIDATE'):
+            command = "& '" + os.environ['D2X_CANDIDATE'].replace("'", "''") + "' install d2mcpp"
         body += command + "\nif ($LASTEXITCODE -ne 0) { throw 'README command failed' }\n"
+        if command == 'xlings install --use d2x@latest mcpp@latest -y':
+            body += f"python '{ROOT / 'scripts/ci/versions.py'}' --public '{LOGS / 'public-tool-versions.json'}'\nif ($LASTEXITCODE -ne 0) {{ throw 'Public version snapshot failed' }}\n"
     script.write_text(body, encoding='utf-8')
     shell = ['powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', str(script)]
 else:
+    import shlex
+    offset = commands.index('xlings install --use d2x@latest mcpp@latest -y') + 1
+    commands.insert(offset, 'python3 ' + shlex.quote(str(ROOT / 'scripts/ci/versions.py')) + ' --public ' + shlex.quote(str(LOGS / 'public-tool-versions.json')))
+    if os.environ.get('D2X_CANDIDATE'):
+        import shlex
+        commands = [shlex.quote(os.environ['D2X_CANDIDATE']) + ' install d2mcpp' if c == 'd2x install d2mcpp' else c for c in commands]
     script.write_text('set -euo pipefail\n' + bootstrap + '\n' + '\n'.join(commands[:-1] + [checker]) + '\n', encoding='utf-8')
     shell = ['bash', str(script)]
 
 course = download / 'd2mcpp'
+(LOGS / 'readme-course-path.txt').write_text(course.as_posix(), encoding='utf-8')
 print('Running the README commands with the documented xlings installer', flush=True)
 try:
     with (LOGS / 'readme-install.log').open('w', encoding='utf-8') as log:
@@ -88,6 +103,9 @@ try:
     output = (LOGS / 'readme-install.log').read_text(encoding='utf-8', errors='replace')
     print(output, flush=True)
     assert result.returncode == 0, 'README flow failed; see readme-install.log'
+    selected = json.loads((course / '.d2x/ci-logs/first-run-versions.json').read_text())
+    assert selected['pins'] == json.loads((course / '.xlings.json').read_text())['workspace']
+    (LOGS / 'readme-selected-versions.json').write_text(json.dumps(selected, indent=2))
     expected = len(list((ROOT / 'solutions/tests').rglob('*.cpp')))
     assert expected > 0 and re.findall(r'(\d+) passed; (\d+) failed', output)[-1] == (str(expected), '0')
     assert f'FIRST-RUN PASS: {expected} exercises' in output

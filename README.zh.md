@@ -48,7 +48,8 @@
 安装 [xlings](docs/environment.zh.md#install-xlings)，重新打开终端后执行：
 
 ```bash
-xlings install d2x mcpp -y
+xlings update
+xlings install --use d2x@latest mcpp@latest -y
 ```
 
 **第二步：获取课程**
