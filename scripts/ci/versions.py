@@ -40,4 +40,11 @@ def verify(root=ROOT, label='versions'):
 
 
 if __name__ == '__main__':
-    verify()
+    import sys
+    if len(sys.argv) == 3 and sys.argv[1] == '--public':
+        report = {tool: {'version': subprocess.check_output([tool, '--version'], text=True).strip(),
+                         'path': shutil.which(tool)} for tool in ['d2x', 'mcpp', 'xlings']}
+        Path(sys.argv[2]).write_text(json.dumps(report, indent=2))
+        print('Public install versions:', json.dumps(report), flush=True)
+    else:
+        verify()

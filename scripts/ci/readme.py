@@ -13,7 +13,6 @@ import shutil
 import subprocess
 import sys
 
-from versions import verify
 
 ROOT = Path(__file__).resolve().parents[2]
 LOGS = ROOT / '.d2x/ci-logs'
@@ -78,9 +77,14 @@ if os.name == 'nt':
         if command == 'd2x install d2mcpp' and os.environ.get('D2X_CANDIDATE'):
             command = "& '" + os.environ['D2X_CANDIDATE'].replace("'", "''") + "' install d2mcpp"
         body += command + "\nif ($LASTEXITCODE -ne 0) { throw 'README command failed' }\n"
+        if command == 'xlings install d2x mcpp -y':
+            body += f"python '{ROOT / 'scripts/ci/versions.py'}' --public '{LOGS / 'public-tool-versions.json'}'\nif ($LASTEXITCODE -ne 0) {{ throw 'Public version snapshot failed' }}\n"
     script.write_text(body, encoding='utf-8')
     shell = ['powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', str(script)]
 else:
+    import shlex
+    offset = commands.index('xlings install d2x mcpp -y') + 1
+    commands.insert(offset, 'python3 ' + shlex.quote(str(ROOT / 'scripts/ci/versions.py')) + ' --public ' + shlex.quote(str(LOGS / 'public-tool-versions.json')))
     if os.environ.get('D2X_CANDIDATE'):
         import shlex
         commands = [shlex.quote(os.environ['D2X_CANDIDATE']) + ' install d2mcpp' if c == 'd2x install d2mcpp' else c for c in commands]
@@ -95,7 +99,9 @@ try:
     output = (LOGS / 'readme-install.log').read_text(encoding='utf-8', errors='replace')
     print(output, flush=True)
     assert result.returncode == 0, 'README flow failed; see readme-install.log'
-    verify(course, label='readme-selected-versions')
+    selected = json.loads((course / '.d2x/ci-logs/first-run-versions.json').read_text())
+    assert selected['pins'] == json.loads((course / '.xlings.json').read_text())['workspace']
+    (LOGS / 'readme-selected-versions.json').write_text(json.dumps(selected, indent=2))
     expected = len(list((ROOT / 'solutions/tests').rglob('*.cpp')))
     assert expected > 0 and re.findall(r'(\d+) passed; (\d+) failed', output)[-1] == (str(expected), '0')
     assert f'FIRST-RUN PASS: {expected} exercises' in output

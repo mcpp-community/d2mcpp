@@ -67,6 +67,7 @@ env:
 
 jobs:
   native:
+    if: ${{ !inputs.diagnose }}
     name: fresh (${{ matrix.os }}, ${{ matrix.route }}, MSVC=${{ !matrix.mask_msvc }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
@@ -152,6 +153,7 @@ jobs:
           include-hidden-files: true
 
   linux-minimal:
+    if: ${{ !inputs.diagnose }}
     name: fresh (Linux without a compiler, ${{ matrix.route }})
     runs-on: ubuntu-24.04
     container: ubuntu:24.04
