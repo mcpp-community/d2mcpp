@@ -12,7 +12,7 @@
 
 **d2x 最新版联动与冷启动诊断**
 
-升级 d2x 至 2026.10.20.2，核对实际执行版本；首次 Provider 构建单独限时，显示准备进度并保留原始日志。
+升级 d2x 至 2026.10.21.1，核对实际执行版本；首次 Provider 构建单独限时，显示准备进度并保留原始日志。
 
 - `Book`: [zh](https://mcpp-community.github.io/d2mcpp/base/chapter_1.html) / [en](https://mcpp-community.github.io/d2mcpp/en/base/chapter_1.html) - 2026/10/20
 - `Code`: [first-use CI](https://github.com/mcpp-community/d2mcpp/blob/main/.github/workflows/fresh-install.yml) - 2026/10/20

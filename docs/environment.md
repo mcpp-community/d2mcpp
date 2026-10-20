@@ -105,3 +105,5 @@ limit. Preparation messages do not extend the startup deadline. On failure, keep
 Startup/transport errors exit nonzero; an unfinished exercise verdict is expected.
 
 For an existing tool installation, use `xlings install --use d2x@latest mcpp@latest -y` after `xlings update`. `@latest` selects the newest stable index entry; `--use` activates it even when already installed. Bare install commands can retain the previously selected version.
+
+User cancellation returns 130 and a `cancelled` event without a Provider-failure warning or a failed exercise verdict.

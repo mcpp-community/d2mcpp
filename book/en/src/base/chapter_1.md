@@ -21,7 +21,7 @@ git clone https://github.com/mcpp-community/d2mcpp.git
 cd d2mcpp
 ```
 
-**2. Prepare the environment.** These scripts install xlings **2026.10.18.1**, the versions in `.xlings.json` (mcpp **2026.10.17.1**, d2x **2026.10.20.2**, mdBook **0.4.43**), and build and check the Provider. The first build may take several minutes.
+**2. Prepare the environment.** These scripts install xlings **2026.10.18.1**, the versions in `.xlings.json` (mcpp **2026.10.17.1**, d2x **2026.10.21.1**, mdBook **0.4.43**), and build and check the Provider. The first build may take several minutes.
 
 Linux / macOS:
 

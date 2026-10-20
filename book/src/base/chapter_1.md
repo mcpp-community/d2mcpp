@@ -21,7 +21,7 @@ git clone https://github.com/mcpp-community/d2mcpp.git
 cd d2mcpp
 ```
 
-**第二步：准备环境。** 脚本安装 xlings **2026.10.18.1** 及 `.xlings.json` 声明的版本（mcpp **2026.10.17.1**、d2x **2026.10.20.2**、mdBook **0.4.43**），构建并检查 Provider。首次构建可能需要几分钟。
+**第二步：准备环境。** 脚本安装 xlings **2026.10.18.1** 及 `.xlings.json` 声明的版本（mcpp **2026.10.17.1**、d2x **2026.10.21.1**、mdBook **0.4.43**），构建并检查 Provider。首次构建可能需要几分钟。
 
 Linux / macOS：
 

@@ -101,3 +101,5 @@ checker 在第一题之前显示准备信息。首次 Provider 启动的总期�
 启动和传输错误会非零退出；未完成练习的 fail 判定属于预期行为。
 
 已有工具环境先执行 `xlings update`，再执行 `xlings install --use d2x@latest mcpp@latest -y`。`@latest` 选择最新稳定条目；`--use` 即使新版已安装也会激活它。仅执行不带版本或激活选项的 install 可能继续保留旧版。
+
+用户取消返回 130 和 `cancelled` 事件，不报告 Provider 故障，也不生成练习失败判定。
