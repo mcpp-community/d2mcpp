@@ -10,6 +10,13 @@
 
 ## 2026/10
 
+**d2x 最新版联动与冷启动诊断**
+
+升级 d2x，核对实际执行版本；首次 Provider 构建单独限时，显示准备进度并保留原始日志。
+
+- `Book`: [zh](https://mcpp-community.github.io/d2mcpp/base/chapter_1.html) / [en](https://mcpp-community.github.io/d2mcpp/en/base/chapter_1.html) - 2026/10/20
+- `Code`: [first-use CI](https://github.com/mcpp-community/d2mcpp/blob/main/.github/workflows/fresh-install.yml) - 2026/10/20
+
 **练习环境升级与首次使用验证**
 
 统一使用 mcpp 2026.10.17.1，增加跨平台准备脚本、全新安装与旧环境恢复验证，更新 Codespaces 入口。

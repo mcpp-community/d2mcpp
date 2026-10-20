@@ -90,3 +90,16 @@ $env:MCPP_HOME = "$env:USERPROFILE\.mcpp-d2mcpp-recovered"
 This downloads a new toolchain, keeping the old directory and progress. Set the same `MCPP_HOME` in future sessions. Undo with `unset MCPP_HOME` on Unix or `Remove-Item Env:MCPP_HOME` in PowerShell.
 
 Still stuck? [Open an issue](https://github.com/mcpp-community/d2mcpp/issues) with your OS, tool versions, command and error. Keep API keys out of reports.
+
+## First-start preparation and version checks
+
+`d2x install` installs the downloaded course's declared workspace dependencies.
+After a Git update, rerun the preparation script to apply changed versions.
+Run `d2x --version` from the course directory and compare it with `.xlings.json`;
+updating a global tool alone does not establish which project version is selected.
+
+The checker shows preparation before the first exercise. Initial Provider startup
+has a total 900-second budget; subsequent Provider calls have a 120-second idle
+limit. Preparation messages do not extend the startup deadline. On failure, keep
+`.d2x/provider.stdout.log`, `.d2x/provider.stderr.log` and the command output.
+Startup/transport errors exit nonzero; an unfinished exercise verdict is expected.

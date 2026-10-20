@@ -21,7 +21,7 @@ git clone https://github.com/mcpp-community/d2mcpp.git
 cd d2mcpp
 ```
 
-**2. Prepare the environment.** These scripts install xlings **2026.10.18.1**, the versions in `.xlings.json` (mcpp **2026.10.17.1**, d2x **2026.08.02.2**, mdBook **0.4.43**), and build and check the Provider. The first build may take several minutes.
+**2. Prepare the environment.** These scripts install xlings **2026.10.18.1**, the versions in `.xlings.json` (mcpp **2026.10.17.1**, d2x **2026.10.20.1**, mdBook **0.4.43**), and build and check the Provider. The first build may take several minutes.
 
 Linux / macOS:
 
@@ -59,7 +59,8 @@ $env:Path = "$env:USERPROFILE\.xlings\subos\current\bin;$env:Path"
 Then, on either system:
 
 ```text
-xlings install d2x@2026.08.02.2 -y
+xlings update
+xlings install d2x mcpp -y
 d2x install d2mcpp
 cd d2mcpp
 ```
@@ -266,3 +267,16 @@ xlings install
 **Tutorial Repository:** [https://github.com/mcpp-community/d2mcpp](https://github.com/mcpp-community/d2mcpp)
 
 **Tutorial Video Collection:** [https://space.bilibili.com/65858958/lists/5208246](https://space.bilibili.com/65858958/lists/5208246)
+
+## First-start preparation and version checks
+
+`d2x install` installs the downloaded course's declared workspace dependencies.
+After a Git update, rerun the preparation script to apply changed versions.
+Run `d2x --version` from the course directory and compare it with `.xlings.json`;
+updating a global tool alone does not establish which project version is selected.
+
+The checker shows preparation before the first exercise. Initial Provider startup
+has a total 900-second budget; subsequent Provider calls have a 120-second idle
+limit. Preparation messages do not extend the startup deadline. On failure, keep
+`.d2x/provider.stdout.log`, `.d2x/provider.stderr.log` and the command output.
+Startup/transport errors exit nonzero; an unfinished exercise verdict is expected.

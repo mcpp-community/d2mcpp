@@ -90,3 +90,12 @@ $env:MCPP_HOME = "$env:USERPROFILE\.mcpp-d2mcpp-recovered"
 这会重新下载工具链，保留旧目录和学习进度。后续练习需设置同一个 `MCPP_HOME`；取消覆盖用 `unset MCPP_HOME`（Unix）或 `Remove-Item Env:MCPP_HOME`（PowerShell）。
 
 仍有问题时，附系统、工具版本、失败命令和原始错误[提交 issue](https://github.com/mcpp-community/d2mcpp/issues)，不要上传 API key。
+
+## 首次启动准备与版本核对
+
+`d2x install` 会安装下载课程所声明的项目依赖。通过 Git 更新后，重新运行准备脚本以应用版本变化。
+在课程目录执行 `d2x --version`，与 `.xlings.json` 对照；仅更新全局工具不能证明项目实际使用的版本。
+
+checker 在第一题之前显示准备信息。首次 Provider 启动的总期限为 900 秒，后续调用的空闲期限为 120 秒；
+准备提示不会延长期限。失败时保留 `.d2x/provider.stdout.log`、`.d2x/provider.stderr.log` 与命令输出。
+启动和传输错误会非零退出；未完成练习的 fail 判定属于预期行为。

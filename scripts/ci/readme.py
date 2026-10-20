@@ -13,6 +13,8 @@ import shutil
 import subprocess
 import sys
 
+from versions import verify
+
 ROOT = Path(__file__).resolve().parents[2]
 LOGS = ROOT / '.d2x/ci-logs'
 WORK = ROOT / '.d2x/ci-work'
@@ -73,10 +75,15 @@ script = WORK / ('readme.ps1' if os.name == 'nt' else 'readme.sh')
 if os.name == 'nt':
     body = "$ErrorActionPreference = 'Stop'\n" + bootstrap + '\n'
     for command in commands[:-1] + [checker]:
+        if command == 'd2x install d2mcpp' and os.environ.get('D2X_CANDIDATE'):
+            command = "& '" + os.environ['D2X_CANDIDATE'].replace("'", "''") + "' install d2mcpp"
         body += command + "\nif ($LASTEXITCODE -ne 0) { throw 'README command failed' }\n"
     script.write_text(body, encoding='utf-8')
     shell = ['powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', str(script)]
 else:
+    if os.environ.get('D2X_CANDIDATE'):
+        import shlex
+        commands = [shlex.quote(os.environ['D2X_CANDIDATE']) + ' install d2mcpp' if c == 'd2x install d2mcpp' else c for c in commands]
     script.write_text('set -euo pipefail\n' + bootstrap + '\n' + '\n'.join(commands[:-1] + [checker]) + '\n', encoding='utf-8')
     shell = ['bash', str(script)]
 
@@ -88,6 +95,7 @@ try:
     output = (LOGS / 'readme-install.log').read_text(encoding='utf-8', errors='replace')
     print(output, flush=True)
     assert result.returncode == 0, 'README flow failed; see readme-install.log'
+    verify(course, label='readme-selected-versions')
     expected = len(list((ROOT / 'solutions/tests').rglob('*.cpp')))
     assert expected > 0 and re.findall(r'(\d+) passed; (\d+) failed', output)[-1] == (str(expected), '0')
     assert f'FIRST-RUN PASS: {expected} exercises' in output

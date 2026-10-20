@@ -40,11 +40,30 @@ on:
       - "book/src/changelog.md"
       - "book/en/src/changelog.md"
   workflow_dispatch:
+    inputs:
+      candidate_run:
+        description: 'Optional successful d2learn/d2x CI run ID (explicit prerelease override)'
+        type: string
+        default: ''
+      candidate_sha:
+        description: 'Exact checkout SHA recorded in that candidate provenance'
+        type: string
+        default: ''
+      diagnose:
+        description: 'Also compare standalone build and checker in separate cold Windows environments'
+        type: boolean
+        default: false
   schedule:
     - cron: '23 4 * * 1'
 
 permissions:
   contents: read
+  actions: read
+
+env:
+  XLINGS_NON_INTERACTIVE: '1'
+  D2X_CANDIDATE_SHA: ${{ inputs.candidate_sha }}
+  D2X_CANDIDATE_DIR: ${{ github.workspace }}/.d2x/candidate
 
 jobs:
   native:
@@ -62,6 +81,18 @@ jobs:
           - {os: windows-2025, route: cold, mask_msvc: true}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        if: inputs.candidate_run != ''
+        with:
+          repository: d2learn/d2x
+          run-id: ${{ inputs.candidate_run }}
+          github-token: ${{ github.token }}
+          name: ${{ runner.os == 'Linux' && 'candidate-linux-x86_64' || format('candidate-{0}', matrix.os) }}
+          path: ${{ env.D2X_CANDIDATE_DIR }}
+      - name: Verify explicit candidate provenance
+        if: inputs.candidate_run != ''
+        shell: bash
+        run: python scripts/ci/candidate.py
       - name: Select an empty toolchain home
         shell: bash
         run: echo "MCPP_HOME=$RUNNER_TEMP/d2mcpp-fresh" >> "$GITHUB_ENV"
@@ -138,6 +169,18 @@ jobs:
           ! command -v g++
           ! command -v clang++
       - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        if: inputs.candidate_run != ''
+        with:
+          repository: d2learn/d2x
+          run-id: ${{ inputs.candidate_run }}
+          github-token: ${{ github.token }}
+          name: candidate-linux-x86_64
+          path: ${{ env.D2X_CANDIDATE_DIR }}
+      - name: Verify explicit candidate provenance
+        if: inputs.candidate_run != ''
+        shell: bash
+        run: python scripts/ci/candidate.py
       - name: Give the ordinary user a fresh checkout
         shell: bash
         env:
@@ -174,7 +217,7 @@ jobs:
 
   released-course:
     name: Published d2x install route (main only)
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && inputs.candidate_run == ''
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
@@ -187,4 +230,49 @@ jobs:
           name: published-course-first-use
           path: .d2x/ci-logs/
           if-no-files-found: ignore
+          include-hidden-files: true
+
+  cold-diagnostics:
+    if: inputs.diagnose
+    runs-on: windows-2025
+    strategy:
+      fail-fast: false
+      matrix:
+        route: [build, checker]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Mask MSVC
+        shell: powershell
+        run: ./scripts/ci/mask-msvc.ps1
+      - name: Select independent cold home
+        shell: bash
+        run: echo "MCPP_HOME=$RUNNER_TEMP/diagnostic-${{ matrix.route }}" >> "$GITHUB_ENV"
+      - name: Install tools only
+        shell: powershell
+        run: ./scripts/setup.ps1 -InstallOnly
+      - name: Diagnose baseline cold startup
+        shell: bash
+        env:
+          DIAGNOSTIC_ROUTE: ${{ matrix.route }}
+        run: python scripts/ci/cold-diagnostics.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cold-diagnostic-${{ matrix.route }}
+          path: .d2x/ci-logs/
+          include-hidden-files: true
+
+  latest-stable:
+    if: github.ref == 'refs/heads/main' && inputs.candidate_run == ''
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/install-xlings.sh
+      - name: Check stable release, public latest and course pin
+        run: python3 scripts/ci/latest.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: latest-stable-versions
+          path: .d2x/ci-logs/
           include-hidden-files: true

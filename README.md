@@ -48,6 +48,7 @@ Wait for the environment to be ready, then run `d2x checker` in the terminal.
 Install [xlings](docs/environment.md#install-xlings), reopen your terminal, then run:
 
 ```bash
+xlings update
 xlings install d2x mcpp -y
 ```
 

@@ -48,6 +48,7 @@
 安裝 [xlings](docs/environment.zh.md#install-xlings)，重新開啟終端後執行：
 
 ```bash
+xlings update
 xlings install d2x mcpp -y
 ```
 
