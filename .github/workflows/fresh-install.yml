@@ -136,7 +136,7 @@ jobs:
           ROUTE: ${{ matrix.route }}
         run: |
           logs="$(pwd)/.d2x/ci-logs"
-          if [[ "$ROUTE" == readme ]]; then cd .d2x/ci-work/download/d2mcpp; fi
+          if [[ "$ROUTE" == readme ]]; then cd "$(cat "$logs/readme-course-path.txt")"; fi
           # doctor returns nonzero for warnings too (missing MSVC is expected).
           mcpp self doctor > "$logs/doctor.txt" 2>&1 || true
           cat "$logs/doctor.txt"

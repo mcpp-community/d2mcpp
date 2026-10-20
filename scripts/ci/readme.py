@@ -12,6 +12,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -50,8 +51,10 @@ assert not (ROOT / '.d2x/state.json').exists(), 'Use a checkout without learning
 LOGS.mkdir(parents=True, exist_ok=True)
 WORK.mkdir(parents=True)
 source = WORK / 'source.git'
-download = WORK / 'download'
-download.mkdir()
+# Public installation must not inherit an ancestor course manifest.
+# Keep this external directory for the post-flow doctor/target assertions.
+download = Path(tempfile.mkdtemp(prefix='d2mcpp first use ' + ('long-project-directory-' * 4 if os.name != 'nt' else '')))
+assert not any((parent / '.xlings.json').exists() for parent in [download, *download.parents]), 'README download must be outside project scope'
 head = subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', 'HEAD'], text=True).strip()
 env = os.environ.copy()
 env['XLINGS_NON_INTERACTIVE'] = '1'
@@ -92,6 +95,7 @@ else:
     shell = ['bash', str(script)]
 
 course = download / 'd2mcpp'
+(LOGS / 'readme-course-path.txt').write_text(course.as_posix(), encoding='utf-8')
 print('Running the README commands with the documented xlings installer', flush=True)
 try:
     with (LOGS / 'readme-install.log').open('w', encoding='utf-8') as log:
