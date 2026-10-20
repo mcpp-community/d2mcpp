@@ -72,11 +72,11 @@ jobs:
         run: ./scripts/ci/mask-msvc.ps1
       - name: Prepare course (Unix)
         if: runner.os != 'Windows'
-        run: bash scripts/setup.sh
+        run: python3 scripts/ci/prepare.py
       - name: Prepare course (Windows PowerShell 5.1)
         if: runner.os == 'Windows'
         shell: powershell
-        run: ./scripts/setup.ps1
+        run: python scripts/ci/prepare.py
       - name: Assert MinGW fallback
         if: matrix.mask_msvc
         run: |

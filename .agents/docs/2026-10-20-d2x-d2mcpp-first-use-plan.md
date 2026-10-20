@@ -153,6 +153,7 @@ latest 检查与候选 pin 验收分开：定时/main job 对比稳定 Release�
 - 本地 Ubuntu 20.04 普通用户隔离容器：全新 MCPP_HOME，使用静态候选，首次 session 99.2 秒、首题 103.3 秒；保存、通过、推进、重启恢复及重复 setup 保留进度均通过；solutions 为 52/52。原始日志保留在执行机器 `/tmp/d2mcpp-startup-local/run.log`。本地另验证 print/TUI 准备与错误显示，以及交互配置保留两种期限。
 - [独立 Windows 取证](https://github.com/mcpp-community/d2mcpp/actions/runs/39442502584) 将 build、直接 run、旧版 checker 分成独立空 home：直接 `mcpp run -q ... describe` 约 24.9 秒正常返回；旧 checker 仍触发 120 秒静默超时。此前另一份独立 build 为 34.5 秒。说明不能把旧故障简单归为编译耗时；候选验收必须覆盖真正 checker 链路。
 - README 的公开工具安装现在位于仓库外的空目录，防止祖先项目配置影响版本解析；版本快照在安装器实际运行的 shell 内记录。进入课程后检查实际工具版本；预发布候选单独校验来源和哈希。`d2x install` 安装课程声明的项目依赖，失败不打印就绪。
+- CI 公共准备包装器调用同一套原生 Shell/PowerShell 脚本，实时显示并归档安装/构建 stdout 和 stderr，覆盖尚未进入 checker 就安装失败的情况。发布后首轮三个作业曾命中旧 CDN 指针 `0a6abe1`，因此拒绝找不到的新版；确认 raw 指针更新后重新验收，不回退旧版。
 - 自我 review 重点：准备提示不刷新总期限；stderr 不能伪造协议；部分事件后失败不推进；Windows 无法建立 Job Object 时拒绝启动；输出洪流不能饿死期限检查；真实发布版还要经过 xlings 安装与课程完整 CI 验证。
 
 - 旧环境补测发现 bare install 保留旧版，`@latest` 单独使用也不会必然激活已安装的新版；公开命令已改为 `xlings install --use d2x@latest mcpp@latest -y`。升级矩阵显式从八月版 d2x/mcpp 开始；三个平台的 latest 检查会先激活八月版，再验证最新版安装与切换。

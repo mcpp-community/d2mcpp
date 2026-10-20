@@ -117,11 +117,11 @@ jobs:
         run: python scripts/ci/readme.py
       - name: Cold install only (Unix)
         if: runner.os != 'Windows' && matrix.route == 'cold'
-        run: bash scripts/setup.sh --install-only
+        run: python3 scripts/ci/prepare.py --install-only
       - name: Cold install only (PowerShell 5.1)
         if: runner.os == 'Windows' && matrix.route == 'cold'
         shell: powershell
-        run: ./scripts/setup.ps1 -InstallOnly
+        run: python scripts/ci/prepare.py --install-only
       - name: First check, save, advance and resume
         if: matrix.route == 'cold'
         shell: bash
@@ -203,7 +203,7 @@ jobs:
         run: |
           cd "$COURSE_DIR"
           if [[ "$ROUTE" == cold ]]; then
-            runuser -u learner -- bash scripts/setup.sh --install-only
+            runuser -u learner -- python3 scripts/ci/prepare.py --install-only
             runuser -u learner -- env MCPP_HOME=/home/learner/.mcpp PATH="/home/learner/.xlings/subos/current/bin:$PATH" python3 scripts/ci/first-run.py --allow-source-edit --cold
             runuser -u learner -- env PATH="/home/learner/.xlings/subos/current/bin:$PATH" python3 scripts/ci/solutions.py
           else
@@ -251,7 +251,7 @@ jobs:
         run: echo "MCPP_HOME=$RUNNER_TEMP/diagnostic-${{ matrix.route }}" >> "$GITHUB_ENV"
       - name: Install tools only
         shell: powershell
-        run: ./scripts/setup.ps1 -InstallOnly
+        run: python scripts/ci/prepare.py --install-only
       - name: Diagnose baseline cold startup
         shell: bash
         env:
