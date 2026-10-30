@@ -57,7 +57,7 @@ jobs:
       matrix:
         include:
           - {name: linux, os: ubuntu-24.04, langs: all}
-          - {name: macos-arm64, os: macos-14, langs: zh}
+          - {name: macos-arm64, os: macos-15, langs: zh}
           - {name: windows-server-2022, os: windows-2022, langs: zh}
           - {name: windows-server-2025, os: windows-2025, langs: zh}
           - {name: windows-no-msvc, os: windows-2025, langs: zh, mask_msvc: true}
